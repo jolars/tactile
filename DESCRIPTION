@@ -1,9 +1,15 @@
 Package: latticework
-Title: What the Package Does (one line, title case)
+Title: Extensions to the R package lattice
 Version: 0.0.0.9000
-Authors@R: person("First", "Last", email = "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+Authors@R: person("Johan", "Larsson", email = "johanlarsson@outlook.com",
+                  role = c("aut", "cre"))
+Description: Extensions to the R package lattice.
 Depends: R (>= 3.4.0)
-License: What license is it under?
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
+URL: https://github.com/jolars/latticework
+BugReports: https://github.com/jolars/latticework/issues
+RoxygenNote: 6.0.1
+Suggests: covr,
+    testthat

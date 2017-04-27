@@ -14,6 +14,7 @@
 #' @export
 #'
 #' @examples
+#' library(lattice)
 #' fit <- lm(Sepal.Length ~ Sepal.Width, data = iris)
 #' xyplot(fit)
 #'

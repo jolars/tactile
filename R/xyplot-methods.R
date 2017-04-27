@@ -1,19 +1,22 @@
 #' Lattice plot diagnostics for lm classes
 #'
-#' @param x
-#' @param which
-#' @param main
-#' @param id.n
-#' @param labels.id
-#' @param cex.id
-#' @param cook.levels
-#' @param label.pos
-#' @param ...
+#' @param x A lm or glm object
+#' @param which Which plots to plot
+#' @param main Titles for the plots
+#' @param id.n The number of extreme values to highlight
+#' @param labels.id Labels for the extreme values.
+#' @param cex.id Size of labels for extreme values.
+#' @param cook.levels Cook's distance cutoffs.
+#' @param label.pos Positions for id labels.
+#' @param \dots Arguments to be passed to xyplot.
 #'
-#' @return
+#' @return Return a gtable list of grobs
 #' @export
 #'
 #' @examples
+#' fit <- lm(Sepal.Length ~ Sepal.Width, data = iris)
+#' xyplot(fit)
+#'
 xyplot.lm <- function(x,
                       which = c(1:3, 5),
                       main = list(
@@ -73,7 +76,7 @@ xyplot.lm <- function(x,
     else if (isGlm)
      sqrt(summary(x)$dispersion)
     else
-     sqrt(stats::deviance(x) / df.residual(x))
+     sqrt(stats::deviance(x) / stats::df.residual(x))
 
     hii <- (infl <- stats::influence(x, do.coef = FALSE))$hat
 
@@ -167,13 +170,14 @@ xyplot.lm <- function(x,
     )
   }
   if (show[3]) {
+    sqrtabsr <- sqrt(abs(rs))
     if (is.null(w)) {
       yhn0 <- yh
     } else {
       yhn0 <- yh[w != 0]
     }
 
-    plot_list[[3]] <- xyplot(
+    plot_list[[3]] <- lattice::xyplot(
       sqrt(abs(rs)) ~ yhn0,
       xlab = l.fit,
       main = "Scale vs location",
@@ -226,7 +230,7 @@ xyplot.lm <- function(x,
 
     do.plot <- TRUE
     if (isConst.hat) {
-      aterms <- attributes(terms(x))
+      aterms <- attributes(stats::terms(x))
       dcl <- aterms$dataClasses[-aterms$response]
       facvars <- names(dcl)[dcl %in% c("factor", "ordered")]
       mf <- stats::model.frame(x)[facvars]
@@ -291,9 +295,9 @@ xyplot.lm <- function(x,
         par.settings = list(superpose.line = list(lty = 2, col = "orange"),
                             clip = list(panel = "off")),
         panel = function(x, y, ...) {
-          panel.abline(h = 0, lty = 3, col = "gray50")
-          panel.xyplot(x, y, ...)
-          panel.loess(x, y, ...)
+          lattice::panel.abline(h = 0, lty = 3, col = "gray50")
+          lattice::panel.xyplot(x, y, ...)
+          lattice::panel.loess(x, y, ...)
           if (id.n > 0) {
             y.id <- rsp[show.rsp]
             text.id(xx[show.rsp], y.id, show.rsp)

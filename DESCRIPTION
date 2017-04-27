@@ -1,5 +1,5 @@
 Package: latticework
-Title: Extensions to the R package lattice
+Title: Extensions for lattice
 Version: 0.0.0.9000
 Authors@R: person("Johan", "Larsson", email = "johanlarsson@outlook.com",
                   role = c("aut", "cre"))
@@ -11,5 +11,13 @@ LazyData: true
 URL: https://github.com/jolars/latticework
 BugReports: https://github.com/jolars/latticework/issues
 RoxygenNote: 6.0.1
-Suggests: covr,
-    testthat
+Imports:
+  lattice,
+  latticeExtra,
+  stats,
+  grDevices,
+  grid,
+  gridExtra
+Suggests:
+  covr,
+  testthat

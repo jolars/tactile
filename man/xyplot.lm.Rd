@@ -36,6 +36,8 @@ Return a gtable list of grobs
 Lattice plot diagnostics for lm classes
 }
 \examples{
+library(lattice)
+library(latticework)
 fit <- lm(Sepal.Length ~ Sepal.Width, data = iris)
 xyplot(fit)
 

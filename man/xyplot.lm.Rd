@@ -4,11 +4,12 @@
 \alias{xyplot.lm}
 \title{Lattice plot diagnostics for lm classes}
 \usage{
-xyplot.lm(x, which = c(1:3, 5), main = list("Residuals vs Fitted",
+\method{xyplot}{lm}(x, which = c(1:3, 5), main = list("Residuals vs Fitted",
   "Normal Q-Q", "Scale-Location", "Cook's distance", "Residuals vs Leverage",
-  "Cook's dist vs Leverage"), id.n = 3,
+  "Cook's distance vs Leverage"), id.n = 3,
   labels.id = names(stats::residuals(x)), cex.id = 0.75,
-  cook.levels = c(0.5, 1), label.pos = c(4, 2), ...)
+  cook.levels = c(0.5, 1), label.pos = c(4, 2), nrow = NULL,
+  ncol = NULL, ...)
 }
 \arguments{
 \item{x}{A lm or glm object}
@@ -27,6 +28,10 @@ xyplot.lm(x, which = c(1:3, 5), main = list("Residuals vs Fitted",
 
 \item{label.pos}{Positions for id labels.}
 
+\item{nrow}{Number of rows in the resulting gTable.}
+
+\item{ncol}{Number of columns in the resulting gTable.}
+
 \item{\dots}{Arguments to be passed to xyplot.}
 }
 \value{
@@ -36,7 +41,6 @@ Return a gtable list of grobs
 Lattice plot diagnostics for lm classes
 }
 \examples{
-library(lattice)
 library(latticework)
 fit <- lm(Sepal.Length ~ Sepal.Width, data = iris)
 xyplot(fit)

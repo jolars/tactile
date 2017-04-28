@@ -8,47 +8,34 @@
 #' @param cex.id Size of labels for extreme values.
 #' @param cook.levels Cook's distance cutoffs.
 #' @param label.pos Positions for id labels.
+#' @param nrow Number of rows in the resulting gTable.
+#' @param ncol Number of columns in the resulting gTable.
 #' @param \dots Arguments to be passed to xyplot.
 #'
 #' @return Return a gtable list of grobs
 #' @export
 #'
 #' @examples
-#' library(lattice)
 #' library(latticework)
 #' fit <- lm(Sepal.Length ~ Sepal.Width, data = iris)
 #' xyplot(fit)
 #'
 xyplot.lm <- function(x,
                       which = c(1:3, 5),
-                      main = list(
-                        "Residuals vs Fitted",
-                        "Normal Q-Q",
-                        "Scale-Location",
-                        "Cook's distance",
-                        "Residuals vs Leverage",
-                        "Cook's dist vs Leverage"
-                      ),
+                      main = list("Residuals vs Fitted",
+                                  "Normal Q-Q",
+                                  "Scale-Location",
+                                  "Cook's distance",
+                                  "Residuals vs Leverage",
+                                  "Cook's distance vs Leverage"),
                       id.n = 3,
                       labels.id = names(stats::residuals(x)),
                       cex.id = 0.75,
                       cook.levels = c(0.5, 1),
                       label.pos = c(4, 2),
+                      nrow = NULL,
+                      ncol = NULL,
                       ...) {
-  dropInf <- function(x, h) {
-    if (any(isInf <- h >= 1)) {
-      warning(gettextf("not plotting observations with leverage one:\n  %s",
-                       paste(which(isInf), collapse = ", ")),
-              call. = FALSE,
-              domain = NA)
-      x[isInf] <- NaN
-    }
-    x
-  }
-
-  if (!inherits(x, "lm"))
-    stop("Not an lm object.")
-
   if (!is.numeric(which) || any(which < 1) || any(which > 6))
     stop("'which' must be in 1:6")
 
@@ -72,7 +59,7 @@ xyplot.lm <- function(x,
 
   n <- length(r)
 
-  if (any(show[2L:6L])) {
+  if (any(show[2:6])) {
     s <- if (inherits(x, "rlm"))
      x$s
     else if (isGlm)
@@ -126,10 +113,17 @@ xyplot.lm <- function(x,
 
     if (any(show[2:3]))
       show.rs <- sort.list(abs(rs), decreasing = TRUE)[iid]
+
     text.id <- function(x, y, ind, adj.x = TRUE) {
       labpos <- if (adj.x) label.pos[1 + as.numeric(x > mean(range(x)))] else 3
-      lattice::panel.text(x, y, labels = labels.id[ind], cex = cex.id,
-                          pos = labpos, offset = 0.25)
+      lattice::panel.text(
+        x = x,
+        y = y,
+        labels = labels.id[ind],
+        cex = cex.id,
+        pos = labpos,
+        offset = 0.25
+      )
     }
   }
 
@@ -160,7 +154,7 @@ xyplot.lm <- function(x,
     qq <- stats::qqnorm(rs, plot.it = FALSE)
     plot_list[[2]] <- lattice::qqmath(
       rs,
-      main = "Normal Q-Q",
+      main = main[[2]],
       ylab = ylab23,
       xlab = "Theoretical quantiles",
       panel = function(x, ...) {
@@ -182,7 +176,7 @@ xyplot.lm <- function(x,
     plot_list[[3]] <- lattice::xyplot(
       sqrt(abs(rs)) ~ yhn0,
       xlab = l.fit,
-      main = "Scale vs location",
+      main = main[[3]],
       ylab = as.expression(substitute(sqrt(abs(YL)),
                                       list(YL = as.name(ylab23)))),
       panel = function(x, y, ...) {
@@ -204,7 +198,7 @@ xyplot.lm <- function(x,
 
     plot_list[[4]] <- lattice::xyplot(
       cook ~ seq_along(cook),
-      main = "Cook's distances",
+      main = main[[4]],
       xlab = "Observation",
       ylab = "Cook's distance",
       ylim = c(0, ymx * 1.1),
@@ -251,7 +245,7 @@ xyplot.lm <- function(x,
 
         plot_list[[5]] <- lattice::xyplot(
           rsp ~ factor(facval, labels = x$xlevels[[1]]),
-          main = "Residuals vs Factor Levels",
+          main = main[[5]],
           xlab = "Factor Level Combinations",
           ylab = ylab5,
           panel = function(x, y, ...) {
@@ -278,8 +272,8 @@ xyplot.lm <- function(x,
 
       if (length(cook.levels)) {
         p <- x$rank
-        lms <- grDevices::extendrange(xx)
-        ylim <- grDevices::extendrange(rsp)
+        lms <- grDevices::extendrange(xx, f = 0.1)
+        ylim <- grDevices::extendrange(rsp, f = 0.1)
         hh <- seq.int(min(r.hat[1L], r.hat[2L]/100), lms[2L], length.out = 101)
         xmax <- min(0.99, lms[2L])
         ymult <- sqrt(p * (1 - xmax) / xmax)
@@ -288,7 +282,7 @@ xyplot.lm <- function(x,
 
       plot_list[[5]] <- lattice::xyplot(
         rsp ~ xx,
-        main = "Residuals vs Leverage",
+        main = main[[5]],
         xlab = "Leverage",
         ylab = ylab5,
         xlim = lms,
@@ -313,7 +307,7 @@ xyplot.lm <- function(x,
               lattice::llines(hh[inb], -cl.h[inb], lty = 2, col = "orange")
             }
             latticeExtra::panel.key(
-              "Cook's distance",
+              text = "Cook's distance",
               corner = c(0.0, 0.02),
               lines = TRUE,
               points = FALSE
@@ -353,7 +347,7 @@ xyplot.lm <- function(x,
       cook ~ g,
       ylim = yrange,
       xlim = xrange,
-      main = "Cook's dist vs Leverage",
+      main = main[[6]],
       ylab = "Cook's distance",
       xlab = expression("Leverage  " * h[ii]),
       panel = function(x, y, ...) {
@@ -361,8 +355,8 @@ xyplot.lm <- function(x,
         for (i in seq_along(bval)) {
           bi2 <- bval[i] ^ 2
           latticeExtra::panel.ablineq(
-            0,
-            bi2,
+            a = 0,
+            b = bi2,
             lty = 3,
             col = "gray50",
             label = bval[i],
@@ -383,8 +377,34 @@ xyplot.lm <- function(x,
 
   plot_list <- plot_list[!sapply(plot_list, is.null)]
 
-  gridExtra::grid.arrange(grobs = plot_list)
+  if (length(plot_list) == 1) {
+    print(plot_list[[1]])
+  } else {
+    grid_opts <- list()
+    grid_opts$grobs <- plot_list
+    if (!is.null(nrow))
+      grid_opts$nrow <- nrow
+    if (!is.null(ncol))
+      grid_opts$ncol <- ncol
+
+    do.call(
+      gridExtra::grid.arrange,
+      grid_opts
+    )
+  }
 }
 
+
+# dropInf utlitiy function
+dropInf <- function(x, h) {
+  if (any(isInf <- h >= 1)) {
+    warning(gettextf("not plotting observations with leverage one:\n  %s",
+                     paste(which(isInf), collapse = ", ")),
+            call. = FALSE,
+            domain = NA)
+    x[isInf] <- NaN
+  }
+  x
+}
 
 

@@ -1,26 +1,29 @@
-#' Lattice plot diagnostics for lm classes
+#' Lattice plot diagnostics for lm objects
 #'
-#' @param x A lm or glm object
-#' @param which Which plots to plot
-#' @param main Titles for the plots
-#' @param id.n The number of extreme values to highlight
-#' @param labels.id Labels for the extreme values.
-#' @param cex.id Size of labels for extreme values.
-#' @param cook.levels Cook's distance cutoffs.
-#' @param label.pos Positions for id labels.
-#' @param nrow Number of rows in the resulting gTable.
-#' @param ncol Number of columns in the resulting gTable.
-#' @param \dots Arguments to be passed to xyplot.
+#' Lattice plot diagnostics for `lm` objects, mostly mimicking the behavior
+#' of [stats::plot.lm()] but based on [lattice::xyplot()] instead.
 #'
-#' @return Return a gtable list of grobs
+#' @inheritParams stats::plot.lm
+#' @param which if a subset of the plots is required, specify a subset of the
+#'   numbers `1:6`
+#' @param main title to each plot
+#' @param nrow rows in the resulting gTable.
+#' @param ncol columns in the resulting gTable.
+#' @param data Only provided for method consistency and is ignored.
+#' @param \dots Arguments to be passed to [lattice::xyplot()].
+#'
+#' @return A `gTable` of trellis grobs or a single trellis object.
+#'
+#' @seealso [stats::lm()], [stats::plot.lm()], [lattice::xyplot()]
+#'
 #' @export
 #'
 #' @examples
 #' library(latticework)
 #' fit <- lm(Sepal.Length ~ Sepal.Width, data = iris)
 #' xyplot(fit)
-#'
 xyplot.lm <- function(x,
+                      data = NULL,
                       which = c(1:3, 5),
                       main = list("Residuals vs Fitted",
                                   "Normal Q-Q",
@@ -143,7 +146,6 @@ xyplot.lm <- function(x,
         lattice::panel.xyplot(x, y, ...)
         if (id.n > 0) {
           y.id <- r[show.r]
-          #y.id[y.id < 0] <- y.id[y.id < 0] - strheight(" ")/3
           text.id(yh[show.r], y.id, show.r)
         }
         lattice::panel.loess(x, y, ...)
@@ -378,7 +380,7 @@ xyplot.lm <- function(x,
   plot_list <- plot_list[!sapply(plot_list, is.null)]
 
   if (length(plot_list) == 1) {
-    print(plot_list[[1]])
+    stats::update(plot_list[[1]])
   } else {
     grid_opts <- list()
     grid_opts$grobs <- plot_list
@@ -387,10 +389,7 @@ xyplot.lm <- function(x,
     if (!is.null(ncol))
       grid_opts$ncol <- ncol
 
-    do.call(
-      gridExtra::grid.arrange,
-      grid_opts
-    )
+    do.call(gridExtra::grid.arrange, grid_opts)
   }
 }
 

@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 
 # latticework
 
-The goal of latticework is to ...
+latticework is an R package that extends `lattice` and `latticeExtra`.
 
 ## Installation
 
@@ -32,3 +32,5 @@ devtools::install_github("jolars/latticework")
 latticework is not currently on CRAN.
 
 ## License
+
+See the [license](LICENSE)

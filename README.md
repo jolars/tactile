@@ -5,7 +5,7 @@
 latticework
 ===========
 
-The goal of latticework is to ...
+latticework is an R package that extends `lattice` and `latticeExtra`.
 
 Installation
 ------------
@@ -21,3 +21,5 @@ latticework is not currently on CRAN.
 
 License
 -------
+
+See the [license](LICENSE)

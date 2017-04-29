@@ -16,7 +16,8 @@ Imports:
   utils,
   grDevices,
   grid,
-  gridExtra
+  gridExtra,
+  modelr
 Suggests:
   covr,
   testthat,

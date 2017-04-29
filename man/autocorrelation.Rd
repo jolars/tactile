@@ -74,3 +74,8 @@ CCF(mdeaths, fdeaths)
 \seealso{
 \code{\link[=xyplot.acf]{xyplot.acf()}}, \code{\link[stats:acf]{stats::acf()}}, \code{\link[lattice:xyplot]{lattice::xyplot()}}
 }
+\author{
+Original: Paul Gilbert, Martyn Plummer. Extensive modifications and
+univariate case of pacf by B. D. Ripley. Adaptation to lattice by
+Johan Larsson.
+}

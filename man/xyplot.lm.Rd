@@ -52,6 +52,7 @@ of \code{\link[stats:plot.lm]{stats::plot.lm()}} but based on \code{\link[lattic
 library(latticework)
 fit <- lm(Sepal.Length ~ Sepal.Width, data = iris)
 xyplot(fit)
+xyplot(fit, which = 2)
 }
 \seealso{
 \code{\link[stats:lm]{stats::lm()}}, \code{\link[stats:plot.lm]{stats::plot.lm()}}, \code{\link[lattice:xyplot]{lattice::xyplot()}}

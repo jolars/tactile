@@ -4,9 +4,12 @@
 \name{latticework-package}
 \alias{latticework}
 \alias{latticework-package}
-\title{latticework: Extensions for lattice}
+\title{latticework: Extensions to lattice}
 \description{
-Extensions to the R package lattice.
+This aim package aims to extend the functionality of lattice
+and latticeExtra with new functions and methods that make it easier to
+be wholly reliant on trellis graphics in R. It is not an official extension
+to lattice nor related to any of its developers.
 }
 \seealso{
 Useful links:

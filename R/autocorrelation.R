@@ -18,6 +18,10 @@
 #'
 #' @seealso [xyplot.acf()], [stats::acf()], [lattice::xyplot()]
 #'
+#' @author Original: Paul Gilbert, Martyn Plummer. Extensive modifications and
+#'   univariate case of pacf by B. D. Ripley. Adaptation to lattice by
+#'   Johan Larsson.
+#'
 #' @examples
 #' library(latticework)
 #' ACF(lh)
@@ -165,7 +169,6 @@ xyplot.acf <- function(x,
   ll$data <- dd
   ll$ylim <- grDevices::extendrange(ylim)
   ll$panel <- function(x, y, ...) {
-    lattice::panel.abline(h = 0, col = 1)
     if (with.ci && ci.type == "white") {
       clim <- clim0
       lattice::panel.abline(h = c(clim, -clim), col = ci.col, lty = 2)
@@ -177,8 +180,8 @@ xyplot.acf <- function(x,
       lattice::panel.lines(x[-1], -clim, col = ci.col, lty = 2)
     }
     lattice::panel.xyplot(x, y, type = "h", ...)
+    lattice::panel.abline(h = 0)
   }
-
   if (nser == 1) {
     ll$x <- stats::formula(acf ~ lag)
   } else if (nser == 2 ) {
@@ -186,6 +189,5 @@ xyplot.acf <- function(x,
   } else if (nser > 2) {
     ll$x <- stats::formula(acf ~ lag | ind1 + ind2)
   }
-
   do.call(lattice::xyplot, ll)
 }

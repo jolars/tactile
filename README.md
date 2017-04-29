@@ -22,4 +22,4 @@ latticework is not currently on CRAN.
 License
 -------
 
-See the [license](LICENSE)
+latticework is open source software, licensed under the GPL-3. See the [LICENSE](LICENSE) for details.

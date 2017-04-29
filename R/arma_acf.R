@@ -30,7 +30,7 @@ arma_acf <- function(ar = numeric(),
     p <- length(ar)
     q <- length(ma)
     if (!p && !q)
-      stop("empty model supplied")
+      stop("The model is empty.")
     lag.max <- max(p, q + 1)
   }
 
@@ -49,15 +49,14 @@ arma_acf <- function(ar = numeric(),
   if (plot)
     lattice::xyplot(
       y ~ x,
-      type = "h",
       ylab = if (pacf) "PACF" else "ACF",
       xlab = "Lag",
       ylim = ylim,
       xlim = xlim,
       ...,
       panel = function(x, y, ...) {
+        lattice::panel.xyplot(x, y, type = "h", ...)
         lattice::panel.abline(h = 0)
-        lattice::panel.xyplot(x, y, ...)
       }
     )
   else

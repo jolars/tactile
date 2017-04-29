@@ -9,5 +9,3 @@ autocorrelation and autocovariance functions from the the `stats` package.
 * `arma_acf()` is a wrapper around `stats::ARMAacf()` which adds the posibility
 of plotting the result via `lattice::xyplot`.
 
-
-

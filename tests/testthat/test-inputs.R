@@ -8,7 +8,7 @@ test_that("We receive the proper classes", {
 
   expect_error(xyplot(fit), NA)
 
-  expect_is(xyplot(fit, which = 1:6), "grob")
+  expect_is(xyplot(fit, which = 1:6), "list")
   expect_is(xyplot(fit, which = 1), "trellis")
 
   dev.off()

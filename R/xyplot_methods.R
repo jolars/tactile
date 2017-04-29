@@ -22,6 +22,7 @@
 #' library(latticework)
 #' fit <- lm(Sepal.Length ~ Sepal.Width, data = iris)
 #' xyplot(fit)
+#' xyplot(fit, which = 2)
 xyplot.lm <- function(x,
                       data = NULL,
                       which = c(1:3, 5),
@@ -149,7 +150,8 @@ xyplot.lm <- function(x,
           text.id(yh[show.r], y.id, show.r)
         }
         lattice::panel.loess(x, y, ...)
-      }
+      },
+      ...
     )
   }
   if (show[2L]) {
@@ -164,7 +166,8 @@ xyplot.lm <- function(x,
         lattice::panel.qqmath(x, ...)
         if (id.n > 0)
           text.id(qq$x[show.rs], qq$y[show.rs], show.rs)
-      }
+      },
+      ...
     )
   }
   if (show[3]) {
@@ -186,7 +189,8 @@ xyplot.lm <- function(x,
         lattice::panel.loess(x, y, ...)
         if (id.n > 0)
           text.id(yhn0[show.rs], sqrtabsr[show.rs], show.rs)
-      }
+      },
+      ...
     )
   }
   if (show[4]) {
@@ -209,7 +213,8 @@ xyplot.lm <- function(x,
         lattice::panel.xyplot(x, y, ...)
         if (id.n > 0)
           text.id(show.r, cook[show.r], show.r, adj.x = FALSE)
-      }
+      },
+      ...
     )
 
   }
@@ -258,7 +263,8 @@ xyplot.lm <- function(x,
               text.id(xx[show.rsp], y.id, show.rsp)
             }
             lattice::panel.loess(x, y, ...)
-          }
+          },
+          ...
         )
 
       }
@@ -325,7 +331,8 @@ xyplot.lm <- function(x,
               text.cex = cex.id
             )
           }
-        }
+        },
+        ...
       )
     }
   }
@@ -367,13 +374,13 @@ xyplot.lm <- function(x,
             at = 0.9,
             cex = 0.8
           )
-
         }
         if (id.n > 0) {
           show.r <- order(-cook)[iid]
           text.id(g[show.r], cook[show.r], show.r)
         }
-      }
+      },
+      ...
     )
   }
 
@@ -390,6 +397,7 @@ xyplot.lm <- function(x,
       grid_opts$ncol <- ncol
 
     do.call(gridExtra::grid.arrange, grid_opts)
+    invisible(plot_list)
   }
 }
 
@@ -397,7 +405,7 @@ xyplot.lm <- function(x,
 # dropInf utlitiy function
 dropInf <- function(x, h) {
   if (any(isInf <- h >= 1)) {
-    warning(gettextf("not plotting observations with leverage one:\n  %s",
+    warning(gettextf("Not plotting observations with leverage one:\n  %s",
                      paste(which(isInf), collapse = ", ")),
             call. = FALSE,
             domain = NA)

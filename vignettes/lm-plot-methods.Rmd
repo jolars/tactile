@@ -1,0 +1,84 @@
+---
+title: "Plot methods for lm objects"
+author: "Johan Larsson"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+latticework provides an `xyplot()` method for `lm` objects -- usually generated
+with `stats::lm()` or `stats::glm()`. It provides the same type of diagnostic
+plots that `stats::plot.lm()` covers, with some small modificiations.
+
+This method is provided so that a user may use lattice graphics throughout out a
+document, say for a lab report, and produce consistent graphic material that
+can be changed on a general level (for instance by using `lattice.options()`).
+
+## Usage
+
+We fit a simple linear model
+
+```{r}
+fit <- lm(Sepal.Length ~ Sepal.Width, data = iris)
+```
+
+Here, we fist use the default option and plot the diagnostics using 
+`stats::plot()`
+
+```{r, fig.cap = "Plot diagnostics with `stats::plot.lm()`.", fig.width = 6, fig.height = 9.5}
+par(mfrow = c(3, 2), cex = 1)
+plot(fit, which = 1:6)
+par(mfrow = c(1, 1))
+```
+
+Or instead use the method provided by latticework.
+
+```{r, fig.cap = "Plot diagnostics with `stats::plot.lm()`.", fig.width = 6, fig.height = 9.5}
+library(latticework)
+xyplot(fit, which = 1:6)
+```
+
+You will see that the results are similar. The benefits, however, of using
+`xyplot.lm()` from latticework are that
+
+* handling of plot margins is much improved,
+* the plots are returned as a list of trellis objects (that can be updated),
+* general plot settings from `lattice` are respected (mostly), and
+* you no longer have to specify `par(mfrow = c(2, 2))`. The plots are arranged
+via `gridExtra::grid.arrange()` automatically and arguments `nrow` and `ncol`
+have been made accessible in the `xyplot.lm()` call to enable manual
+specifications.
+
+## Performance
+
+The downside is that `xyplot.lm()` is **much** slower than `stats::plot.lm()`
+when more than one plot is requested, which we can exemplify by
+
+```{r, fig.keep = "none"}
+stats_method <- function() {
+  ff <- tempfile()
+  png(filename = ff)
+  par(mfrow = c(2, 1))
+  res <- plot(fit, which = 1:2)
+  par(mfrow = c(1, 1))
+  dev.off()
+  unlink(ff)
+}
+
+latticework_method <- function() {
+  xyplot(fit, which = 1:2)
+}
+
+f <- microbenchmark::microbenchmark(stats_method(), latticework_method())
+```
+
+And next we plot the results. As you see, the latticework method is slower
+despite all the fluff we put around the call to `plot.lm()`.
+
+```{r, fig.cap = "Boxplot of timing results of the `xyplot.lm()` compared with `plot.lm()`.", fig.width = 6}
+lattice::bwplot(expr ~ time, data = f)
+```
+

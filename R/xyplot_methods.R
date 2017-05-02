@@ -47,7 +47,7 @@ xyplot.lm <- function(x,
   show <- rep(FALSE, 6)
   show[which] <- TRUE
 
-  plot_list <- vector("list", sum(show))
+  plot_list <- vector("list", 6)
 
   r <- stats::residuals(x)
   yh <- stats::predict(x)

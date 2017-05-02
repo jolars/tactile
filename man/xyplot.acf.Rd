@@ -5,7 +5,7 @@
 \title{Plot Autocovariance and Autocorrelation Functions}
 \usage{
 \method{xyplot}{acf}(x, data = NULL, ci = 0.95, type = "h",
-  xlab = "Lag", ylab = NULL, ylim = NULL, ci.col = "grey",
+  xlab = "Lag", ylab = NULL, ylim = NULL, ci.col = "gray50",
   ci.type = c("white", "ma"), ...)
 }
 \arguments{

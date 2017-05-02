@@ -8,10 +8,9 @@
 #' series and should be treated with appropriate caution. Using `ci.type = "ma"`
 #' may potentially be less misleading.
 #'
-#' @name autocorrelation
-#'
 #' @inheritParams stats::acf
-#' @param \dots Further arguments to be passed to [xyplot.acf()].
+#' @param drop_lag0 drop the first lag?
+#' @param \dots further arguments to be passed to [xyplot.acf()].
 #'
 #' @return If `plot = TRUE`, returns and plots a trellis object. Otherwise,
 #'   an `acf` object is returned
@@ -21,39 +20,49 @@
 #' @author Original: Paul Gilbert, Martyn Plummer. Extensive modifications and
 #'   univariate case of pacf by B. D. Ripley. Adaptation to lattice by
 #'   Johan Larsson.
+#' @export
 #'
 #' @examples
 #' library(latticework)
-#' ACF(lh)
-#' CCF(mdeaths, fdeaths)
-NULL
+#' autocf(lh)
+#' crosscf(mdeaths, fdeaths)
+autocf <- function(x,
+                   lag.max = NULL,
+                   type = c("correlation", "covariance", "partial"),
+                   plot = TRUE,
+                   na.action = stats::na.fail,
+                   demean = TRUE,
+                   drop_lag0 = TRUE,
+                   ...) {
+  out <- stats::acf(x = x,
+                    lag.max = lag.max,
+                    type = type,
+                    plot = FALSE,
+                    na.action = na.action,
+                    demean = demean)
 
-#' @describeIn autocorrelation Auto-correlation or -covariance
-#' @export
-ACF <- function(x,
-                lag.max = NULL,
-                type = c("correlation", "covariance", "partial"),
-                plot = TRUE,
-                na.action = stats::na.fail,
-                demean = TRUE,
-                ...) {
-  out <- stats::acf(x = x, lag.max = lag.max, type = type, plot = FALSE,
-                    na.action = na.action, demean = demean)
+  out$series <- deparse(substitute(x))
+
+  if (drop_lag0 && match.arg(type) == "correlation") {
+    out$acf = out$acf[-1, , , drop = FALSE]
+    out$lag = out$lag[-1, , , drop = FALSE]
+  }
+
   if (plot)
     xyplot(out, ...)
   else
     out
 }
 
-#' @describeIn autocorrelation Cross-correlation or -covariance
+#' @rdname autocf
 #' @export
-CCF <- function(x,
-                y,
-                lag.max = NULL,
-                type = c("correlation", "covariance"),
-                plot = TRUE,
-                na.action = stats::na.fail,
-                ...) {
+crosscf <- function(x,
+                    y,
+                    lag.max = NULL,
+                    type = c("correlation", "covariance"),
+                    plot = TRUE,
+                    na.action = stats::na.fail,
+                    ...) {
   out <- stats::ccf(x = x, y = y, lag.max = lag.max, type = type, plot = FALSE,
                     na.action = na.action)
   if (plot)
@@ -62,13 +71,13 @@ CCF <- function(x,
     out
 }
 
-#' @describeIn autocorrelation Partial cross-correlation or -covariance
+#' @rdname autocf
 #' @export
-PACF <- function(x,
-                 lag.max = NULL,
-                 plot = TRUE,
-                 na.action = stats::na.fail,
-                 ...) {
+pautocf <- function(x,
+                    lag.max = NULL,
+                    plot = TRUE,
+                    na.action = stats::na.fail,
+                    ...) {
   out <- stats::pacf(x = x, lag.max = lag.max, plot = FALSE,
                      na.action = na.action)
   if (plot)
@@ -87,14 +96,14 @@ PACF <- function(x,
 #' @param \dots Graphical parameters passed on to [lattice::xyplot()].
 #'
 #' @return Returns and plots a `trellis` object.
-#' @seealso [ACF()], [CCF()], [PACF()], [lattice::xyplot()],
+#' @seealso [autocf()], [crosscf()], [pautocf()], [lattice::xyplot()],
 #'   [stats::plot.acf()], [stats::acf()].
 #'
 #' @export
 #'
 #' @examples
 #' z  <- ts(matrix(rnorm(400), 100, 4), start = c(1961, 1), frequency = 12)
-#' ACF(z)
+#' autocf(z)
 xyplot.acf <- function(x,
                        data = NULL,
                        ci = 0.95,

@@ -17,7 +17,8 @@ Imports:
   grDevices,
   grid,
   gridExtra,
-  modelr
+  modelr,
+  zoo
 Suggests:
   covr,
   testthat,

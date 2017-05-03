@@ -76,9 +76,10 @@ xyplot.Arima <- function(x,
 
   # ACF of residuals
   if (show[3L])
-    plots[[3L]] <-
-      autocf(x$residuals, na.action = na.action, par.settings = par.settings,
-             ...)
+    plots[[3L]] <- autocf(x$residuals,
+                          na.action = na.action,
+                          par.settings = par.settings,
+                          ...)
 
   # Box-Ljung p.tests
   if (show[4L]) {
@@ -107,20 +108,5 @@ xyplot.Arima <- function(x,
     )
   }
 
-  plots <- plots[!vapply(plots, is.null, FUN.VALUE = logical(1))]
-
-  ll <- list()
-  ll$grobs <- plots
-  ll$padding <- 0
-  if (!is.null(layout)) {
-    if (is.matrix(layout)) {
-      ll$layout_matrix <- layout
-    } else {
-      ll$ncol <- layout[1]
-      ll$nrow <- layout[2]
-    }
-  }
-
-  do.call(gridExtra::grid.arrange, ll)
-  invisible(plots)
+  grid_wrap(plots, layout = layout)
 }

@@ -8,8 +8,7 @@
   main = list("Residuals vs Fitted", "Normal Q-Q", "Scale-Location",
   "Cook's distance", "Residuals vs Leverage", "Cook's distance vs Leverage"),
   id.n = 3, labels.id = names(stats::residuals(x)), cex.id = 0.75,
-  cook.levels = c(0.5, 1), label.pos = c(4, 2), nrow = NULL,
-  ncol = NULL, ...)
+  cook.levels = c(0.5, 1), label.pos = c(4, 2), layout = NULL, ...)
 }
 \arguments{
 \item{x}{\code{lm} object, typically result of \code{\link{lm}} or
@@ -35,14 +34,14 @@ numbers \code{1:6}}
 \item{label.pos}{positioning of labels, for the left half and right
     half of the graph respectively, for plots 1-3.}
 
-\item{nrow}{rows in the resulting gTable.}
+\item{layout}{a numeric vector with \code{[columns, rows]} to use in the call
+to \code{\link[gridExtra:grid.arrange]{gridExtra::grid.arrange()}}, or a layout matrix which will then be
+passed as the \code{layout_matrix} in \code{grid.arrange()}.}
 
-\item{ncol}{columns in the resulting gTable.}
-
-\item{\dots}{Arguments to be passed to \code{\link[lattice:xyplot]{lattice::xyplot()}}.}
+\item{\dots}{arguments to be passed to \code{\link[lattice:xyplot]{lattice::xyplot()}}.}
 }
 \value{
-A \code{gTable} of trellis grobs or a single trellis object.
+A list of \code{trellis} objects or a single \code{trellis} object.
 }
 \description{
 Lattice plot diagnostics for \code{lm} objects, mostly mimicking the behavior

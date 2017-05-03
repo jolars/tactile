@@ -7,12 +7,13 @@
 #' @param which if a subset of the plots is required, specify a subset of the
 #'   numbers `1:6`
 #' @param main title to each plot
-#' @param nrow rows in the resulting gTable.
-#' @param ncol columns in the resulting gTable.
 #' @param data Only provided for method consistency and is ignored.
-#' @param \dots Arguments to be passed to [lattice::xyplot()].
+#' @param layout a numeric vector with `[columns, rows]` to use in the call
+#'   to [gridExtra::grid.arrange()], or a layout matrix which will then be
+#'   passed as the `layout_matrix` in `grid.arrange()`.
+#' @param \dots arguments to be passed to [lattice::xyplot()].
 #'
-#' @return A `gTable` of trellis grobs or a single trellis object.
+#' @return A list of `trellis` objects or a single `trellis` object.
 #'
 #' @seealso [stats::lm()], [stats::plot.lm()], [lattice::xyplot()]
 #'
@@ -37,8 +38,7 @@ xyplot.lm <- function(x,
                       cex.id = 0.75,
                       cook.levels = c(0.5, 1),
                       label.pos = c(4, 2),
-                      nrow = NULL,
-                      ncol = NULL,
+                      layout = NULL,
                       ...) {
   if (!is.numeric(which) || any(which < 1) || any(which > 6))
     stop("'which' must be in 1:6")
@@ -143,13 +143,13 @@ xyplot.lm <- function(x,
       ylim = ylim,
       main = main[[1]],
       panel = function(x, y, ...) {
-        lattice::panel.abline(h = 0, col = "gray50", lty = 3)
+        lattice::panel.abline(h = 0, col = "gray50", lty = 2)
         lattice::panel.xyplot(x, y, ...)
         if (id.n > 0) {
           y.id <- r[show.r]
           text.id(yh[show.r], y.id, show.r)
         }
-        lattice::panel.loess(x, y, ...)
+        lattice::panel.loess(x, y)
       },
       ...
     )
@@ -207,7 +207,7 @@ xyplot.lm <- function(x,
       main = main[[4]],
       xlab = "Observation",
       ylab = "Cook's distance",
-      ylim = c(0, ymx * 1.1),
+      ylim = c(-0.01, ymx * 1.1),
       type = "h",
       panel = function(x, y, ...) {
         lattice::panel.xyplot(x, y, ...)
@@ -262,7 +262,7 @@ xyplot.lm <- function(x,
               y.id <- rsp[show.rsp]
               text.id(xx[show.rsp], y.id, show.rsp)
             }
-            lattice::panel.loess(x, y, ...)
+            lattice::panel.loess(x, y)
           },
           ...
         )
@@ -288,16 +288,14 @@ xyplot.lm <- function(x,
         aty <- sqrt(cook.levels) * ymult
       }
 
-      plot_list[[5]] <- lattice::xyplot(
-        rsp ~ xx,
+      plot5_pars <- list(
+        x = rsp ~ xx,
         main = main[[5]],
         xlab = "Leverage",
         ylab = ylab5,
         xlim = lms,
         ylim = ylim,
         scales = list(y = list(tck = c(2, 0))),
-        par.settings = list(superpose.line = list(lty = 2, col = "orange"),
-                            clip = list(panel = "off")),
         panel = function(x, y, ...) {
           lattice::panel.abline(h = 0, lty = 3, col = "gray50")
           lattice::panel.xyplot(x, y, ...)
@@ -311,29 +309,37 @@ xyplot.lm <- function(x,
               cl.h <- sqrt(crit * p * (1 - hh) / hh)
               ina <- cl.h < ylim[2]
               inb <- -cl.h > ylim[1]
-              lattice::llines(hh[ina], cl.h[ina], lty = 2, col = "orange")
-              lattice::llines(hh[inb], -cl.h[inb], lty = 2, col = "orange")
+              lattice::llines(hh[ina], cl.h[ina], lty = 2, col = "darkorange")
+              lattice::llines(hh[inb], -cl.h[inb], lty = 2, col = "darkorange")
             }
             latticeExtra::panel.key(
               text = "Cook's distance",
               corner = c(0.0, 0.02),
               lines = TRUE,
-              points = FALSE
+              points = FALSE,
+              col = "darkorange"
             )
             lattice::panel.axis(
               side = "right",
               at = c(-rev(aty), aty),
               labels = paste(c(rev(cook.levels), cook.levels)),
-              line.col = "orange",
-              text.col = "orange",
+              text.col = "darkorange",
               outside = TRUE,
               ticks = FALSE,
               text.cex = cex.id
             )
           }
-        },
-        ...
+        }
       )
+
+      plot5_pars <- utils::modifyList(plot5_pars, list(...))
+
+      plot5_pars$par.settings$superpose.line <-
+        list(lty = 2, col = "darkorange")
+      plot5_pars$par.settings$clip <- list(panel = "off")
+      plot5_pars$par.settings$layout.widths$right.padding <- 2
+
+      plot_list[[5]] <- do.call(lattice::xyplot, plot5_pars)
     }
   }
   if (show[6]) {
@@ -371,10 +377,11 @@ xyplot.lm <- function(x,
             label = bval[i],
             rotate = TRUE,
             fontfamily = "sans",
-            at = 0.9,
+            at = 0.95,
             cex = 0.8
           )
         }
+        lattice::panel.loess(x, y)
         if (id.n > 0) {
           show.r <- order(-cook)[iid]
           text.id(g[show.r], cook[show.r], show.r)
@@ -384,34 +391,6 @@ xyplot.lm <- function(x,
     )
   }
 
-  plot_list <- plot_list[!sapply(plot_list, is.null)]
-
-  if (length(plot_list) == 1) {
-    stats::update(plot_list[[1]])
-  } else {
-    grid_opts <- list()
-    grid_opts$grobs <- plot_list
-    if (!is.null(nrow))
-      grid_opts$nrow <- nrow
-    if (!is.null(ncol))
-      grid_opts$ncol <- ncol
-
-    do.call(gridExtra::grid.arrange, grid_opts)
-    invisible(plot_list)
-  }
+  grid_wrap(plot_list, layout = layout)
 }
-
-
-# dropInf utlitiy function
-dropInf <- function(x, h) {
-  if (any(isInf <- h >= 1)) {
-    warning(gettextf("Not plotting observations with leverage one:\n  %s",
-                     paste(which(isInf), collapse = ", ")),
-            call. = FALSE,
-            domain = NA)
-    x[isInf] <- NaN
-  }
-  x
-}
-
 

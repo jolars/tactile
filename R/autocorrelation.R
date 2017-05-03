@@ -8,6 +8,8 @@
 #' series and should be treated with appropriate caution. Using `ci.type = "ma"`
 #' may potentially be less misleading.
 #'
+#' @name autocorrelation
+#'
 #' @inheritParams stats::acf
 #' @param drop_lag0 drop the first lag?
 #' @param \dots further arguments to be passed to [xyplot.acf()].
@@ -20,12 +22,15 @@
 #' @author Original: Paul Gilbert, Martyn Plummer. Extensive modifications and
 #'   univariate case of pacf by B. D. Ripley. Adaptation to lattice by
 #'   Johan Larsson.
-#' @export
 #'
 #' @examples
-#' library(latticework)
 #' autocf(lh)
+#' pautocf(lh)
 #' crosscf(mdeaths, fdeaths)
+NULL
+
+#' @describeIn autocorrelation Autocorrelation and autocovariance
+#' @export
 autocf <- function(x,
                    lag.max = NULL,
                    type = c("correlation", "covariance", "partial"),
@@ -43,18 +48,18 @@ autocf <- function(x,
 
   out$series <- deparse(substitute(x))
 
-  if (drop_lag0 && match.arg(type) == "correlation") {
-    out$acf = out$acf[-1, , , drop = FALSE]
-    out$lag = out$lag[-1, , , drop = FALSE]
+  if (drop_lag0) {
+    out$acf = out$acf[-1L, , , drop = FALSE]
+    out$lag = out$lag[-1L, , , drop = FALSE]
   }
 
   if (plot)
-    xyplot(out, ...)
+    xyplot(x = out, ...)
   else
     out
 }
 
-#' @rdname autocf
+#' @describeIn autocorrelation Crosscorrelation and crosscovariance
 #' @export
 crosscf <- function(x,
                     y,
@@ -65,13 +70,16 @@ crosscf <- function(x,
                     ...) {
   out <- stats::ccf(x = x, y = y, lag.max = lag.max, type = type, plot = FALSE,
                     na.action = na.action)
+
+  out$series <- deparse(substitute(x))
+
   if (plot)
-    xyplot(out, ...)
+    xyplot(x = out, ...)
   else
     out
 }
 
-#' @rdname autocf
+#' @describeIn autocorrelation Partial autocorrelation and autocovariance
 #' @export
 pautocf <- function(x,
                     lag.max = NULL,
@@ -80,8 +88,11 @@ pautocf <- function(x,
                     ...) {
   out <- stats::pacf(x = x, lag.max = lag.max, plot = FALSE,
                      na.action = na.action)
+
+  out$series <- deparse(substitute(x))
+
   if (plot)
-    xyplot(out, ...)
+    xyplot(x = out, ...)
   else
     out
 }
@@ -92,8 +103,8 @@ pautocf <- function(x,
 #' of the autocorrelation and autocovariance functions from `latticework`.
 #'
 #' @inheritParams stats::plot.acf
-#' @param data Only provided for method consistency and is ignored.
-#' @param \dots Graphical parameters passed on to [lattice::xyplot()].
+#' @param data only provided for method consistency and is ignored.
+#' @param \dots graphical parameters passed on to [lattice::xyplot()].
 #'
 #' @return Returns and plots a `trellis` object.
 #' @seealso [autocf()], [crosscf()], [pautocf()], [lattice::xyplot()],
@@ -102,15 +113,11 @@ pautocf <- function(x,
 #' @export
 #'
 #' @examples
-#' z  <- ts(matrix(rnorm(400), 100, 4), start = c(1961, 1), frequency = 12)
-#' autocf(z)
+#' z <- ts(matrix(rnorm(400), 100, 4), start = c(1961, 1), frequency = 12)
+#' autocf(z, ci.col = "black")
 xyplot.acf <- function(x,
                        data = NULL,
                        ci = 0.95,
-                       type = "h",
-                       xlab = "Lag",
-                       ylab = NULL,
-                       ylim = NULL,
                        ci.col = "gray50",
                        ci.type = c("white", "ma"),
                        ...) {
@@ -120,17 +127,7 @@ xyplot.acf <- function(x,
   if (nser < 1L)
     stop("x$lag must have at least 1 column")
 
-  if (is.null(ylab))
-    ylab <- switch(
-      x$type,
-      correlation = "ACF",
-      covariance = "ACF (cov)",
-      partial = "Partial ACF"
-    )
-
-  snames <- x$snames
-
-  if (is.null(snames))
+  if (is.null(snames <- x$snames))
     snames <- paste("Series ", if (nser == 1L) x$series else 1L:nser)
 
   with.ci <- ci > 0 && x$type != "covariance"
@@ -143,14 +140,12 @@ xyplot.acf <- function(x,
 
   clim0 <- if (with.ci) stats::qnorm((1 + ci)/2)/sqrt(x$n.used) else c(0, 0)
 
-  if (is.null(ylim)) {
-    ylim <- range(x$acf[, 1L:nser, 1L:nser], na.rm = TRUE)
-    if (with.ci) ylim <- range(c(-clim0, clim0, ylim))
-    if (with.ci.ma) {
-      for (i in 1L:nser) {
-        clim <- clim0 * sqrt(cumsum(c(1, 2 * x$acf[-1, i, i]^2)))
-        ylim <- range(c(-clim, clim, ylim))
-      }
+  ylim <- range(x$acf[, 1L:nser, 1L:nser], na.rm = TRUE)
+  if (with.ci) ylim <- range(c(-clim0, clim0, ylim))
+  if (with.ci.ma) {
+    for (i in 1L:nser) {
+      clim <- clim0 * sqrt(cumsum(c(1L, 2L * x$acf[-1L, i, i]^2L)))
+      ylim <- range(c(-clim, clim, ylim))
     }
   }
 
@@ -165,38 +160,45 @@ xyplot.acf <- function(x,
     b <- data.frame(x$lag[, , i], stringsAsFactors = FALSE)
     colnames(b) <- snames
     aa <- utils::stack(a)
-    aa[, 3] <- snames[i]
-    aa[, 4] <- utils::stack(b)[, 1]
+    aa[, 3L] <- snames[i]
+    aa[, 4L] <- utils::stack(b)[, 1L]
     dd <- rbind(dd, aa)
   }
   colnames(dd) <- c("acf", "ind1", "ind2", "lag")
 
   # Set up lattice parameters
-  ll <- list(...)
-  ll$xlab <- xlab
-  ll$ylab <- ylab
-  ll$data <- dd
-  ll$ylim <- grDevices::extendrange(ylim)
-  ll$panel <- function(x, y, ...) {
-    if (with.ci && ci.type == "white") {
-      clim <- clim0
-      lattice::panel.abline(h = c(clim, -clim), col = ci.col, lty = 2)
-    } else if (with.ci.ma &&
-               lattice::current.row() == lattice::current.column()) {
-      clim <- clim0 * sqrt(cumsum(c(1, 2 * y[-1]^2)))
-      clim <- clim[-length(clim)]
-      lattice::panel.lines(x[-1], clim, col = ci.col, lty = 2)
-      lattice::panel.lines(x[-1], -clim, col = ci.col, lty = 2)
+  plot_pars <- list(
+    x = if (nser == 1L) {
+      acf ~ lag
+    } else if (nser == 2L ) {
+      acf ~ lag | ind1
+    } else if (nser > 2L) {
+      acf ~ lag | ind1 + ind2
+    },
+    xlab = "Lag",
+    ylab = switch(x$type,
+                  correlation = "ACF",
+                  covariance = "ACF (cov)",
+                  partial = "Partial ACF"),
+    data = dd,
+    ylim = grDevices::extendrange(ylim),
+    panel = function(x, y, ...) {
+      if (with.ci && ci.type == "white") {
+        clim <- clim0
+        lattice::panel.abline(h = c(clim, -clim), col = ci.col, lty = 2)
+      } else if (with.ci.ma &&
+                 lattice::current.row() == lattice::current.column()) {
+        clim <- clim0 * sqrt(cumsum(c(1, 2 * y[-1]^2)))
+        clim <- clim[-length(clim)]
+        lattice::panel.lines(x[-1], clim, col = ci.col, lty = 2)
+        lattice::panel.lines(x[-1], -clim, col = ci.col, lty = 2)
+      }
+      lattice::panel.xyplot(x, y, type = "h", ...)
+      lattice::panel.abline(h = 0)
     }
-    lattice::panel.xyplot(x, y, type = "h", ...)
-    lattice::panel.abline(h = 0)
-  }
-  if (nser == 1) {
-    ll$x <- stats::formula(acf ~ lag)
-  } else if (nser == 2 ) {
-    ll$x <- stats::formula(acf ~ lag | ind1)
-  } else if (nser > 2) {
-    ll$x <- stats::formula(acf ~ lag | ind1 + ind2)
-  }
-  do.call(lattice::xyplot, ll)
+  )
+
+  plot_pars <- utils::modifyList(plot_pars, list(...))
+
+  do.call(lattice::xyplot, plot_pars)
 }

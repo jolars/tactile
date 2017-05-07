@@ -8,6 +8,7 @@
 #'
 #' @inheritParams stats::ARMAacf
 #' @param plot Set to `TRUE` to plot the resulting ACF via [lattice::xyplot]
+#' @param drop_lag0 Set to `TRUE` to drop the lag at 0.
 #' @param \dots Graphical parameters passed onto [lattice::xyplot()].
 #'
 #' @return A vector of (partial) autocorrelations, named by the lags or, if
@@ -25,6 +26,7 @@ arma_acf <- function(ar = numeric(),
                      lag.max = NULL,
                      pacf = FALSE,
                      plot = FALSE,
+                     drop_lag0 = TRUE,
                      ...) {
   if (is.null(lag.max)) {
     p <- length(ar)
@@ -35,7 +37,14 @@ arma_acf <- function(ar = numeric(),
   }
 
   y <- stats::ARMAacf(ar = ar, ma = ma, lag.max = lag.max, pacf = pacf)
-  x <- as.integer(names(y))
+  if (pacf) {
+    x <- seq_along(y)
+  } else if (drop_lag0) {
+    y <- y[-1L]
+    x <- seq_along(y)
+  } else {
+    x <- seq_along(y) - 1
+  }
 
   yrng <- range(y, na.rm = TRUE)
   if (yrng[1] > 0) yrng[1] <- 0
@@ -49,7 +58,7 @@ arma_acf <- function(ar = numeric(),
   if (plot)
     lattice::xyplot(
       y ~ x,
-      ylab = if (pacf) "PACF" else "ACF",
+      ylab = if (pacf) "Partial ACF" else "ACF",
       xlab = "Lag",
       ylim = ylim,
       xlim = xlim,

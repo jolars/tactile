@@ -5,8 +5,7 @@
 \title{Diagnostic Plots for Time-Series Fits with lattice}
 \usage{
 \method{xyplot}{Arima}(x, data = NULL, which = 1:4, gof.lag = 10,
-  na.action = stats::na.pass, main = NULL, layout = NULL,
-  par.settings = list(layout.heights = list(top.padding = 0)), ...)
+  na.action = stats::na.pass, main = NULL, layout = NULL, ...)
 }
 \arguments{
 \item{x}{a fitted time-series model}
@@ -26,9 +25,7 @@
 to \code{\link[gridExtra:grid.arrange]{gridExtra::grid.arrange()}}, or a layout matrix which will then be
 passed as the \code{layout_matrix} in \code{grid.arrange()}.}
 
-\item{par.settings}{graphical parameters passed on to \code{\link[lattice:xyplot]{lattice::xyplot()}}.}
-
-\item{\dots}{other parameters to pass to \code{\link[lattice:xyplot]{lattice::xyplot()}}.}
+\item{\dots}{parameters to pass to \code{\link[lattice:xyplot]{lattice::xyplot()}}.}
 }
 \value{
 Plots a lattice plot and returns a \code{trellis} object.
@@ -44,5 +41,5 @@ xyplot(fit, which = c(1:2, 4), layout = rbind(c(1, 1), c(2, 3)))
 }
 \seealso{
 \code{\link[stats:tsdiag]{stats::tsdiag()}}, \code{\link[stats:arima]{stats::arima()}}, \code{\link[lattice:xyplot]{lattice::xyplot()}},
-\code{\link[gridExtra:grid.arrange]{gridExtra::grid.arrange()}}, \code{\link[stats:Box.test]{stats::Box.test()}}, \code{\link[=autocf]{autocf()}}.
+\code{\link[gridExtra:grid.arrange]{gridExtra::grid.arrange()}}, \code{\link[stats:Box.test]{stats::Box.test()}}, \code{\link[=ACF]{ACF()}}.
 }

@@ -12,6 +12,8 @@
 #' This theme is continually updated and is likely to change. Colors, for
 #' instance, are likely to be updated eventually.
 #'
+#' @param font_size Font size. Will affect other settings such as padding as well.
+#' @param point_size Point size. Will affect other settings.
 #' @inheritParams lattice::standard.theme
 #' @param \dots Additional named options appended via [utils::modifyList()].
 #'
@@ -23,25 +25,27 @@
 #' @examples
 #' xyplot(speed ~ dist, data = cars, par.settings = latticework_theme())
 #'
-latticework_theme <- function(name = "pdf",
+latticework_theme <- function(font_size = 12,
+                              point_size = 8,
+                              name = "pdf",
                               color = name != "postscript",
                               ...) {
   ll <- lattice::standard.theme(name = name, color = color)
 
   mod <- list(
-    fontsize = list(text = 7, points = 5),
+    fontsize = list(text = font_size, points = point_size),
     layout.heights = list(
-      top.padding = 0,
-      bottom.padding = 0,
+      top.padding = 0.1,
+      bottom.padding = 0.1,
       main = 2,
       sub = 2,
       main.key.padding = 0,
       axis.bottom = 1
     ),
-    par.main.text = list(cex = 1.15),
-    layout.widths = list(right.padding = 0,
-                         left.padding = 0,
+    layout.widths = list(right.padding = 0.1,
+                         left.padding = 0.1,
                          key.right = 1.5),
+    par.main.text = list(cex = 1.15),
     axis.components = list(left = list(tck = 0.5, pad1 = 0.5, pad2 = 0.5),
                            right = list(tck = 0.5, pad1 = 0.5, pad2 = 0),
                            bottom = list(tck = 0.5, pad1 = 0.5, pad2 = 0.5),

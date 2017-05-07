@@ -4,9 +4,7 @@
 \alias{xyplot.lm}
 \title{Lattice plot diagnostics for lm objects}
 \usage{
-\method{xyplot}{lm}(x, data = NULL, which = c(1:3, 5),
-  main = list("Residuals vs Fitted", "Normal Q-Q", "Scale-Location",
-  "Cook's distance", "Residuals vs Leverage", "Cook's distance vs Leverage"),
+\method{xyplot}{lm}(x, data = NULL, which = c(1:3, 5), main = FALSE,
   id.n = 3, labels.id = names(stats::residuals(x)), cex.id = 0.75,
   cook.levels = c(0.5, 1), label.pos = c(4, 2), layout = NULL, ...)
 }
@@ -19,7 +17,8 @@
 \item{which}{if a subset of the plots is required, specify a subset of the
 numbers \code{1:6}}
 
-\item{main}{title to each plot}
+\item{main}{if \code{TRUE} plots default titles. Can also be a \code{list} or character
+vector of length 6.}
 
 \item{id.n}{number of points to be labelled in each plot, starting
     with the most extreme.}

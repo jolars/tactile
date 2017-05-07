@@ -8,7 +8,7 @@
 #' series and should be treated with appropriate caution. Using `ci.type = "ma"`
 #' may potentially be less misleading.
 #'
-#' @name autocorrelation
+#' @name ACF
 #'
 #' @inheritParams stats::acf
 #' @param drop_lag0 drop the first lag?
@@ -24,21 +24,21 @@
 #'   Johan Larsson.
 #'
 #' @examples
-#' autocf(lh)
-#' pautocf(lh)
-#' crosscf(mdeaths, fdeaths)
+#' ACF(lh)
+#' PACF(lh)
+#' CCF(mdeaths, fdeaths)
 NULL
 
-#' @describeIn autocorrelation Autocorrelation and autocovariance
+#' @describeIn ACF Autocorrelation and autocovariance
 #' @export
-autocf <- function(x,
-                   lag.max = NULL,
-                   type = c("correlation", "covariance", "partial"),
-                   plot = TRUE,
-                   na.action = stats::na.fail,
-                   demean = TRUE,
-                   drop_lag0 = TRUE,
-                   ...) {
+ACF <- function(x,
+                lag.max = NULL,
+                type = c("correlation", "covariance", "partial"),
+                plot = TRUE,
+                na.action = stats::na.fail,
+                demean = TRUE,
+                drop_lag0 = TRUE,
+                ...) {
   out <- stats::acf(x = x,
                     lag.max = lag.max,
                     type = type,
@@ -59,15 +59,15 @@ autocf <- function(x,
     out
 }
 
-#' @describeIn autocorrelation Crosscorrelation and crosscovariance
+#' @describeIn ACF Crosscorrelation and crosscovariance
 #' @export
-crosscf <- function(x,
-                    y,
-                    lag.max = NULL,
-                    type = c("correlation", "covariance"),
-                    plot = TRUE,
-                    na.action = stats::na.fail,
-                    ...) {
+CCF <- function(x,
+                y,
+                lag.max = NULL,
+                type = c("correlation", "covariance"),
+                plot = TRUE,
+                na.action = stats::na.fail,
+                ...) {
   out <- stats::ccf(x = x, y = y, lag.max = lag.max, type = type, plot = FALSE,
                     na.action = na.action)
 
@@ -79,13 +79,13 @@ crosscf <- function(x,
     out
 }
 
-#' @describeIn autocorrelation Partial autocorrelation and autocovariance
+#' @describeIn ACF Partial autocorrelation and autocovariance
 #' @export
-pautocf <- function(x,
-                    lag.max = NULL,
-                    plot = TRUE,
-                    na.action = stats::na.fail,
-                    ...) {
+PACF <- function(x,
+                 lag.max = NULL,
+                 plot = TRUE,
+                 na.action = stats::na.fail,
+                 ...) {
   out <- stats::pacf(x = x, lag.max = lag.max, plot = FALSE,
                      na.action = na.action)
 
@@ -107,14 +107,14 @@ pautocf <- function(x,
 #' @param \dots graphical parameters passed on to [lattice::xyplot()].
 #'
 #' @return Returns and plots a `trellis` object.
-#' @seealso [autocf()], [crosscf()], [pautocf()], [lattice::xyplot()],
+#' @seealso [ACF()], [CCF()], [PACF()], [lattice::xyplot()],
 #'   [stats::plot.acf()], [stats::acf()].
 #'
 #' @export
 #'
 #' @examples
 #' z <- ts(matrix(rnorm(400), 100, 4), start = c(1961, 1), frequency = 12)
-#' autocf(z, ci.col = "black")
+#' ACF(z, ci.col = "black")
 xyplot.acf <- function(x,
                        data = NULL,
                        ci = 0.95,
@@ -141,7 +141,8 @@ xyplot.acf <- function(x,
   clim0 <- if (with.ci) stats::qnorm((1 + ci)/2)/sqrt(x$n.used) else c(0, 0)
 
   ylim <- range(x$acf[, 1L:nser, 1L:nser], na.rm = TRUE)
-  if (with.ci) ylim <- range(c(-clim0, clim0, ylim))
+  if (with.ci)
+    ylim <- range(c(-clim0, clim0, ylim))
   if (with.ci.ma) {
     for (i in 1L:nser) {
       clim <- clim0 * sqrt(cumsum(c(1L, 2L * x$acf[-1L, i, i]^2L)))

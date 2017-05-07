@@ -12,11 +12,10 @@
 #' @param layout either a numeric vector with (columns, rows) to use in the call
 #'   to [gridExtra::grid.arrange()], or a layout matrix which will then be
 #'   passed as the `layout_matrix` in `grid.arrange()`.
-#' @param par.settings graphical parameters passed on to [lattice::xyplot()].
-#' @param \dots other parameters to pass to [lattice::xyplot()].
+#' @param \dots parameters to pass to [lattice::xyplot()].
 #'
 #' @seealso [stats::tsdiag()], [stats::arima()], [lattice::xyplot()],
-#'   [gridExtra::grid.arrange()], [stats::Box.test()], [autocf()].
+#'   [gridExtra::grid.arrange()], [stats::Box.test()], [ACF()].
 #' @return Plots a lattice plot and returns a `trellis` object.
 #' @export
 #'
@@ -31,9 +30,6 @@ xyplot.Arima <- function(x,
                          na.action = stats::na.pass,
                          main = NULL,
                          layout = NULL,
-                         par.settings = list(
-                           layout.heights = list(top.padding = 0)
-                         ),
                          ...) {
   show <- rep(FALSE, 4)
   show[which] <- TRUE
@@ -42,7 +38,9 @@ xyplot.Arima <- function(x,
   if (!is.null(main))
     stopifnot(length(main) == sum(show))
 
-  r <- stats::residuals(x) / sqrt(x$sigma2)
+  r <- stats::residuals(x)
+  r <- r[!is.na(r)]
+  r <- r / sqrt(x$sigma2)
 
   # Standardized residuals
   if (show[1L]) {
@@ -50,7 +48,6 @@ xyplot.Arima <- function(x,
       r ~ seq_along(r),
       ylab = "Standardized residuals",
       xlab = "Time",
-      par.settings = par.settings,
       ...,
       panel = function(x, y, ...) {
         lattice::panel.abline(h = 0, col = "gray50")
@@ -63,12 +60,12 @@ xyplot.Arima <- function(x,
   if (show[2L]) {
     plots[[2L]] <- lattice::qqmath(
       ~ r,
-      ylab = "Standardized residuals",
-      xlab = "Time",
-      par.settings = par.settings,
+      ylab = "Sample quantiles",
+      xlab = "Theoretical quantiles",
       ...,
       panel = function(x, y, ...) {
-        lattice::panel.qqmathline(x, col = "gray50")
+        panel.qqmathci(x, ...)
+        lattice::panel.qqmathline(x, col  = "grey50", lty = 2)
         lattice::panel.qqmath(x, ...)
       }
     )
@@ -76,10 +73,7 @@ xyplot.Arima <- function(x,
 
   # ACF of residuals
   if (show[3L])
-    plots[[3L]] <- autocf(x$residuals,
-                          na.action = na.action,
-                          par.settings = par.settings,
-                          ...)
+    plots[[3L]] <- ACF(x$residuals, na.action = na.action, ...)
 
   # Box-Ljung p.tests
   if (show[4L]) {
@@ -99,7 +93,6 @@ xyplot.Arima <- function(x,
       xlab = "Lag",
       ylab = "Box-Ljung p-values",
       ylim = c(0, max(pval) * 1.08),
-      par.settings = par.settings,
       ...,
       panel = function(x, y, ...) {
         lattice::panel.abline(h = 0.05, lty = 2, col = "gray50")

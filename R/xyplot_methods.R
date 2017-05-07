@@ -6,7 +6,8 @@
 #' @inheritParams stats::plot.lm
 #' @param which if a subset of the plots is required, specify a subset of the
 #'   numbers `1:6`
-#' @param main title to each plot
+#' @param main if `TRUE` plots default titles. Can also be a `list` or character
+#'   vector of length 6.
 #' @param data Only provided for method consistency and is ignored.
 #' @param layout a numeric vector with `[columns, rows]` to use in the call
 #'   to [gridExtra::grid.arrange()], or a layout matrix which will then be
@@ -27,12 +28,7 @@
 xyplot.lm <- function(x,
                       data = NULL,
                       which = c(1:3, 5),
-                      main = list("Residuals vs Fitted",
-                                  "Normal Q-Q",
-                                  "Scale-Location",
-                                  "Cook's distance",
-                                  "Residuals vs Leverage",
-                                  "Cook's distance vs Leverage"),
+                      main = FALSE,
                       id.n = 3,
                       labels.id = names(stats::residuals(x)),
                       cex.id = 0.75,
@@ -46,6 +42,19 @@ xyplot.lm <- function(x,
   isGlm <- inherits(x, "glm")
   show <- rep(FALSE, 6)
   show[which] <- TRUE
+  if (!(is.list(main) || is.character(main))) {
+    main <- if (main)
+      list(
+        "Residuals vs Fitted",
+        "Normal Q-Q",
+        "Scale-Location",
+        "Cook's distance",
+        "Residuals vs Leverage",
+        "Cook's distance vs Leverage"
+      )
+    else
+      replicate(6, NULL)
+  }
 
   plot_list <- vector("list", 6)
 
@@ -162,6 +171,7 @@ xyplot.lm <- function(x,
       ylab = ylab23,
       xlab = "Theoretical quantiles",
       panel = function(x, ...) {
+        panel.qqmathci(x, ...)
         lattice::panel.qqmathline(x, lty = 3, col = "gray50", ...)
         lattice::panel.qqmath(x, ...)
         if (id.n > 0)
@@ -186,7 +196,7 @@ xyplot.lm <- function(x,
                                       list(YL = as.name(ylab23)))),
       panel = function(x, y, ...) {
         lattice::panel.xyplot(x, y, ...)
-        lattice::panel.loess(x, y, ...)
+        lattice::panel.loess(x, y)
         if (id.n > 0)
           text.id(yhn0[show.rs], sqrtabsr[show.rs], show.rs)
       },
@@ -219,7 +229,11 @@ xyplot.lm <- function(x,
 
   }
   if (show[5]) {
-    ylab5 <- if (isGlm) "Std. Pearson resid." else "Standardized residuals"
+    ylab5 <- if (isGlm)
+      "Std. Pearson resid."
+    else
+      "Standardized residuals"
+
     r.w <- stats::residuals(x, "pearson")
 
     if (!is.null(w))
@@ -299,7 +313,7 @@ xyplot.lm <- function(x,
         panel = function(x, y, ...) {
           lattice::panel.abline(h = 0, lty = 3, col = "gray50")
           lattice::panel.xyplot(x, y, ...)
-          lattice::panel.loess(x, y, ...)
+          lattice::panel.loess(x, y)
           if (id.n > 0) {
             y.id <- rsp[show.rsp]
             text.id(xx[show.rsp], y.id, show.rsp)
@@ -390,7 +404,6 @@ xyplot.lm <- function(x,
       ...
     )
   }
-
   grid_wrap(plot_list, layout = layout)
 }
 

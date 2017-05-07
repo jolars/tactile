@@ -5,7 +5,7 @@
 \title{Compute (and Plot) Theoretical ACF for an ARMA Process}
 \usage{
 arma_acf(ar = numeric(), ma = numeric(), lag.max = NULL, pacf = FALSE,
-  plot = FALSE, ...)
+  plot = FALSE, drop_lag0 = TRUE, ...)
 }
 \arguments{
 \item{ar}{numeric vector of AR coefficients}
@@ -19,6 +19,8 @@ arma_acf(ar = numeric(), ma = numeric(), lag.max = NULL, pacf = FALSE,
 \item{pacf}{logical.  Should the partial autocorrelations be returned?}
 
 \item{plot}{Set to \code{TRUE} to plot the resulting ACF via \link[lattice:xyplot]{lattice::xyplot}}
+
+\item{drop_lag0}{Set to \code{TRUE} to drop the lag at 0.}
 
 \item{\dots}{Graphical parameters passed onto \code{\link[lattice:xyplot]{lattice::xyplot()}}.}
 }

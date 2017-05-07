@@ -38,3 +38,13 @@ dropInf <- function(x, h) {
   x
 }
 
+# Exported and modified from lattice:::getFunctionOrName
+get_fun <- function(fun) {
+  if (is.function(fun))
+    fun
+  else if (is.character(fun))
+    get(fun)
+  else
+    eval(fun)
+}
+

@@ -4,7 +4,7 @@
 \alias{qqmath.zoo}
 \title{Q-Q diagram for zoo time series}
 \usage{
-\method{qqmath}{zoo}(x, data = NULL, reference = TRUE, ...)
+\method{qqmath}{zoo}(x, data = NULL, reference = TRUE, ci = TRUE, ...)
 }
 \arguments{
 \item{x}{A \code{zoo} object}
@@ -12,6 +12,8 @@
 \item{data}{Ignored}
 
 \item{reference}{Plot a reference line via \link[lattice:panel.qqmathline]{lattice::panel.qqmathline}?}
+
+\item{ci}{Plot confidence levels?}
 
 \item{\dots}{Graphical parameters to pass on to \code{\link[lattice:qqmath]{lattice::qqmath()}}.}
 }

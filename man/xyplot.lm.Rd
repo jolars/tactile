@@ -5,7 +5,7 @@
 \title{Lattice plot diagnostics for lm objects}
 \usage{
 \method{xyplot}{lm}(x, data = NULL, which = c(1:3, 5), main = FALSE,
-  id.n = 3, labels.id = names(stats::residuals(x)), cex.id = 0.75,
+  id.n = 3, labels.id = names(residuals(x)), cex.id = 0.75,
   cook.levels = c(0.5, 1), label.pos = c(4, 2), layout = NULL, ...)
 }
 \arguments{

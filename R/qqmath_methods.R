@@ -26,10 +26,9 @@ qqmath.zoo <- function(x, data = NULL, reference = TRUE, ci = TRUE, ...) {
       if (ci)
         panel.qqmathci(x, ...)
       if (reference)
-        lattice::panel.qqmathline(x, col = "gray50", lty = 2)
-      lattice::panel.qqmath(x, ...)
+        panel.qqmathline(x, col = "gray50", lty = 2)
+      panel.qqmath(x, ...)
     }
   )
-  ll <- update_list(ll, list(...))
-  do.call(lattice::qqmath, ll)
+  do.call(qqmath, update_list(ll, list(...)))
 }

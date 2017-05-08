@@ -4,17 +4,12 @@
 \alias{latticework_theme}
 \title{latticework lattice theme}
 \usage{
-latticework_theme(font_size = 12, point_size = 8, name = "pdf",
-  color = name != "postscript", ...)
+latticework_theme(font_size = 12, point_size = 8, color = TRUE, ...)
 }
 \arguments{
 \item{font_size}{Font size. Will affect other settings such as padding as well.}
 
 \item{point_size}{Point size. Will affect other settings.}
-
-\item{name}{ name of the device for which the setting is required, as
-    returned by \code{.Device}
-  }
 
 \item{color}{ logical, whether the initial settings should be color or
     black and white.  Defaults to \code{FALSE} for postscript devices,

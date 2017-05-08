@@ -4,8 +4,8 @@
 \alias{panel.qqmathci}
 \title{Panel function for Q-Q plot confidence intervals}
 \usage{
-panel.qqmathci(x, y = x, distribution = stats::qnorm, probs = c(0.25,
-  0.75), qtype = 7, groups = NULL, ci = 0.95, ci_col = "grey90", ...,
+panel.qqmathci(x, y = x, distribution = qnorm, probs = c(0.25, 0.75),
+  qtype = 7, groups = NULL, ci = 0.95, ci_col = "grey90", ...,
   identifier = "qqmathci")
 }
 \arguments{
@@ -63,7 +63,7 @@ that provided in the argument \code{distribution}.
 }
 \examples{
 library(lattice)
-qqmath(~ Sepal.Width | Species, data = iris, distribution = stats::qnorm,
+qqmath(~ Sepal.Width | Species, data = iris, distribution = qnorm,
        panel = function(x, ...) {
          panel.qqmathci(x, ...)
          panel.qqmathline(x, ...)

@@ -11,11 +11,11 @@
 
 \item{data}{Ignored}
 
-\item{reference}{Plot a reference line via \link[lattice:panel.qqmathline]{lattice::panel.qqmathline}?}
+\item{reference}{Plot a reference line via \link{panel.qqmathline}?}
 
 \item{ci}{Plot confidence levels?}
 
-\item{\dots}{Graphical parameters to pass on to \code{\link[lattice:qqmath]{lattice::qqmath()}}.}
+\item{\dots}{Graphical parameters to pass on to \code{\link[=qqmath]{qqmath()}}.}
 }
 \value{
 Plots and returns a \code{trellis} object.
@@ -30,5 +30,5 @@ zoo_lh <- zoo(lh)
 qqmath(zoo_lh)
 }
 \seealso{
-\code{\link[lattice:qqmath]{lattice::qqmath()}}, \code{\link[zoo:zoo]{zoo::zoo()}}, \code{\link[lattice:panel.qqmathline]{lattice::panel.qqmathline()}}.
+\code{\link[=qqmath]{qqmath()}}, \code{\link[zoo:zoo]{zoo::zoo()}}, \code{\link[=panel.qqmathline]{panel.qqmathline()}}.
 }

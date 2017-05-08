@@ -8,11 +8,13 @@
 #' @param which which plots should be plotted?
 #' @param na.action what to do about na.values when computing ACF?
 #' @param main optional titles for the plots
+#' @param max.lag number of lags to compute ACF for
+#' @param qq.aspect aspect of Q-Q plot (see [lattice::qqmath()])
 #' @inheritParams stats::tsdiag
 #' @param layout either a numeric vector with (columns, rows) to use in the call
 #'   to [gridExtra::grid.arrange()], or a layout matrix which will then be
 #'   passed as the `layout_matrix` in `grid.arrange()`.
-#' @param \dots parameters to pass to [lattice::xyplot()].
+#' @param \dots parameters to pass to [xyplot()].
 #'
 #' @seealso [stats::tsdiag()], [stats::arima()], [lattice::xyplot()],
 #'   [gridExtra::grid.arrange()], [stats::Box.test()], [ACF()].
@@ -26,77 +28,110 @@
 xyplot.Arima <- function(x,
                          data = NULL,
                          which = 1:4,
-                         gof.lag = 10,
-                         na.action = stats::na.pass,
+                         max.lag = NULL,
+                         gof.lag = NULL,
+                         qq.aspect = "iso",
+                         na.action = na.pass,
                          main = NULL,
                          layout = NULL,
                          ...) {
-  show <- rep(FALSE, 4)
+  show <- rep(FALSE, 4L)
   show[which] <- TRUE
-  plots <- vector("list", 4)
+  plots <- vector("list", 4L)
 
   if (!is.null(main))
     stopifnot(length(main) == sum(show))
 
-  r <- stats::residuals(x)
-  r <- r[!is.na(r)]
-  r <- r / sqrt(x$sigma2)
+  na.action <- get_fun(na.action)
+
+  r <- na.action(x$residuals)
+  rstd <- r / sqrt(x$sigma2)
 
   # Standardized residuals
   if (show[1L]) {
-    plots[[1L]] <- lattice::xyplot(
-      r ~ seq_along(r),
+    plots[[1L]] <- xyplot(
+      rstd,
       ylab = "Standardized residuals",
-      xlab = "Time",
+      grid = TRUE,
       ...,
       panel = function(x, y, ...) {
-        lattice::panel.abline(h = 0, col = "gray50")
-        lattice::panel.xyplot(x, y, type = "l", ...)
+        panel.abline(h = 0L, col = "gray50")
+        panel.xyplot(x, y, ...)
       }
     )
   }
 
   # Q-Q-diagram of standardized residuals
   if (show[2L]) {
-    plots[[2L]] <- lattice::qqmath(
-      ~ r,
+    plots[[2L]] <- qqmath(
+      ~ rstd,
       ylab = "Sample quantiles",
       xlab = "Theoretical quantiles",
+      aspect = qq.aspect,
       ...,
       panel = function(x, y, ...) {
         panel.qqmathci(x, ...)
-        lattice::panel.qqmathline(x, col  = "grey50", lty = 2)
-        lattice::panel.qqmath(x, ...)
+        panel.qqmathline(x, col  = "grey50", lty = 2L)
+        panel.qqmath(x, ...)
       }
     )
   }
 
   # ACF of residuals
-  if (show[3L])
-    plots[[3L]] <- ACF(x$residuals, na.action = na.action, ...)
+  if (show[3L]) {
+    df <- sum(x$arma[c(1, 3, 4, 7)])
+    period <- x$arma[5]
+
+    if (is.null(max.lag)) {
+      max.lag <- if (period < 6) 20 else 3 * period
+      if (max.lag <= df + 8)
+        max.lag <- df + 8
+    }
+
+    plots[[3L]] <- ACF(r, na.action = na.action, max.lag = max.lag, ...)
+  }
 
   # Box-Ljung p.tests
   if (show[4L]) {
-    df <- length(c(x$model$phi, x$model$theta))
+    df <- sum(x$arma[c(1, 3, 4, 7)])
+    period <- x$arma[5]
 
-    if (gof.lag < df)
-      stop("'gof.lag' cannot be < df (p +q)")
+    if (is.null(gof.lag)) {
+      gof.lag <- if (period < 6) 20 else 3 * period
+      if (gof.lag <= df + 8)
+        gof.lag <- df + 8
 
-    along <- seq.int(1L + df, gof.lag)
+    } else if (gof.lag < df) {
+      stop("'gof.lag' cannot be < df (p + q + P + Q)")
+    }
 
-    pval <- vapply(along, function(i) {
-      stats::Box.test(r, i, fitdf = df, type = "Ljung-Box")$p.value
-    }, FUN.VALUE = numeric(1))
+    pval <- double(gof.lag)
+    pval[] <- NA
+    for (i in (df + 1):gof.lag)
+      pval[i] <- Box.test(r, i, "Ljung-Box", df)$p.value
 
-    plots[[4L]] <- lattice::xyplot(
-      pval ~ along,
+    ll <- list(
+      x = pval ~ seq_along(pval),
+      xlab = "Lag",
+      ylab = "Ljung-Box p-values",
+      ylim = range(c(0, max(pval, na.rm = TRUE) * 1.08, 0.1)),
+      panel = function(x, y, ...) {
+        panel.abline(h = 0.05, lty = 2L, col = "gray50")
+        panel.xyplot(x, y, ...)
+      }
+    )
+
+    plots[[4L]] <- do.call(xyplot, update_list(ll, list(...)))
+
+    plots[[4L]] <- xyplot(
+      x = pval ~ seq_along(pval),
       xlab = "Lag",
       ylab = "Box-Ljung p-values",
-      ylim = c(0, max(pval) * 1.08),
+      ylim = range(c(0, max(pval, na.rm = TRUE) * 1.08, 0.1)),
       ...,
       panel = function(x, y, ...) {
-        lattice::panel.abline(h = 0.05, lty = 2, col = "gray50")
-        lattice::panel.xyplot(x, y, ...)
+        panel.abline(h = 0.05, lty = 2L, col = "gray50")
+        panel.xyplot(x, y, ...)
       }
     )
   }

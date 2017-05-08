@@ -30,7 +30,7 @@ xyplot.lm <- function(x,
                       which = c(1:3, 5),
                       main = FALSE,
                       id.n = 3,
-                      labels.id = names(stats::residuals(x)),
+                      labels.id = names(residuals(x)),
                       cex.id = 0.75,
                       cook.levels = c(0.5, 1),
                       label.pos = c(4, 2),
@@ -58,9 +58,9 @@ xyplot.lm <- function(x,
 
   plot_list <- vector("list", 6)
 
-  r <- stats::residuals(x)
-  yh <- stats::predict(x)
-  w <- stats::weights(x)
+  r <- residuals(x)
+  yh <- predict(x)
+  w <- weights(x)
 
   if (!is.null(w)) {
     wind <- w != 0
@@ -78,15 +78,15 @@ xyplot.lm <- function(x,
     else if (isGlm)
      sqrt(summary(x)$dispersion)
     else
-     sqrt(stats::deviance(x) / stats::df.residual(x))
+     sqrt(deviance(x) / df.residual(x))
 
-    hii <- (infl <- stats::influence(x, do.coef = FALSE))$hat
+    hii <- (infl <- influence(x, do.coef = FALSE))$hat
 
     if (any(show[4:6])) {
       cook <- if (isGlm)
-        stats::cooks.distance(x, infl = infl)
+        cooks.distance(x, infl = infl)
       else
-        stats::cooks.distance(x, infl = infl, sd = s, res = r, hat = hii)
+        cooks.distance(x, infl = infl, sd = s, res = r, hat = hii)
     }
   }
 
@@ -129,7 +129,7 @@ xyplot.lm <- function(x,
 
     text.id <- function(x, y, ind, adj.x = TRUE) {
       labpos <- if (adj.x) label.pos[1 + as.numeric(x > mean(range(x)))] else 3
-      lattice::panel.text(
+      panel.text(
         x = x,
         y = y,
         labels = labels.id[ind],
@@ -143,37 +143,37 @@ xyplot.lm <- function(x,
   if (show[1L]) {
     ylim <- range(r, na.rm = TRUE)
     if (id.n > 0)
-      ylim <- grDevices::extendrange(r = ylim, f = 0.08)
+      ylim <- extendrange(r = ylim, f = 0.08)
 
-    plot_list[[1]] <- lattice::xyplot(
+    plot_list[[1]] <- xyplot(
       r ~ yh,
       xlab = l.fit,
       ylab = "Residuals",
       ylim = ylim,
       main = main[[1]],
       panel = function(x, y, ...) {
-        lattice::panel.abline(h = 0, col = "gray50", lty = 2)
-        lattice::panel.xyplot(x, y, ...)
+        panel.abline(h = 0, col = "gray50", lty = 2)
+        panel.xyplot(x, y, ...)
         if (id.n > 0) {
           y.id <- r[show.r]
           text.id(yh[show.r], y.id, show.r)
         }
-        lattice::panel.loess(x, y)
+        panel.loess(x, y)
       },
       ...
     )
   }
   if (show[2L]) {
-    qq <- stats::qqnorm(rs, plot.it = FALSE)
-    plot_list[[2]] <- lattice::qqmath(
+    qq <- qqnorm(rs, plot.it = FALSE)
+    plot_list[[2]] <- qqmath(
       rs,
       main = main[[2]],
       ylab = ylab23,
       xlab = "Theoretical quantiles",
       panel = function(x, ...) {
         panel.qqmathci(x, ...)
-        lattice::panel.qqmathline(x, lty = 3, col = "gray50", ...)
-        lattice::panel.qqmath(x, ...)
+        panel.qqmathline(x, lty = 3, col = "gray50", ...)
+        panel.qqmath(x, ...)
         if (id.n > 0)
           text.id(qq$x[show.rs], qq$y[show.rs], show.rs)
       },
@@ -188,15 +188,15 @@ xyplot.lm <- function(x,
       yhn0 <- yh[w != 0]
     }
 
-    plot_list[[3]] <- lattice::xyplot(
+    plot_list[[3]] <- xyplot(
       sqrt(abs(rs)) ~ yhn0,
       xlab = l.fit,
       main = main[[3]],
       ylab = as.expression(substitute(sqrt(abs(YL)),
                                       list(YL = as.name(ylab23)))),
       panel = function(x, y, ...) {
-        lattice::panel.xyplot(x, y, ...)
-        lattice::panel.loess(x, y)
+        panel.xyplot(x, y, ...)
+        panel.loess(x, y)
         if (id.n > 0)
           text.id(yhn0[show.rs], sqrtabsr[show.rs], show.rs)
       },
@@ -212,7 +212,7 @@ xyplot.lm <- function(x,
       ymx <- max(cook, na.rm = TRUE)
     }
 
-    plot_list[[4]] <- lattice::xyplot(
+    plot_list[[4]] <- xyplot(
       cook ~ seq_along(cook),
       main = main[[4]],
       xlab = "Observation",
@@ -220,7 +220,7 @@ xyplot.lm <- function(x,
       ylim = c(-0.01, ymx * 1.1),
       type = "h",
       panel = function(x, y, ...) {
-        lattice::panel.xyplot(x, y, ...)
+        panel.xyplot(x, y, ...)
         if (id.n > 0)
           text.id(show.r, cook[show.r], show.r, adj.x = FALSE)
       },
@@ -234,7 +234,7 @@ xyplot.lm <- function(x,
     else
       "Standardized residuals"
 
-    r.w <- stats::residuals(x, "pearson")
+    r.w <- residuals(x, "pearson")
 
     if (!is.null(w))
       r.w <- r.w[wind]
@@ -247,10 +247,10 @@ xyplot.lm <- function(x,
 
     do.plot <- TRUE
     if (isConst.hat) {
-      aterms <- attributes(stats::terms(x))
+      aterms <- attributes(terms(x))
       dcl <- aterms$dataClasses[-aterms$response]
       facvars <- names(dcl)[dcl %in% c("factor", "ordered")]
-      mf <- stats::model.frame(x)[facvars]
+      mf <- model.frame(x)[facvars]
 
       if (ncol(mf) > 0) {
         dm <- data.matrix(mf)
@@ -264,19 +264,19 @@ xyplot.lm <- function(x,
         facval <- (dm - 1) %*% ff
         xx <- facval
 
-        plot_list[[5]] <- lattice::xyplot(
+        plot_list[[5]] <- xyplot(
           rsp ~ factor(facval, labels = x$xlevels[[1]]),
           main = main[[5]],
           xlab = "Factor Level Combinations",
           ylab = ylab5,
           panel = function(x, y, ...) {
-            lattice::panel.abline(h = 0, lty = 3, col = "gray50")
-            lattice::panel.xyplot(x, y, ...)
+            panel.abline(h = 0, lty = 3, col = "gray50")
+            panel.xyplot(x, y, ...)
             if (id.n > 0) {
               y.id <- rsp[show.rsp]
               text.id(xx[show.rsp], y.id, show.rsp)
             }
-            lattice::panel.loess(x, y)
+            panel.loess(x, y)
           },
           ...
         )
@@ -294,8 +294,8 @@ xyplot.lm <- function(x,
 
       if (length(cook.levels)) {
         p <- x$rank
-        lms <- grDevices::extendrange(xx, f = 0.1)
-        ylim <- grDevices::extendrange(rsp, f = 0.1)
+        lms <- extendrange(xx, f = 0.1)
+        ylim <- extendrange(rsp, f = 0.1)
         hh <- seq.int(min(r.hat[1L], r.hat[2L]/100), lms[2L], length.out = 101)
         xmax <- min(0.99, lms[2L])
         ymult <- sqrt(p * (1 - xmax) / xmax)
@@ -311,9 +311,9 @@ xyplot.lm <- function(x,
         ylim = ylim,
         scales = list(y = list(tck = c(2, 0))),
         panel = function(x, y, ...) {
-          lattice::panel.abline(h = 0, lty = 3, col = "gray50")
-          lattice::panel.xyplot(x, y, ...)
-          lattice::panel.loess(x, y)
+          panel.abline(h = 0, lty = 3, col = "gray50")
+          panel.xyplot(x, y, ...)
+          panel.loess(x, y)
           if (id.n > 0) {
             y.id <- rsp[show.rsp]
             text.id(xx[show.rsp], y.id, show.rsp)
@@ -323,8 +323,8 @@ xyplot.lm <- function(x,
               cl.h <- sqrt(crit * p * (1 - hh) / hh)
               ina <- cl.h < ylim[2]
               inb <- -cl.h > ylim[1]
-              lattice::llines(hh[ina], cl.h[ina], lty = 2, col = "darkorange")
-              lattice::llines(hh[inb], -cl.h[inb], lty = 2, col = "darkorange")
+              llines(hh[ina], cl.h[ina], lty = 2, col = "darkorange")
+              llines(hh[inb], -cl.h[inb], lty = 2, col = "darkorange")
             }
             latticeExtra::panel.key(
               text = "Cook's distance",
@@ -333,7 +333,7 @@ xyplot.lm <- function(x,
               points = FALSE,
               col = "darkorange"
             )
-            lattice::panel.axis(
+            panel.axis(
               side = "right",
               at = c(-rev(aty), aty),
               labels = paste(c(rev(cook.levels), cook.levels)),
@@ -346,14 +346,14 @@ xyplot.lm <- function(x,
         }
       )
 
-      plot5_pars <- utils::modifyList(plot5_pars, list(...))
+      plot5_pars <- update_list(plot5_pars, list(...))
 
       plot5_pars$par.settings$superpose.line <-
         list(lty = 2, col = "darkorange")
       plot5_pars$par.settings$clip <- list(panel = "off")
       plot5_pars$par.settings$layout.widths$right.padding <- 2
 
-      plot_list[[5]] <- do.call(lattice::xyplot, plot5_pars)
+      plot_list[[5]] <- do.call(xyplot, plot5_pars)
     }
   }
   if (show[6]) {
@@ -372,7 +372,7 @@ xyplot.lm <- function(x,
     xmax <- xrange[2]
     ymax <- yrange[2]
 
-    plot_list[[6]] <- lattice::xyplot(
+    plot_list[[6]] <- xyplot(
       cook ~ g,
       ylim = yrange,
       xlim = xrange,
@@ -380,7 +380,7 @@ xyplot.lm <- function(x,
       ylab = "Cook's distance",
       xlab = expression("Leverage  " * h[ii]),
       panel = function(x, y, ...) {
-        lattice::panel.xyplot(x, y, ...)
+        panel.xyplot(x, y, ...)
         for (i in seq_along(bval)) {
           bi2 <- bval[i] ^ 2
           latticeExtra::panel.ablineq(
@@ -395,7 +395,7 @@ xyplot.lm <- function(x,
             cex = 0.8
           )
         }
-        lattice::panel.loess(x, y)
+        panel.loess(x, y)
         if (id.n > 0) {
           show.r <- order(-cook)[iid]
           text.id(g[show.r], cook[show.r], show.r)

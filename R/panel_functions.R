@@ -23,7 +23,7 @@
 #'
 #' @examples
 #' library(lattice)
-#' qqmath(~ Sepal.Width | Species, data = iris, distribution = stats::qnorm,
+#' qqmath(~ Sepal.Width | Species, data = iris, distribution = qnorm,
 #'        panel = function(x, ...) {
 #'          panel.qqmathci(x, ...)
 #'          panel.qqmathline(x, ...)
@@ -31,7 +31,7 @@
 #'        })
 panel.qqmathci <- function(x,
                            y = x,
-                           distribution = stats::qnorm,
+                           distribution = qnorm,
                            probs = c(0.25, 0.75),
                            qtype = 7,
                            groups = NULL,
@@ -55,7 +55,7 @@ panel.qqmathci <- function(x,
 
   nobs <- sum(!is.na(y))
   if (!is.null(groups))
-    lattice::panel.superpose(
+    panel.superpose(
       x = y,
       y = NULL,
       distribution = distribution,
@@ -67,9 +67,9 @@ panel.qqmathci <- function(x,
     )
   else if (nobs > 0) {
     n   <- length(y)
-    pp  <- stats::ppoints(y)
+    pp  <- ppoints(y)
     z   <- distribution(pp)
-    yy  <- stats::quantile(y, probs, names = FALSE, type = qtype, na.rm = TRUE)
+    yy  <- quantile(y, probs, names = FALSE, type = qtype, na.rm = TRUE)
     xx  <- distribution(probs)
     zz  <- distribution(1 - (1 - ci)/2)
     b   <- (yy[2] - yy[1]) / (xx[2] - xx[1])
@@ -79,11 +79,11 @@ panel.qqmathci <- function(x,
     upr <- fit + zz * se
     lwr <- fit - zz * se
 
-    lattice::panel.polygon(x = c(z, rev(z)),
-                           y = c(upr, rev(lwr)),
-                           col = ci_col,
-                           border = "transparent",
-                           ...,
-                           identifier = identifier)
+    panel.polygon(x = c(z, rev(z)),
+                  y = c(upr, rev(lwr)),
+                  col = ci_col,
+                  border = "transparent",
+                  ...,
+                  identifier = identifier)
   }
 }

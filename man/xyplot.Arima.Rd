@@ -4,8 +4,9 @@
 \alias{xyplot.Arima}
 \title{Diagnostic Plots for Time-Series Fits with lattice}
 \usage{
-\method{xyplot}{Arima}(x, data = NULL, which = 1:4, gof.lag = 10,
-  na.action = stats::na.pass, main = NULL, layout = NULL, ...)
+\method{xyplot}{Arima}(x, data = NULL, which = 1:4, max.lag = NULL,
+  gof.lag = NULL, qq.aspect = "iso", na.action = na.pass, main = NULL,
+  layout = NULL, ...)
 }
 \arguments{
 \item{x}{a fitted time-series model}
@@ -14,8 +15,12 @@
 
 \item{which}{which plots should be plotted?}
 
+\item{max.lag}{number of lags to compute ACF for}
+
 \item{gof.lag}{the maximum number of lags for a Portmanteau
     goodness-of-fit test}
+
+\item{qq.aspect}{aspect of Q-Q plot (see \code{\link[lattice:qqmath]{lattice::qqmath()}})}
 
 \item{na.action}{what to do about na.values when computing ACF?}
 
@@ -25,7 +30,7 @@
 to \code{\link[gridExtra:grid.arrange]{gridExtra::grid.arrange()}}, or a layout matrix which will then be
 passed as the \code{layout_matrix} in \code{grid.arrange()}.}
 
-\item{\dots}{parameters to pass to \code{\link[lattice:xyplot]{lattice::xyplot()}}.}
+\item{\dots}{parameters to pass to \code{\link[=xyplot]{xyplot()}}.}
 }
 \value{
 Plots a lattice plot and returns a \code{trellis} object.

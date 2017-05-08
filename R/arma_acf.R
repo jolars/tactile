@@ -36,7 +36,7 @@ arma_acf <- function(ar = numeric(),
     lag.max <- max(p, q + 1)
   }
 
-  y <- stats::ARMAacf(ar = ar, ma = ma, lag.max = lag.max, pacf = pacf)
+  y <- ARMAacf(ar = ar, ma = ma, lag.max = lag.max, pacf = pacf)
   if (pacf) {
     x <- seq_along(y)
   } else if (drop_lag0) {
@@ -49,14 +49,14 @@ arma_acf <- function(ar = numeric(),
   yrng <- range(y, na.rm = TRUE)
   if (yrng[1] > 0) yrng[1] <- 0
   if (yrng[2] < 0) yrng[2] <- 0
-  ylim <- grDevices::extendrange(r = yrng)
+  ylim <- extendrange(r = yrng)
 
   xrng <- range(x)
   if (xrng[2] < 10) xrng[2] <- 10
-  xlim <- grDevices::extendrange(r = xrng)
+  xlim <- extendrange(r = xrng)
 
   if (plot)
-    lattice::xyplot(
+    xyplot(
       y ~ x,
       ylab = if (pacf) "Partial ACF" else "ACF",
       xlab = "Lag",
@@ -64,8 +64,8 @@ arma_acf <- function(ar = numeric(),
       xlim = xlim,
       ...,
       panel = function(x, y, ...) {
-        lattice::panel.xyplot(x, y, type = "h", ...)
-        lattice::panel.abline(h = 0)
+        panel.xyplot(x, y, type = "h", ...)
+        panel.abline(h = 0)
       }
     )
   else

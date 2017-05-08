@@ -29,12 +29,12 @@ latticework_theme <- function(font_size = 12,
                               point_size = 8,
                               color = TRUE,
                               ...) {
-  ll <- lattice::standard.theme(name = "pdf", color = color)
+  ll <- standard.theme(name = "pdf", color = color)
 
   mod <- list(
     fontsize = list(text = font_size, points = point_size),
-    strip.background = list(col = grDevices::grey(9:6/10)),
-    strip.shingle = list(col = grDevices::grey(7:4/10)),
+    strip.background = list(col = grey(9:6/10)),
+    strip.shingle = list(col = grey(7:4/10)),
     strip.text = list(cex = 0.75),
     layout.heights = list(top.padding = 0.1,
                           bottom.padding = 0,
@@ -53,5 +53,5 @@ latticework_theme <- function(font_size = 12,
                            bottom = list(tck = 0.5, pad1 = 0.5, pad2 = 0),
                            top = list(tck = 0.5, pad1 = 0.5, pad2 = 0))
   )
-  utils::modifyList(utils::modifyList(ll, mod), list(...))
+  update_list(update_list(ll, mod), list(...))
 }

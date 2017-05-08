@@ -35,7 +35,7 @@ ACF <- function(x,
                 lag.max = NULL,
                 type = c("correlation", "covariance", "partial"),
                 plot = TRUE,
-                na.action = stats::na.fail,
+                na.action = na.fail,
                 demean = TRUE,
                 drop_lag0 = TRUE,
                 ...) {
@@ -52,7 +52,7 @@ ACF <- function(x,
   }
 
   if (inherits(x, c("ts", "zoo")))
-    out$lag <- out$lag * stats::frequency(x)
+    out$lag <- out$lag * frequency(x)
 
   if (plot)
     xyplot(x = out, ...)
@@ -67,13 +67,13 @@ CCF <- function(x,
                 lag.max = NULL,
                 type = c("correlation", "covariance"),
                 plot = TRUE,
-                na.action = stats::na.fail,
+                na.action = na.fail,
                 ...) {
-  out <- stats::ccf(x = x, y = y, lag.max = lag.max, type = type, plot = FALSE,
-                    na.action = na.action)
+  out <- ccf(x = x, y = y, lag.max = lag.max, type = type, plot = FALSE,
+             na.action = na.action)
 
   if (inherits(x, c("ts", "zoo")) && inherits(y, c("ts", "zoo")))
-    out$lag <- out$lag * stats::frequency(x)
+    out$lag <- out$lag * frequency(x)
 
   if (plot)
     xyplot(x = out, ...)
@@ -86,13 +86,12 @@ CCF <- function(x,
 PACF <- function(x,
                  lag.max = NULL,
                  plot = TRUE,
-                 na.action = stats::na.fail,
+                 na.action = na.fail,
                  ...) {
-  out <- stats::pacf(x = x, lag.max = lag.max, plot = FALSE,
-                     na.action = na.action)
+  out <- pacf(x = x, lag.max = lag.max, plot = FALSE, na.action = na.action)
 
   if (inherits(x, c("ts", "zoo")))
-    out$lag <- out$lag * stats::frequency(x)
+    out$lag <- out$lag * frequency(x)
 
   if (plot)
     xyplot(x = out, ...)
@@ -141,7 +140,7 @@ xyplot.acf <- function(x,
     with.ci.ma <- FALSE
   }
 
-  clim0 <- if (with.ci) stats::qnorm((1 + ci)/2)/sqrt(x$n.used) else c(0, 0)
+  clim0 <- if (with.ci) qnorm((1 + ci)/2)/sqrt(x$n.used) else c(0, 0)
 
   ylim <- range(x$acf[, 1L:nser, 1L:nser], na.rm = TRUE)
   if (with.ci)
@@ -163,9 +162,9 @@ xyplot.acf <- function(x,
     colnames(a) <- snames
     b <- data.frame(x$lag[, , i], stringsAsFactors = FALSE)
     colnames(b) <- snames
-    aa <- utils::stack(a)
+    aa <- stack(a)
     aa[, 3L] <- snames[i]
-    aa[, 4L] <- utils::stack(b)[, 1L]
+    aa[, 4L] <- stack(b)[, 1L]
     dd <- rbind(dd, aa)
   }
   colnames(dd) <- c("acf", "ind1", "ind2", "lag")
@@ -185,24 +184,22 @@ xyplot.acf <- function(x,
                   covariance = "ACF (cov)",
                   partial = "Partial ACF"),
     data = dd,
-    ylim = grDevices::extendrange(ylim),
+    ylim = extendrange(ylim),
     panel = function(x, y, ...) {
       if (with.ci && ci.type == "white") {
         clim <- clim0
-        lattice::panel.abline(h = c(clim, -clim), col = ci.col, lty = 2)
+        panel.abline(h = c(clim, -clim), col = ci.col, lty = 2)
       } else if (with.ci.ma &&
-                 lattice::current.row() == lattice::current.column()) {
+                 current.row() == current.column()) {
         clim <- clim0 * sqrt(cumsum(c(1, 2 * y[-1]^2)))
         clim <- clim[-length(clim)]
-        lattice::panel.lines(x[-1], clim, col = ci.col, lty = 2)
-        lattice::panel.lines(x[-1], -clim, col = ci.col, lty = 2)
+        panel.lines(x[-1], clim, col = ci.col, lty = 2)
+        panel.lines(x[-1], -clim, col = ci.col, lty = 2)
       }
-      lattice::panel.xyplot(x, y, type = "h", ...)
-      lattice::panel.abline(h = 0)
+      panel.xyplot(x, y, type = "h", ...)
+      panel.abline(h = 0)
     }
   )
 
-  plot_pars <- utils::modifyList(plot_pars, list(...))
-
-  do.call(lattice::xyplot, plot_pars)
+  do.call(lattice::xyplot, update_list(plot_pars, list(...)))
 }

@@ -8,13 +8,13 @@
 \title{Auto- and Cross- Covariance and -Correlation Function Estimation}
 \usage{
 ACF(x, lag.max = NULL, type = c("correlation", "covariance", "partial"),
-  plot = TRUE, na.action = stats::na.fail, demean = TRUE,
-  drop_lag0 = TRUE, ...)
+  plot = TRUE, na.action = na.fail, demean = TRUE, drop_lag0 = TRUE,
+  ...)
 
 CCF(x, y, lag.max = NULL, type = c("correlation", "covariance"),
-  plot = TRUE, na.action = stats::na.fail, ...)
+  plot = TRUE, na.action = na.fail, ...)
 
-PACF(x, lag.max = NULL, plot = TRUE, na.action = stats::na.fail, ...)
+PACF(x, lag.max = NULL, plot = TRUE, na.action = na.fail, ...)
 }
 \arguments{
 \item{x}{a univariate or multivariate (not \code{ccf}) numeric time

@@ -3,7 +3,7 @@ grid_wrap <- function(x, layout = NULL) {
   x <- x[!vapply(x, is.null, FUN.VALUE = logical(1))]
 
   if (length(x) == 1) {
-    stats::update(x[[1]])
+    update(x[[1]])
   } else {
     ll <- list(grobs = x)
     if (!is.null(layout)) {
@@ -14,7 +14,7 @@ grid_wrap <- function(x, layout = NULL) {
         ll$nrow <- layout[2]
       }
     }
-    do.call(gridExtra::grid.arrange, ll)
+    do.call(grid.arrange, ll)
     invisible(x)
   }
 }
@@ -23,7 +23,7 @@ grid_wrap <- function(x, layout = NULL) {
 update_list <- function(x, val) {
   if (is.null(x))
     x <- list()
-  utils::modifyList(x = x, val = val)
+  modifyList(x = x, val = val)
 }
 
 # dropInf utlitiy function
@@ -47,4 +47,3 @@ get_fun <- function(fun) {
   else
     eval(fun)
 }
-

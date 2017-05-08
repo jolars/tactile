@@ -46,12 +46,13 @@ ACF <- function(x,
                     na.action = na.action,
                     demean = demean)
 
-  out$series <- deparse(substitute(x))
-
   if (drop_lag0) {
     out$acf = out$acf[-1L, , , drop = FALSE]
     out$lag = out$lag[-1L, , , drop = FALSE]
   }
+
+  if (inherits(x, c("ts", "zoo")))
+    out$lag <- out$lag * stats::frequency(x)
 
   if (plot)
     xyplot(x = out, ...)
@@ -71,7 +72,8 @@ CCF <- function(x,
   out <- stats::ccf(x = x, y = y, lag.max = lag.max, type = type, plot = FALSE,
                     na.action = na.action)
 
-  out$series <- deparse(substitute(x))
+  if (inherits(x, c("ts", "zoo")) && inherits(y, c("ts", "zoo")))
+    out$lag <- out$lag * stats::frequency(x)
 
   if (plot)
     xyplot(x = out, ...)
@@ -89,7 +91,8 @@ PACF <- function(x,
   out <- stats::pacf(x = x, lag.max = lag.max, plot = FALSE,
                      na.action = na.action)
 
-  out$series <- deparse(substitute(x))
+  if (inherits(x, c("ts", "zoo")))
+    out$lag <- out$lag * stats::frequency(x)
 
   if (plot)
     xyplot(x = out, ...)

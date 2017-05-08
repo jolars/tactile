@@ -122,18 +122,6 @@ xyplot.Arima <- function(x,
     )
 
     plots[[4L]] <- do.call(xyplot, update_list(ll, list(...)))
-
-    plots[[4L]] <- xyplot(
-      x = pval ~ seq_along(pval),
-      xlab = "Lag",
-      ylab = "Box-Ljung p-values",
-      ylim = range(c(0, max(pval, na.rm = TRUE) * 1.08, 0.1)),
-      ...,
-      panel = function(x, y, ...) {
-        panel.abline(h = 0.05, lty = 2L, col = "gray50")
-        panel.xyplot(x, y, ...)
-      }
-    )
   }
 
   grid_wrap(plots, layout = layout)

@@ -9,7 +9,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-latticework provides an `xyplot()` method for `lm` objects -- usually generated
+trelliswork provides an `xyplot()` method for `lm` objects -- usually generated
 with `stats::lm()` or `stats::glm()`. It provides the same type of diagnostic
 plots that `stats::plot.lm()` covers, with some small modificiations.
 
@@ -34,15 +34,15 @@ plot(fit, which = 1:6)
 par(mfrow = c(1, 1))
 ```
 
-Or instead use the method provided by latticework.
+Or instead use the method provided by trelliswork.
 
 ```{r, fig.cap = "Plot diagnostics with `stats::plot.lm()`.", fig.width = 6, fig.height = 9.5}
-library(latticework)
+library(trelliswork)
 xyplot(fit, which = 1:6)
 ```
 
 You will see that the results are similar. The benefits, however, of using
-`xyplot.lm()` from latticework are that
+`xyplot.lm()` from trelliswork are that
 
 * handling of plot margins is much improved,
 * the plots are returned as a list of trellis objects (that can be updated),
@@ -68,14 +68,14 @@ stats_method <- function() {
   unlink(ff)
 }
 
-latticework_method <- function() {
+trelliswork_method <- function() {
   xyplot(fit, which = 1:2)
 }
 
-f <- microbenchmark::microbenchmark(stats_method(), latticework_method())
+f <- microbenchmark::microbenchmark(stats_method(), trelliswork_method())
 ```
 
-And next we plot the results. As you see, the latticework method is slower
+And next we plot the results. As you see, the trelliswork method is slower
 despite all the fluff we put around the call to `plot.lm()`.
 
 ```{r, fig.cap = "Boxplot of timing results of the `xyplot.lm()` compared with `plot.lm()`.", fig.width = 6}

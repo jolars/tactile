@@ -15,6 +15,8 @@
 #' @param \dots arguments to be passed to [lattice::xyplot()].
 #'
 #' @return A list of `trellis` objects or a single `trellis` object.
+#' @author Original by John Maindonald and Martin Maechler. Adaptation to
+#'   lattice by Johan Larsson.
 #'
 #' @seealso [stats::lm()], [stats::plot.lm()], [lattice::xyplot()]
 #'
@@ -25,17 +27,18 @@
 #' fit <- lm(Sepal.Length ~ Sepal.Width, data = iris)
 #' xyplot(fit)
 #' xyplot(fit, which = 2)
-xyplot.lm <- function(x,
-                      data = NULL,
-                      which = c(1:3, 5),
-                      main = FALSE,
-                      id.n = 3,
-                      labels.id = names(residuals(x)),
-                      cex.id = 0.75,
-                      cook.levels = c(0.5, 1),
-                      label.pos = c(4, 2),
-                      layout = NULL,
-                      ...) {
+xyplot.lm <-
+  function(x,
+           data = NULL,
+           which = c(1:3, 5),
+           main = FALSE,
+           id.n = 3,
+           labels.id = names(residuals(x)),
+           cex.id = 0.75,
+           cook.levels = c(0.5, 1),
+           label.pos = c(4, 2),
+           layout = NULL,
+           ...) {
   if (!is.numeric(which) || any(which < 1) || any(which > 6))
     stop("'which' must be in 1:6")
 
@@ -74,11 +77,11 @@ xyplot.lm <- function(x,
 
   if (any(show[2:6])) {
     s <- if (inherits(x, "rlm"))
-     x$s
+      x$s
     else if (isGlm)
-     sqrt(summary(x)$dispersion)
+      sqrt(summary(x)$dispersion)
     else
-     sqrt(deviance(x) / df.residual(x))
+      sqrt(deviance(x) / df.residual(x))
 
     hii <- (infl <- influence(x, do.coef = FALSE))$hat
 
@@ -134,8 +137,7 @@ xyplot.lm <- function(x,
         y = y,
         labels = labels.id[ind],
         cex = cex.id,
-        pos = labpos,
-        offset = 0.25
+        pos = labpos
       )
     }
   }
@@ -152,13 +154,15 @@ xyplot.lm <- function(x,
       ylim = ylim,
       main = main[[1]],
       panel = function(x, y, ...) {
-        panel.abline(h = 0, col = "gray50", lty = 2)
+        panel.abline(h = 0,
+                     col = trellis.par.get()$add.line$col,
+                     lty = 2)
         panel.xyplot(x, y, ...)
         if (id.n > 0) {
           y.id <- r[show.r]
           text.id(yh[show.r], y.id, show.r)
         }
-        panel.loess(x, y)
+        panel.loess(x, y, ...)
       },
       ...
     )
@@ -170,10 +174,13 @@ xyplot.lm <- function(x,
       main = main[[2]],
       ylab = ylab23,
       xlab = "Theoretical quantiles",
-      panel = function(x, ...) {
-        panel.qqmathci(x, ...)
-        panel.qqmathline(x, lty = 3, col = "gray50", ...)
-        panel.qqmath(x, ...)
+      panel = function(...) {
+        panel.qqmathci(...)
+        panel.qqmathline(lty = trellis.par.get()$add.line$lty,
+                         col = trellis.par.get()$add.line$col,
+                         lwd = trellis.par.get()$add.line$lwd,
+                         ...)
+        panel.qqmath(...)
         if (id.n > 0)
           text.id(qq$x[show.rs], qq$y[show.rs], show.rs)
       },
@@ -270,7 +277,7 @@ xyplot.lm <- function(x,
           xlab = "Factor Level Combinations",
           ylab = ylab5,
           panel = function(x, y, ...) {
-            panel.abline(h = 0, lty = 3, col = "gray50")
+            panel.abline(h = 0, lty = 2, col = trellis.par.get()$add.line$col)
             panel.xyplot(x, y, ...)
             if (id.n > 0) {
               y.id <- rsp[show.rsp]
@@ -311,7 +318,7 @@ xyplot.lm <- function(x,
         ylim = ylim,
         scales = list(y = list(tck = c(2, 0))),
         panel = function(x, y, ...) {
-          panel.abline(h = 0, lty = 3, col = "gray50")
+          panel.abline(h = 0, lty = 2, col = trellis.par.get()$add.line$col)
           panel.xyplot(x, y, ...)
           panel.loess(x, y)
           if (id.n > 0) {
@@ -346,7 +353,7 @@ xyplot.lm <- function(x,
         }
       )
 
-      plot5_pars <- update_list(plot5_pars, list(...))
+      plot5_pars <- updateList(plot5_pars, list(...))
 
       plot5_pars$par.settings$superpose.line <-
         list(lty = 2, col = "darkorange")
@@ -366,8 +373,8 @@ xyplot.lm <- function(x,
     xlim <- c(0, max(g, na.rm = TRUE))
     ylim <- c(0, ymx)
 
-    xrange <- grDevices::extendrange(xlim, f = 0.1)
-    yrange <- grDevices::extendrange(ylim, f = 0.1)
+    xrange <- extendrange(xlim, f = 0.1)
+    yrange <- extendrange(ylim, f = 0.1)
 
     xmax <- xrange[2]
     ymax <- yrange[2]
@@ -386,8 +393,8 @@ xyplot.lm <- function(x,
           latticeExtra::panel.ablineq(
             a = 0,
             b = bi2,
-            lty = 3,
-            col = "gray50",
+            lty = 2,
+            col = trellis.par.get()$add.line$col,
             label = bval[i],
             rotate = TRUE,
             fontfamily = "sans",
@@ -406,4 +413,3 @@ xyplot.lm <- function(x,
   }
   grid_wrap(plot_list, layout = layout)
 }
-

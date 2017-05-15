@@ -5,45 +5,34 @@ grid_wrap <- function(x, layout = NULL) {
   if (length(x) == 1) {
     update(x[[1]])
   } else {
-    ll <- list(grobs = x)
+    args <- list(grobs = x)
     if (!is.null(layout)) {
       if (is.matrix(layout)) {
-        ll$layout_matrix <- layout
+        args$layout_matrix <- layout
       } else {
-        ll$ncol <- layout[1]
-        ll$nrow <- layout[2]
+        args$ncol <- layout[1]
+        args$nrow <- layout[2]
       }
     }
-    do.call(grid.arrange, ll)
+    do.call(grid.arrange, args)
     invisible(x)
   }
 }
 
-# Wrapper for modifyList
-update_list <- function(x, val) {
-  if (is.null(x))
-    x <- list()
-  modifyList(x = x, val = val)
+# rescale to new range
+rescale <- function(x, new_min = 0, new_max = 1) {
+  old_min <- min(x, na.rm = TRUE)
+  old_max <- max(x, na.rm = TRUE)
+  (x - old_min)/(old_max - old_min) * (new_max - new_min) + new_min
 }
 
-# dropInf utlitiy function
-dropInf <- function(x, h) {
-  if (any(isInf <- h >= 1)) {
-    warning(gettextf("Not plotting observations with leverage one:\n  %s",
-                     paste(which(isInf), collapse = ", ")),
-            call. = FALSE,
-            domain = NA)
-    x[isInf] <- NaN
-  }
-  x
-}
 
-# Exported and modified from lattice:::getFunctionOrName
-get_fun <- function(fun) {
-  if (is.function(fun))
-    fun
-  else if (is.character(fun))
-    get(fun)
-  else
-    eval(fun)
+# suppress plot, return object
+dont_plot <- function(x) {
+  tmp <- tempfile()
+  grDevices::png(tmp)
+  p <- graphics::plot(x)
+  grDevices::dev.off()
+  unlink(tmp)
+  invisible(p)
 }

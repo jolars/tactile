@@ -1,9 +1,9 @@
-Package: latticework
-Title: Extensions to lattice
+Package: trelliswork
+Title: Extensions to Lattice
 Version: 0.0.0.9000
 Authors@R: person("Johan", "Larsson", email = "johanlarsson@outlook.com",
                   role = c("aut", "cre"))
-Description: This aim package aims to extend the functionality of lattice
+Description: This package aims to extend the functionality of lattice
   and latticeExtra with new functions and methods that make it easier to
   be wholly reliant on trellis graphics in R. It is not an official extension
   to lattice nor related to any of its developers.
@@ -17,19 +17,19 @@ Imports:
   grDevices,
   grid,
   gridExtra,
-  modelr,
-  zoo
+  RColorBrewer
 Suggests:
   covr,
   testthat,
   knitr,
   rmarkdown,
-  microbenchmark
+  microbenchmark,
+  zoo,
 License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.0.1
-URL: https://github.com/jolars/latticework
-BugReports: https://github.com/jolars/latticework/issues
+URL: https://github.com/jolars/trelliswork
+BugReports: https://github.com/jolars/trelliswork/issues
 VignetteBuilder: knitr

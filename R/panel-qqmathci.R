@@ -1,4 +1,4 @@
-#' Panel function for Q-Q plot confidence intervals
+#' Panel Function for Q-Q Plot Confidence Intervals
 #'
 #' Panel function to go along with [lattice::qqmath()] and possibly
 #' [lattice::panel.qqmathline()]. Adds filled confidence bands to the Q-Q-plot.
@@ -23,11 +23,11 @@
 #'
 #' @examples
 #' library(lattice)
-#' qqmath(~ Sepal.Width | Species, data = iris, distribution = qnorm,
-#'        panel = function(x, ...) {
-#'          panel.qqmathci(x, ...)
-#'          panel.qqmathline(x, ...)
-#'          panel.qqmath(x, ...)
+#' qqmath(~ Sepal.Width | Species, data = iris, distribution = qunif,
+#'        panel = function(...) {
+#'          panel.qqmathci(...)
+#'          panel.qqmathline(...)
+#'          panel.qqmath(...)
 #'        })
 panel.qqmathci <- function(x,
                            y = x,
@@ -41,7 +41,7 @@ panel.qqmathci <- function(x,
                            identifier = "qqmathci") {
   y <- as.numeric(y)
   stopifnot(length(probs) == 2)
-  distribution <- get_fun(distribution)
+  distribution <- getFunctionOrName(distribution)
 
   d <- deparse(formals()[["distribution"]])
   d <- if (grepl("::", d, fixed = TRUE) || grepl(":::", d, fixed = TRUE))
@@ -74,16 +74,18 @@ panel.qqmathci <- function(x,
     zz  <- distribution(1 - (1 - ci)/2)
     b   <- (yy[2] - yy[1]) / (xx[2] - xx[1])
     a   <- yy[1] - b * xx[1]
-    se  <- (b/dens(z)) * sqrt(pp * (1 - pp)/n)
+    se  <- b/dens(z) * sqrt(pp * (1 - pp)/n)
     fit <- a + b * z
     upr <- fit + zz * se
     lwr <- fit - zz * se
 
-    panel.polygon(x = c(z, rev(z)),
-                  y = c(upr, rev(lwr)),
-                  col = ci_col,
-                  border = "transparent",
-                  ...,
-                  identifier = identifier)
+    panel.polygon(
+      x = c(z, rev(z)),
+      y = c(upr, rev(lwr)),
+      col = ci_col,
+      border = "transparent",
+      ...,
+      identifier = identifier
+    )
   }
 }

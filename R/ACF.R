@@ -39,12 +39,12 @@ ACF <- function(x,
                 demean = TRUE,
                 drop_lag0 = TRUE,
                 ...) {
-  out <- stats::acf(x = x,
-                    lag.max = lag.max,
-                    type = type,
-                    plot = FALSE,
-                    na.action = na.action,
-                    demean = demean)
+  out <- acf(x = x,
+             lag.max = lag.max,
+             type = type,
+             plot = FALSE,
+             na.action = na.action,
+             demean = demean)
 
   if (drop_lag0) {
     out$acf = out$acf[-1L, , , drop = FALSE]
@@ -201,5 +201,5 @@ xyplot.acf <- function(x,
     }
   )
 
-  do.call(lattice::xyplot, update_list(plot_pars, list(...)))
+  do.call(lattice::xyplot, updateList(plot_pars, list(...)))
 }

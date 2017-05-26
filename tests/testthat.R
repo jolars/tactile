@@ -1,4 +1,4 @@
 library(testthat)
-library(latticework)
+library(trelliswork)
 
-test_check("latticework")
+test_check("trelliswork")

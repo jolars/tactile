@@ -1,4 +1,4 @@
-library(latticework)
+library(trelliswork)
 
 test_that("We receive the proper classes", {
   fit <- stats::lm(rnorm(100) ~ runif(100))

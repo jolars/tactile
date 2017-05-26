@@ -1,384 +1,162 @@
-#' Bubbleplot
+#' Bubbleplots
 #'
-#' A lattice-based plot for displaying *bubble plots*, that is, plots that
-#' match a variable with the area of circles.
+#' Draws bubbleblots -- trivariate plots where the third dimension is mapped
+#' to the size of the points drawn on the screen.
 #'
-#' @param x A formula of the form `color_variable ~ x * y` followed, optionally,
-#'   by `|` and conditioning variables stringed together with `+`.
-#' @param bubblekey Draws a bubble key to the right of the plot.
-#' @param maxsize Maximum cex for the bubbles.
-#' @inheritParams lattice::xyplot
-#' @inherit lattice::xyplot return
-#' @author Original by Deepayan Sarkar.
-#' @return A `trellis` object.
-#' @examples
-#' bubbleplot(mpg ~ wt * disp, data = mtcars)
+#' @author Johan Larsson
 #'
-#' bubbleplot(mpg ~ wt * disp, data = mtcars, groups = cyl, auto.key = TRUE,
-#'            bubblekey = list(title = "Miles/Gallon"))
+#' @inherit lattice::qqmath return
 #' @export
-bubbleplot <- function(x, data, ...) UseMethod("bubbleplot")
+#'
+#' @examples
+#' bubbleplot(disp ~ hp * wt, groups = cyl, data = mtcars, auto.key = TRUE)
+#' bubbleplot(disp ~ hp * mpg | factor(cyl), groups = gear, data = mtcars,
+#'            auto.key = TRUE)
+bubbleplot <- function(x, data = NULL, ...) UseMethod("bubbleplot")
 
+#' @param x A formula of the form `z ~ x * y`, where `x` and `y` have the usual
+#'   interpretation in trellis graphics (see [lattice::xyplot()]) and `z` is
+#'   mapped to the size of bubbles.
+#' @param data A data.frame, list or environment wherein the formula and
+#'   groups arguments can be evaluated.
+#' @param maxsize Maximum size (in cex) for the bubbles.
+#' @param bubblekey Set to `TRUE` to draw an informative legend about the
+#'   bubbles. Uses [lattice::draw.key()]. See the **key** section of the
+#'   documentation in [lattice::xyplot()]. If both `auto.key` and `bubblekey`
+#'   are given and their `space` arguments (positions) conflict, bubblekey
+#'   will silently override the position of `auto.key`.
+#' @param allow.multiple See [lattice::xyplot()]
+#' @param outer See [lattice::xyplot()]
+#' @param panel See [lattice::xyplot()]. Here, we are passing an additional
+#'   variable, `z`, which is then used in [panel.bubbleplot()].
+#' @param groups See [lattice::xyplot()]
+#' @param subset See [lattice::xyplot()]
+#' @param drop.unused.levels See [lattice::xyplot()]
+#' @param \dots Further arguments to pass to [lattice::xyplot()].
+#'
 #' @rdname bubbleplot
 #' @export
-bubbleplot.formula <-
-  function(x,
-           data = NULL,
-           bubblekey = TRUE,
-           maxsize = 2,
-           allow.multiple = is.null(groups) || outer,
-           outer = !is.null(groups),
-           auto.key = FALSE,
-           aspect = "fill",
-           panel = "panel.bubbleplot",
-           prepanel = NULL,
-           scales = list(),
-           strip = TRUE,
-           groups = NULL,
-           xlab,
-           xlim,
-           ylab,
-           ylim,
-           drop.unused.levels = lattice.getOption("drop.unused.levels"),
-           ...,
-           lattice.options = NULL,
-           default.scales = list(),
-           default.prepanel = lattice.getOption("prepanel.default.xyplot"),
-           subscripts = !is.null(groups),
-           subset = TRUE) {
-    formula <- x
-    dots <- list(...)
-    groups <- eval(substitute(groups), data, environment(x))
-    subset <- eval(substitute(subset), data, environment(x))
-    if (!is.null(lattice.options)) {
-      oopt <- lattice.options(lattice.options)
-      on.exit(lattice.options(oopt), add = TRUE)
-    }
+bubbleplot.formula <- function(
+    x,
+    data = NULL,
+    maxsize = 3,
+    bubblekey = TRUE,
+    allow.multiple = is.null(groups) || outer,
+    outer = !is.null(groups),
+    panel = panel.bubbleplot,
+    groups = NULL,
+    subset = TRUE,
+    drop.unused.levels = lattice.getOption("drop.unused.levels"),
+    ...
+  ) {
+  new_groups <- substitute(groups)
+  groups <- eval(substitute(groups), data, environment(x))
+  subset <- eval(substitute(subset), data, environment(x))
 
-    ## Step 1: Evaluate x, y, etc. and do some preprocessing
+  # Parse the formula as z ~ x * y
+  form <- latticeParseFormula(
+    model = x,
+    data = data,
+    dimension = 3,
+    subset = subset,
+    groups = groups,
+    multiple = allow.multiple,
+    outer = outer,
+    subscripts = TRUE,
+    drop = drop.unused.levels
+  )
 
-    form <-
-      latticeParseFormula(
-        formula,
-        data,
-        dimension = 3,
-        subset = subset,
-        groups = groups,
-        multiple = allow.multiple,
-        outer = outer,
-        subscripts = TRUE,
-        drop = drop.unused.levels
-      )
+  new_form <- xyz_to_xy(form)
 
-    groups <- form$groups
+  # Compute bubble sizes
+  z <- form$left
+  bubbles <- make_bubbles(z, maxsize)
 
-    if (!is.function(panel)) panel <- eval(panel)
-    if (!is.function(strip)) strip <- eval(strip)
+  # Retrieve call
+  ccall <- match.call()
 
-    if ("subscripts" %in% names(formals(panel))) subscripts <- TRUE
-    if (subscripts) subscr <- form$subscr
-    cond <- form$condition
-    z <- form$left
-    x <- form$right.x
-    y <- form$right.y
+  ocall <- sys.call(sys.parent())
+  ocall[[1]] <- quote(bubbleplot)
 
-    if (length(cond) == 0) {
-      strip <- FALSE
-      cond <- list(gl(1, length(x)))
-    }
+  # Update call
+  ccall$x <- new_form
+  ccall$z <- bubbles$x
+  ccall$panel <- panel
 
-    if (missing(xlab)) xlab <- form$right.x.name
-    if (missing(ylab)) ylab <- form$right.y.name
+  # Make the call
+  ccall[[1]] <- quote(lattice::xyplot)
+  ans <- eval.parent(ccall)
+  ans$call <- ocall
 
-    ## S-PLUS requires both x and y to be numeric, but we
-    ## don't. Question is, should we give a warning ? Nope.
 
-    ##if (!(is.numeric(x) && is.numeric(y)))
-    ##    warning("x and y are not both numeric")
 
-    ## create a skeleton trellis object with the
-    ## less complicated components:
+  # Set up bubblekey (if required)
+  if (isTRUE(bubblekey) || is.list(bubblekey)) {
+    key_args <- list(
+      key = updateList(list(
+        title = form$left.name,
+        cex.title = 1,
+        text = list(as.character(bubbles$breaks)),
+        points = list(
+          col = if (is.null(groups)) trellis.par.get("plot.symbol")$col else 1,
+          pch = trellis.par.get("plot.symbol")$pch,
+          fill = trellis.par.get("plot.symbol")$fill,
+          alpha = trellis.par.get("plot.symbol")$alpha,
+          font = trellis.par.get("plot.symbol")$font,
+          cex = bubbles$breaks_cex
+        ),
+        # Padding purely by trial and error. Is there a smarter solution?
+        padding.text = maxsize * 1.3
+      ), if (is.list(bubblekey)) bubblekey else list())
+    )
 
-    foo <-
-      do.call("trellis.skeleton",
-              c(list(formula = formula,
-                     cond = cond,
-                     aspect = aspect,
-                     strip = strip,
-                     panel = panel,
-                     xlab = xlab,
-                     ylab = ylab,
-                     xlab.default = form$right.x.name,
-                     ylab.default = form$right.y.name,
-                     lattice.options = lattice.options), dots),
-              quote = TRUE)
+    # Find a position for the key
+    if (!is.null(key_args$key$space))
+      # First respect user input
+      key_pos <- key_args$key$space
+    else if (!is.null(ans$legend)) {
+      # Else
+      positions <- c("right", "top", "bottom", "left")
+      ii <- positions %in% names(ans$legend)
+      key_pos <- positions[!ii][1]
+    } else
+      key_pos <- "right"
 
-    dots <- foo$dots # arguments not processed by trellis.skeleton
-    foo <- foo$foo
-    foo$call <- sys.call(sys.parent())
-    foo$call[[1]] <- quote(xyplot)
-
-    ## Step 2: Compute scales.common (leaving out limits for now)
-
-    if (is.character(scales)) scales <- list(relation = scales)
-    scales <- updateList(default.scales, scales)
-    foo <- c(foo, do.call("construct.scales", scales))
-
-    ## Step 3: Decide if limits were specified in call:
-
-    have.xlim <- !missing(xlim)
-    if (!is.null(foo$x.scales$limits)) # override xlim
-    {
-      have.xlim <- TRUE
-      xlim <- foo$x.scales$limits
-    }
-    have.ylim <- !missing(ylim)
-    if (!is.null(foo$y.scales$limits))
-    {
-      have.ylim <- TRUE
-      ylim <- foo$y.scales$limits
-    }
-
-    ## Step 4: Decide if log scales are being used:
-
-    have.xlog <- !is.logical(foo$x.scales$log) || foo$x.scales$log
-    have.ylog <- !is.logical(foo$y.scales$log) || foo$y.scales$log
-    if (have.xlog)
-    {
-      xlog <- foo$x.scales$log
-      xbase <-
-        if (is.logical(xlog)) 10
-      else if (is.numeric(xlog)) xlog
-      else if (xlog == "e") exp(1)
-
-      x <- log(x, xbase)
-      if (have.xlim) xlim <- logLimits(xlim, xbase)
-    }
-    if (have.ylog)
-    {
-      ylog <- foo$y.scales$log
-      ybase <-
-        if (is.logical(ylog)) 10
-      else if (is.numeric(ylog)) ylog
-      else if (ylog == "e") exp(1)
-
-      y <- log(y, ybase)
-      if (have.ylim) ylim <- logLimits(ylim, ybase)
-    }
-
-    ## Step 5: Process cond
-
-    cond.max.level <- unlist(lapply(cond, nlevels))
-
-    ## Step 6: Determine packets
-
-    foo$panel.args.common <- dots
-    if (subscripts) foo$panel.args.common$groups <- groups
-
-    npackets <- prod(cond.max.level)
-    if (npackets != prod(sapply(foo$condlevels, length)))
-      stop("mismatch in number of packets")
-    foo$panel.args <- vector(mode = "list", length = npackets)
-
-    foo$packet.sizes <- numeric(npackets)
-    if (npackets > 1) {
-      dim(foo$packet.sizes) <- sapply(foo$condlevels, length)
-      dimnames(foo$packet.sizes) <- lapply(foo$condlevels, as.character)
-    }
-
-    # Compute breakpoints for bubbles etc.
-    bubbles <- make_bubbles(z, maxsize)
-    z <- bubbles$x
-
-    cond.current.level <- rep(1, length(cond))
-    for (packet.number in seq_len(npackets)) {
-      id <- compute.packet(cond, cond.current.level)
-      foo$packet.sizes[packet.number] <- sum(id)
-      foo$panel.args[[packet.number]] <- list(x = x[id], y = y[id], z = z[id])
-      if (subscripts)
-        foo$panel.args[[packet.number]]$subscripts <- subscr[id]
-      cond.current.level <- cupdate(cond.current.level, cond.max.level)
-    }
-
-    ## FIXME: make this adjustment everywhere else
-
-    more.comp <-
-      c(limits.and.aspect(default.prepanel,
-                          prepanel = prepanel,
-                          have.xlim = have.xlim, xlim = xlim,
-                          have.ylim = have.ylim, ylim = ylim,
-                          x.relation = foo$x.scales$relation,
-                          y.relation = foo$y.scales$relation,
-                          panel.args.common = foo$panel.args.common,
-                          panel.args = foo$panel.args,
-                          aspect = aspect,
-                          npackets = npackets,
-                          x.axs = foo$x.scales$axs,
-                          y.axs = foo$y.scales$axs),
-        cond.orders(foo))
-    foo[names(more.comp)] <- more.comp
-
-    if (is.null(foo$legend) && needAutoKey(auto.key, groups))
-    {
-      foo$legend <-
-        list(list(fun = "drawSimpleKey",
-                  args =
-                    updateList(list(text = levels(as.factor(groups)),
-                                    points = TRUE,
-                                    rectangles = FALSE,
-                                    lines = FALSE),
-                               if (is.list(auto.key)) auto.key else list())))
-      foo$legend[[1]]$x <- foo$legend[[1]]$args$x
-      foo$legend[[1]]$y <- foo$legend[[1]]$args$y
-      foo$legend[[1]]$corner <- foo$legend[[1]]$args$corner
-
-      names(foo$legend) <-
-        if (any(c("x", "y", "corner") %in% names(foo$legend[[1]]$args)))
-          "inside"
-      else
-        "top"
-      if (!is.null(foo$legend[[1]]$args$space))
-        names(foo$legend) <- foo$legend[[1]]$args$space
-    }
-
-    if (isTRUE(bubblekey) || is.list(bubblekey)) {
-      foo$legend <- updateList(foo$legend, list(right = list(
-        fun = "draw.key",
-        args = list(key = updateList(list(
-          title = form$left.name,
-          cex.title = 1,
-          text = list(as.character(bubbles$breaks)),
-          points = list(
-            col = if (is.null(groups)) trellis.par.get("plot.symbol")$col else 1,
-            pch = trellis.par.get("plot.symbol")$pch,
-            fill = trellis.par.get("plot.symbol")$fill,
-            alpha = trellis.par.get("plot.symbol")$alpha,
-            font = trellis.par.get("plot.symbol")$font,
-            cex = bubbles$breaks_cex
-          ),
-          padding.text = maxsize * 1.3 # Is There any better way to do this?
-        ), if (is.list(bubblekey)) bubblekey else list())
-      ))))
-    }
-
-    class(foo) <- "trellis"
-    foo
+    ans[["legend"]][[key_pos]] <- list(fun = "draw.key", args = key_args)
   }
-
-#' Panel Function for bubbleplot
-#'
-#' This is a panel function adapted to [bubbleplot()]. Most of the documentation
-#' here has been imported from [lattice::xyplot()].
-#'
-#' @inheritParams lattice::panel.xyplot
-#' @param z Variable to map area of the bubbles to.
-#'
-#' @return A bubble plot panel.
-#' @author Original by Deepayan Sarkar. Modifications by Johan Larsson.
-#' @examples
-#' bubbleplot(wt ~ mpg * disp, groups = cyl, data = mtcars,
-#'   panel = function(...) {
-#'     panel.grid(...)
-#'     panel.bubbleplot(...)
-#'     panel.loess(col = 1, ...)
-#'   }
-#' )
-#' @export
-panel.bubbleplot <- function(x, y, z, groups = NULL, ...) {
-  if (!is.null(groups)) {
-    panel.superpose.bubbelplot(x, y, z, groups = groups, ...)
-  } else {
-    panel.xyplot(x, y, cex = z, ...)
-  }
+  ans
 }
 
-panel.superpose.bubbelplot <-
-  function(x,
-           y = NULL,
-           z,
-           subscripts,
-           groups,
-           panel.groups = "panel.xyplot",
-           ...,
-           col = "black",
-           col.line = superpose.line$col,
-           col.symbol = superpose.symbol$col,
-           pch = superpose.symbol$pch,
-           cex = superpose.symbol$cex,
-           fill = superpose.symbol$fill,
-           font = superpose.symbol$font,
-           fontface = superpose.symbol$fontface,
-           fontfamily = superpose.symbol$fontfamily,
-           lty = superpose.line$lty,
-           lwd = superpose.line$lwd,
-           alpha = superpose.symbol$alpha,
-           type = "p",
-           grid = FALSE,
-           distribute.type = FALSE) {
-  if (distribute.type) {
-    type <- as.list(type)
-  } else {
-    type <- unique(type)
-    wg <- match("g", type, nomatch = NA_character_)
-    if (!is.na(wg)) {
-      if (missing(grid))
-        grid <- TRUE
-      type <- type[-wg]
-    }
-    type <- list(type)
-  }
-  if (grid)
-    panel.grid(h = -1, v = -1, x = x, y = y)
-  x <- as.numeric(x)
-  if (!is.null(y))
-    y <- as.numeric(y)
-  if (length(x) > 0) {
-    if (!missing(col)) {
-      if (missing(col.line))
-        col.line <- col
-      if (missing(col.symbol))
-        col.symbol <- col
-    }
-    superpose.symbol <- trellis.par.get("superpose.symbol")
-    superpose.line <- trellis.par.get("superpose.line")
-    vals <- if (is.factor(groups))
-      levels(groups)
-    else sort(unique(groups))
-    nvals <- length(vals)
-    col <- rep(col, length.out = nvals)
-    col.line <- rep(col.line, length.out = nvals)
-    col.symbol <- rep(col.symbol, length.out = nvals)
-    pch <- rep(pch, length.out = nvals)
-    fill <- rep(fill, length.out = nvals)
-    lty <- rep(lty, length.out = nvals)
-    lwd <- rep(lwd, length.out = nvals)
-    alpha <- rep(alpha, length.out = nvals)
-    font <- rep(font, length.out = nvals)
-    if (!is.null(fontface))
-      fontface <- rep(fontface, length.out = nvals)
-    if (!is.null(fontfamily))
-      fontfamily <- rep(fontfamily, length.out = nvals)
-    type <- rep(type, length.out = nvals)
-    panel.groups <- getFunctionOrName(panel.groups)
-    subg <- groups[subscripts]
-    ok <- !is.na(subg)
-    for (i in seq_along(vals)) {
-      id <- ok & (subg == vals[i])
-      if (any(id)) {
-        args <- list(x = x[id], subscripts = subscripts[id],
-                     pch = pch[[i]], cex = z[id], font = font[[i]],
-                     fontface = fontface[[i]], fontfamily = fontfamily[[i]],
-                     col = col[[i]], col.line = col.line[[i]],
-                     col.symbol = col.symbol[[i]],
-                     fill = fill[[i]], lty = lty[[i]], lwd = lwd[[i]],
-                     alpha = alpha[[i]], type = type[[i]], group.number = i,
-                     group.value = vals[i], ...)
-        if (!is.null(y))
-          args$y <- y[id]
-        do.call(panel.groups, args)
-      }
-    }
-  }
+#' Panel Function for Bubble Plots
+#'
+#' @inheritParams lattice::panel.xyplot
+#' @param z A numeric vector that areas of circles will be mapped to.
+#' @param groups
+#' @param cex Is used internally and user settings will be ignored.
+#' @param \dots Further arguments to pass to [lattice::panel.xyplot()].
+#'
+#' @return Plots a layer inside a panel of a `lattice` plot.
+#' @export
+#'
+#' @examples
+panel.bubbleplot <- function(x,
+                             y,
+                             z,
+                             groups = NULL,
+                             subscripts,
+                             cex = NULL,
+                             ...) {
+  # include cex as argument in top function and then ignore it
+  if (!is.null(groups))
+    panel.superpose(x,
+                    y,
+                    subscripts,
+                    groups,
+                    panel.bubbleplot,
+                    z = z,
+                    ...)
+  else
+    panel.xyplot(x, y, cex = z[subscripts], subscripts = subscripts, ...)
 }
 
 # Map z values to circle areas and generate pretty breakpoints for bubblekey
@@ -387,7 +165,12 @@ make_bubbles <- function(x, maxsize) {
   stopifnot(all(x >= 0), is.numeric(x))
 
   # compute required radii for breaks and values
-  breaks <- pretty(x)
+  breaks <- pretty(x, n = 4)
+
+  # Drop first level if it is 0
+  if (breaks[1] == 0)
+    breaks <- breaks[-1]
+
   breaks_cex <- sqrt(breaks / pi)
   x <- sqrt(x / pi)
 

@@ -3,28 +3,29 @@ Title: Extensions to Lattice
 Version: 0.0.0.9000
 Authors@R: person("Johan", "Larsson", email = "johanlarsson@outlook.com",
                   role = c("aut", "cre"))
-Description: This package aims to extend the functionality of lattice
-  and latticeExtra with new functions and methods that make it easier to
-  be wholly reliant on trellis graphics in R. It is not an official extension
-  to lattice nor related to any of its developers.
+Description: This package extends lattice and latticeExtra by providing new
+  high-level functions, methods for existing high-level functions, panel
+  functions, and themes. The objective is to replace base plotting functions
+  in order to be wholly reliant on trellis graphics in R.
 Depends:
   R (>= 3.4.0),
   lattice
 Imports:
-  latticeExtra,
-  stats,
-  utils,
   grDevices,
   grid,
   gridExtra,
-  RColorBrewer
+  latticeExtra,
+  RColorBrewer,
+  stats,
+  utils,
+  zoo
 Suggests:
   covr,
-  testthat,
+  forecast,
   knitr,
-  rmarkdown,
   microbenchmark,
-  zoo,
+  rmarkdown,
+  testthat
 License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true

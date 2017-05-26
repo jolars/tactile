@@ -17,7 +17,7 @@ You can install trelliswork from github with:
 devtools::install_github("jolars/trelliswork")
 ```
 
-trelliswork is not currently on CRAN.
+trelliswork is not currently on CRAN. A submission is planned.
 
 License
 -------

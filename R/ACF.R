@@ -102,7 +102,7 @@ PACF <- function(x,
 #' Plot Autocovariance and Autocorrelation Functions
 #'
 #' This is a version of [stats::plot.acf()] designed for the special versions
-#' of the autocorrelation and autocovariance functions from `latticework`.
+#' of the autocorrelation and autocovariance functions from `trelliswork`.
 #'
 #' @inheritParams stats::plot.acf
 #' @param data only provided for method consistency and is ignored.
@@ -187,10 +187,8 @@ xyplot.acf <- function(x,
     ylim = extendrange(ylim),
     panel = function(x, y, ...) {
       if (with.ci && ci.type == "white") {
-        clim <- clim0
-        panel.abline(h = c(clim, -clim), col = ci.col, lty = 2)
-      } else if (with.ci.ma &&
-                 current.row() == current.column()) {
+        panel.abline(h = c(clim0, -clim0), col = ci.col, lty = 2)
+      } else if (with.ci.ma && current.row() == current.column()) {
         clim <- clim0 * sqrt(cumsum(c(1, 2 * y[-1]^2)))
         clim <- clim[-length(clim)]
         panel.lines(x[-1], clim, col = ci.col, lty = 2)

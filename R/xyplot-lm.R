@@ -23,7 +23,6 @@
 #' @export
 #'
 #' @examples
-#' library(latticework)
 #' fit <- lm(Sepal.Length ~ Sepal.Width, data = iris)
 #' xyplot(fit)
 #' xyplot(fit, which = 2)
@@ -176,10 +175,7 @@ xyplot.lm <-
       xlab = "Theoretical quantiles",
       panel = function(...) {
         panel.qqmathci(...)
-        panel.qqmathline(lty = trellis.par.get()$add.line$lty,
-                         col = trellis.par.get()$add.line$col,
-                         lwd = trellis.par.get()$add.line$lwd,
-                         ...)
+        panel.qqmathline(...)
         panel.qqmath(...)
         if (id.n > 0)
           text.id(qq$x[show.rs], qq$y[show.rs], show.rs)
@@ -283,7 +279,7 @@ xyplot.lm <-
               y.id <- rsp[show.rsp]
               text.id(xx[show.rsp], y.id, show.rsp)
             }
-            panel.loess(x, y)
+            panel.loess(x, y, ...)
           },
           ...
         )

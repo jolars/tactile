@@ -2,164 +2,69 @@
 #'
 #' @param x
 #' @param data
+#' @param include
+#' @param pi
+#' @param pi_col
 #' @param ...
 #'
-#' @return
+#' @inherit lattice::qqmath return
 #' @export
 #'
 #' @examples
-xyplot.forecast <- function(x,
-                            data = NULL,
-                            include = NULL,
-                            pi = 95,
-                            pi_col = "grey75",
-                            ...)
-{
-  object <- x
+xyplot.forecast <- function(
+    x,
+    data = NULL,
+    interval = TRUE,
+    interval_col = trellis.par.get("reference.line")$col,
+    interval_alpha = 0.5,
+    ...
+  ) {
+  if (is.null(x$lower) | is.null(x$upper) | is.null(x$level))
+    interval <- FALSE
+  else if (!is.finite(max(x$upper)))
+    interval <- FALSE
 
-  if (is.null(object$lower) | is.null(object$upper) | is.null(object$level))
-    pi <- FALSE
-  else if (!is.finite(max(object$upper)))
-    pi <- FALSE
+  actual <- as.zoo(x$x)
+  pred <- as.zoo(drop(x$mean))
+  pred <- c(tail(actual, 1), pred)
 
-  if (!is.null(object$model$terms) && !is.null(object$model$model)) {
-    mt <- object$model$terms
-    yvar <- if (!is.null(object$series)) object$series else deparse(mt[[2]])
-    xvar <- attr(mt, "term.labels")
-    vars <- c(yvar = yvar, xvar = xvar)
-    data <- object$model$model
-    colnames(data) <- names(vars)[match(colnames(data), vars)]
-    if (!is.null(object$model$lambda))
-      data$yvar <- forecast::InvBoxCox(data$yvar, object$model$lambda)
-  } else {
-    if (!is.null(object$x))
-      data <- data.frame(yvar = c(object$x))
-    else if (!is.null(object$residuals) && !is.null(object$fitted))
-      data <- data.frame(yvar = c(object$residuals + object$fitted))
-    else
-      stop("Could not find data")
-
-    if (!is.null(object$series))
-      vars <- c(yvar = object$series)
-    else if (!is.null(object$model$call)) {
-      vars <- c(yvar = deparse(object$model$call$y))
-      if (vars == "object")
-        vars <- c(yvar = "y")
-    } else
-      vars <- c(yvar = "y")
+  if (!is.null(data)) {
+    actual <- c(actual, as.zoo(data))
   }
 
-  if (!is.element("ts", class(object$mean))) {
-    if (length(xvar) > 1)
-      stop("Forecast plot for regression models only available for a single predictor")
-    if (NCOL(object$newdata) == 1)
-      colnames(object$newdata) <- xvar
+  dd <- merge(Actual = actual, Forecast = pred)
+  upr <- as.zoo(x$upper)
+  lwr <- as.zoo(x$lower)
 
-    predicted <- data.frame(xpred = object$newdata, ypred = object$mean)
-
-    if (pi) {
-      levels <- NROW(object$level)
-      interval <- data.frame(
-        xpred = rep(object$newdata[[1]], levels),
-        lower = c(object$lower),
-        upper = c(object$upper),
-        level = object$level
-      )
-      interval <- interval[order(interval$level, decreasing = TRUE), ]
-      interval <- interval[interval$level == pi, ]
-    }
-
-    p <- list(
-      x = yvar ~ xvar,
-      data = data,
-      ylab = vars["yvar"],
-      xlab = vars["xvar"],
-      xlim = extendrange(c(data$datetime, predicted$xvar)),
-      ylim = extendrange(
-        c(data$yvar,
-          if (pi) c(interval$upper, interval$lower) else (predicted$ypred))
-      ),
-      type = "l",
-      panel = function(x, y, ...) {
-        panel.xyplot(x, y, ...)
-        if (pi) {
-          panel.lines(x = interval$xpred, y = interval$ypred, lty = 2)
-          panel.polygon(
-            c(interval$datetime, rev(interval$datetime)),
-            c(interval$upper, rev(interval$lower)),
-            alpha = 0.1,
-            col = pi_col,
-            border = "transparent"
-          )
-        }
-        panel.points(predicted$xpred, predicted$ypred)
-        coef <- data.frame(int = 0, m = 0)
-        i <- match("(Intercept)", names(object$model$coefficients))
-        if (i != 0) {
-          coef$int <- object$model$coefficients[i]
-          if (NROW(object$model$coefficients) == 2) {
-            coef$m <- object$model$coefficients[-i]
+  ll <- list(
+    dd,
+    superpose = TRUE,
+    lty = 1:2,
+    ylim = extendrange(c(coredata(dd), coredata(upr), coredata(lwr))),
+    panel = function(x, grid = FALSE, ...) {
+      if (grid)
+        panel.grid(h = -1, v = -1)
+      if (interval) {
+        for (i in 1:NCOL(upr)) {
+          if (NCOL(upr) > 1) {
+            u <- upr[, i]
+            l <- lwr[, i]
+          } else {
+            u <- upr
+            l <- lwr
           }
+          yy <- c(coredata(u), rev(coredata(l)))
+          xx <- c(time(u), rev(time(l)))
+
+          panel.polygon(xx,
+                        yy,
+                        border = "transparent",
+                        col = interval_col,
+                        alpha = interval_alpha)
         }
-        else {
-          if (NROW(object$model$coefficients) == 1) {
-            coef$m <- object$model$coefficients
-          }
-        }
-        panel.abline(coef$int, coef$m)
       }
-    )
-  } else {
-    if (!is.null(time(object$x))) {
-      timex <- time(object$x)
+      panel.xyplot(x, grid = FALSE, ...)
     }
-    else if (!is.null(time(object$model$residuals))) {
-      timex <- time(object$model$residuals)
-    }
-    data <- data.frame(yvar = as.numeric(data$yvar),
-                       datetime = as.numeric(timex))
-    if (!is.null(include))
-      data <- tail(data, include)
-
-    predicted <- data.frame(datetime = time(object$mean), ypred = object$mean)
-
-    if (pi) {
-      levels <- NROW(object$level)
-      interval <- data.frame(
-        datetime = rep(predicted$datetime, levels),
-        lower = c(object$lower),
-        upper = c(object$upper),
-        level = rep(object$level, each = NROW(object$mean))
-      )
-      interval <- interval[order(interval$level, decreasing = TRUE), ]
-      interval <- interval[interval$level == pi, ]
-    }
-
-    p <- list(
-      x = yvar ~ datetime,
-      data = data,
-      ylab = vars["yvar"],
-      xlab = "Time",
-      type = "l",
-      xlim = extendrange(c(data$datetime, predicted$datetime)),
-      ylim = extendrange(c(data$yvar,
-                           if (pi) c(interval$upper, interval$lower)
-                           else (predicted$ypred))
-      ),
-      panel = function(x, y, ...) {
-        panel.xyplot(x, y, ...)
-        if (pi)
-          panel.polygon(
-            c(interval$datetime, rev(interval$datetime)),
-            c(interval$upper, rev(interval$lower)),
-            alpha = 0.5,
-            col = pi_col,
-            border = "transparent",
-            ...
-          )
-        panel.lines(predicted$datetime, predicted$ypred, lty = 2, ...)
-      }
-    )
-  }
-  do.call(xyplot, updateList(p, list(...)))
+  )
+  do.call(xyplot, updateList(ll, list(...)))
 }

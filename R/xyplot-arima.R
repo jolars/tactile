@@ -42,7 +42,7 @@ xyplot.Arima <- function(x,
   if (!is.null(main))
     stopifnot(length(main) == sum(show))
 
-  na.action <- getFunctionOrName(na.action)
+  na.action <- get_fun(na.action)
 
   r <- na.action(x$residuals)
   rstd <- r / sqrt(x$sigma2)
@@ -54,7 +54,7 @@ xyplot.Arima <- function(x,
       ylab = "Standardized residuals",
       ...,
       panel = function(...) {
-        panel.abline(h = 0L, col = trellis.par.get()$add.line$col)
+        panel.abline(h = 0L, col = trellis.par.get("add.line")$col)
         panel.xyplot(...)
       }
     )
@@ -64,7 +64,10 @@ xyplot.Arima <- function(x,
   if (show[2L]) {
     plots[[2L]] <- qqmath(
       ~ rstd,
+      xlab = "Theoretical quantiles",
+      ylab = "Standardized residuals",
       aspect = qq.aspect,
+      prepanel = prepanel.qqmathline,
       ...,
       panel = function(...) {
         panel.qqmathci(...)

@@ -1,47 +1,54 @@
-#' Panel Function for Q-Q Plot Confidence Intervals
+#' Q-Q Plot Confidence Intervals (Panel Function)
 #'
-#' Panel function to go along with [lattice::qqmath()] and possibly
+#' Panel function to go along with [lattice::qqmath()] and
 #' [lattice::panel.qqmathline()]. Adds filled confidence bands to the Q-Q-plot.
 #'
 #' The function tries to figure out the density function counterpart to
-#' that provided in the argument `distribution`.
+#' that provided in the argument `distribution` by regular expressions.
 #'
 #' @inheritParams lattice::panel.qqmathline
 #' @param ci Confidence level
-#' @param ci_col Fill color of the confidence bands
+#' @param ci_alpha Alpha level for the color fill
 #' @param \dots Arguments passed to [lattice::panel.superpose()] and
-#'   [lattice::panel.polygon()].
+#'   [lattice::panel.polygon()]
 #'
-#' @author Modified by Johan Larsson from [lattice::panel.qqmathline()] by
-#' Deepayan Sarkar.
+#' @author Johan Larsson.
 #' @seealso [lattice::panel.qqmathline()], [lattice::qqmath()], and
 #'   [lattice::panel.qqmath()].
 #'
-#' @return Adds confidence levels to a trellis device such as that
-#'   created by [lattice::qqmath()].
+#' @return Augments a trellis plot panel, such as that
+#'   created by [lattice::qqmath()], with confidence levels.
 #' @export
 #'
 #' @examples
-#' library(lattice)
-#' qqmath(~ Sepal.Width | Species, data = iris, distribution = qunif,
-#'        panel = function(...) {
-#'          panel.qqmathci(...)
-#'          panel.qqmathline(...)
-#'          panel.qqmath(...)
+#' qqmath(~ height | voice.part, aspect = "xy", data = singer,
+#'        prepanel = prepanel.qqmathline,
+#'        panel = function(x, ...) {
+#'          panel.qqmathci(x, ...)
+#'          panel.qqmathline(x, ...)
+#'          panel.qqmath(x, ...)
 #'        })
-panel.qqmathci <- function(x,
-                           y = x,
-                           distribution = qnorm,
-                           probs = c(0.25, 0.75),
-                           qtype = 7,
-                           groups = NULL,
-                           ci = 0.95,
-                           ci_col = "grey90",
-                           ...,
-                           identifier = "qqmathci") {
+panel.qqmathci <- function(
+    x,
+    y = x,
+    distribution = qnorm,
+    probs = c(0.25, 0.75),
+    qtype = 7,
+    groups = NULL,
+    ci = 0.95,
+    ci_alpha = 0.25,
+    col = plot.line$col,
+    col.se = col,
+    col.line,
+    col.symbol,
+    ...) {
+  plot.line <- trellis.par.get("plot.line")
+  if (!missing(col.line))
+    col <- col.line
+
   y <- as.numeric(y)
   stopifnot(length(probs) == 2)
-  distribution <- getFunctionOrName(distribution)
+  distribution <- get_fun(distribution)
 
   d <- deparse(formals()[["distribution"]])
   d <- if (grepl("::", d, fixed = TRUE) || grepl(":::", d, fixed = TRUE))
@@ -55,16 +62,16 @@ panel.qqmathci <- function(x,
 
   nobs <- sum(!is.na(y))
   if (!is.null(groups))
-    panel.superpose(
-      x = y,
-      y = NULL,
-      distribution = distribution,
-      probs = probs,
-      qtype = qtype,
-      groups = groups,
-      panel.groups = panel.qqmathci,
-      ...
-    )
+    panel.superpose(x = y,
+                    y = NULL,
+                    distribution = distribution,
+                    probs = probs,
+                    qtype = qtype,
+                    groups = groups,
+                    panel.groups = panel.qqmathci,
+                    ci = ci,
+                    ci_alpha = ci_alpha,
+                    ...)
   else if (nobs > 0) {
     n   <- length(y)
     pp  <- ppoints(y)
@@ -79,13 +86,11 @@ panel.qqmathci <- function(x,
     upr <- fit + zz * se
     lwr <- fit - zz * se
 
-    panel.polygon(
-      x = c(z, rev(z)),
-      y = c(upr, rev(lwr)),
-      col = ci_col,
-      border = "transparent",
-      ...,
-      identifier = identifier
-    )
-  }
+    panel.polygon(x = c(z, rev(z)),
+                  y = c(upr, rev(lwr)),
+                  alpha = ci_alpha,
+                  col = col.se,
+                  border = "transparent",
+                  ...)
+  } else return()
 }

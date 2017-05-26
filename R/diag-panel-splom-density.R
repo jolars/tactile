@@ -26,9 +26,13 @@ diag.panel.splom.density <- function(x,
                                      n = 512,
                                      ...) {
   yrng <- current.panel.limits()$ylim
-  d <- density(x, bw = bw, adjust = adjust, kernel = kernel, weights = weights,
+  d <- density(x,
+               bw = bw,
+               adjust = adjust,
+               kernel = kernel,
+               weights = weights,
                n = n, na.rm = TRUE)
   d$y <- yrng[1] + 0.95 * diff(yrng) * d$y / max(d$y, na.rm = TRUE)
   panel.lines(d, ...)
-  diag.panel.splom(x, ...)
+  diag.panel.splom(x, ...) # for labels
 }

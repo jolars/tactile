@@ -14,10 +14,10 @@
 #'
 #' This theme is continually updated and is likely to change.
 #'
-#' @param font_size Font size. Will affect other settings such as padding as well.
-#' @param point_size Point size. Will affect other settings.
+#' @param fontsize A vector of two numeric scalars for text and symbols
+#'   respectively.
 #' @inheritParams lattice::standard.theme
-#' @param \dots Additional named options appended via [utils::modifyList()].
+#' @param \dots Additional named options.
 #'
 #' @return A list of graphical parameters that for instance could be supplied
 #'   inside a call to [lattice::xyplot()] or set via
@@ -31,20 +31,19 @@
 #' trellis.par.set(trelliswork_theme())
 #' show.settings()
 #' trellis.par.set(opars)
-trelliswork_theme <- function(font_size = 12,
-                              point_size = 8,
+trelliswork_theme <- function(fontsize = c(12, 8),
                               color = TRUE,
                               ...) {
   theme <- standard.theme(name = "pdf", color = color)
 
   theme <- updateList(theme, list(
-    fontsize = list(text = font_size, points = point_size),
+    fontsize = list(text = fontsize[1], points = fontsize[2]),
     strip.background = list(col = rep.int("grey90", 7)),
     strip.shingle = list(col = rep.int("grey70", 7)),
     strip.text = list(cex = 0.75),
     layout.heights = list(top.padding = 0.1,
                           bottom.padding = 0.1,
-                          axis.top = 0.1,
+                          axis.top = 0.75,
                           main = 2,
                           main.key.padding = 0,
                           sub = 2,
@@ -55,15 +54,17 @@ trelliswork_theme <- function(font_size = 12,
                          key.right = 1.25,
                          ylab = 1.25),
     par.main.text = list(cex = 1.15),
-    axis.components = list(left = list(tck = 0.5, pad1 = 0.5, pad2 = 0.5),
-                           right = list(tck = 0.5, pad1 = 0.5, pad2 = 0.5),
+    axis.components = list(left   = list(tck = 0.5, pad1 = 0.5, pad2 = 0.5),
+                           right  = list(tck = 0.5, pad1 = 0.5, pad2 = 0.5),
                            bottom = list(tck = 0.5, pad1 = 0.5, pad2 = 0.5),
-                           top = list(tck = 0.5, pad1 = 0.5, pad2 = 0.5))
+                           top    = list(tck = 0.5, pad1 = 0.5, pad2 = 0.5))
   ))
 
   if (color) {
-    symbol    <- RColorBrewer::brewer.pal(n = 9, "Set1")[c(2:1, 3:5, 7:9)]
-    fill      <- RColorBrewer::brewer.pal(n = 8, "Accent")
+    symbol <- RColorBrewer::brewer.pal(n = 9, "Set1")[c(2:1, 3:5, 7:9)]
+    fill   <- grDevices::adjustcolor(symbol, offset = c(0.4, 0.4, 0.4, 0),
+                                     transform = diag(c(0.7, 0.7, 0.7, 0.7)))
+
     region    <- RColorBrewer::brewer.pal(n = 11, "Spectral")
     reference <- "#e8e8e8"
     bg        <- "transparent"

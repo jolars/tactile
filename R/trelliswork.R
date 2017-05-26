@@ -2,6 +2,7 @@
 #' @import lattice
 #' @import latticeExtra
 #' @import stats
+#' @import zoo
 #' @importFrom utils modifyList
 #' @importFrom utils stack
 #' @importFrom grDevices extendrange

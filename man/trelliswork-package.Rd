@@ -6,10 +6,10 @@
 \alias{trelliswork-package}
 \title{trelliswork: Extensions to Lattice}
 \description{
-This package aims to extend the functionality of lattice
-and latticeExtra with new functions and methods that make it easier to
-be wholly reliant on trellis graphics in R. It is not an official extension
-to lattice nor related to any of its developers.
+This package extends lattice and latticeExtra by providing new
+high-level functions, methods for existing high-level functions, panel
+functions, and themes. The objective is to replace base plotting functions
+in order to be wholly reliant on trellis graphics in R.
 }
 \seealso{
 Useful links:

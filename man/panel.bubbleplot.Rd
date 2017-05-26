@@ -2,44 +2,28 @@
 % Please edit documentation in R/bubbleplot.R
 \name{panel.bubbleplot}
 \alias{panel.bubbleplot}
-\title{Panel Function for bubbleplot}
+\title{Panel Function for Bubble Plots}
 \usage{
-panel.bubbleplot(x, y, z, groups = NULL, ...)
+panel.bubbleplot(x, y, z, groups = NULL, subscripts, cex = NULL, ...)
 }
 \arguments{
 \item{x}{ variables to be plotted in the scatterplot}
 
 \item{y}{ variables to be plotted in the scatterplot}
 
-\item{z}{Variable to map area of the bubbles to.}
+\item{z}{A numeric vector that areas of circles will be mapped to.}
 
 \item{groups}{ an optional grouping variable.  If present,
     \code{\link{panel.superpose}} will be used instead to display each
     subgroup }
 
-\item{...}{
-    Extra arguments, if any, for \code{panel.xyplot}.  In most cases
-    \code{panel.xyplot} ignores these.  For types "r" and "smooth",
-    these are passed on to \code{panel.lmline} and \code{panel.loess}
-    respectively.
-  }
+\item{cex}{Is used internally and user settings will be ignored.}
+
+\item{\dots}{Further arguments to pass to \code{\link[lattice:panel.xyplot]{lattice::panel.xyplot()}}.}
 }
 \value{
-A bubble plot panel.
+Plots a layer inside a panel of a \code{lattice} plot.
 }
 \description{
-This is a panel function adapted to \code{\link[=bubbleplot]{bubbleplot()}}. Most of the documentation
-here has been imported from \code{\link[lattice:xyplot]{lattice::xyplot()}}.
-}
-\examples{
-bubbleplot(wt ~ mpg * disp, groups = cyl, data = mtcars,
-  panel = function(...) {
-    panel.grid(...)
-    panel.bubbleplot(...)
-    panel.loess(col = 1, ...)
-  }
-)
-}
-\author{
-Original by Deepayan Sarkar. Modifications by Johan Larsson.
+Panel Function for Bubble Plots
 }

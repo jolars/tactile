@@ -4,12 +4,11 @@
 \alias{trelliswork_theme}
 \title{trelliswork Theme}
 \usage{
-trelliswork_theme(font_size = 12, point_size = 8, color = TRUE, ...)
+trelliswork_theme(fontsize = c(12, 8), color = TRUE, ...)
 }
 \arguments{
-\item{font_size}{Font size. Will affect other settings such as padding as well.}
-
-\item{point_size}{Point size. Will affect other settings.}
+\item{fontsize}{A vector of two numeric scalars for text and symbols
+respectively.}
 
 \item{color}{ logical, whether the initial settings should be color or
     black and white.  Defaults to \code{FALSE} for postscript devices,
@@ -19,7 +18,7 @@ trelliswork_theme(font_size = 12, point_size = 8, color = TRUE, ...)
     supplied directly in high level calls for some settings).
   }
 
-\item{\dots}{Additional named options appended via \code{\link[utils:modifyList]{utils::modifyList()}}.}
+\item{\dots}{Additional named options.}
 }
 \value{
 A list of graphical parameters that for instance could be supplied

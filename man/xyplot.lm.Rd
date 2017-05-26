@@ -47,7 +47,6 @@ Lattice plot diagnostics for \code{lm} objects, mostly mimicking the behavior
 of \code{\link[stats:plot.lm]{stats::plot.lm()}} but based on \code{\link[lattice:xyplot]{lattice::xyplot()}} instead.
 }
 \examples{
-library(latticework)
 fit <- lm(Sepal.Length ~ Sepal.Width, data = iris)
 xyplot(fit)
 xyplot(fit, which = 2)

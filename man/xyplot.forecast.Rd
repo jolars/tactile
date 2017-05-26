@@ -4,11 +4,19 @@
 \alias{xyplot.forecast}
 \title{Title}
 \usage{
-\method{xyplot}{forecast}(x, data = NULL, include = NULL, pi = 95,
-  pi_col = "grey75", ...)
+\method{xyplot}{forecast}(x, data = NULL, interval = TRUE,
+  interval_col = trellis.par.get("reference.line")$col,
+  interval_alpha = 0.5, ...)
 }
 \arguments{
 \item{...}{}
+}
+\value{
+An object of class \code{"trellis"}. The
+  \code{\link[lattice:update.trellis]{update}} method can be used to
+  update components of the object and the
+  \code{\link[lattice:print.trellis]{print}} method (usually called by
+  default) will plot it on an appropriate plotting device.
 }
 \description{
 Title

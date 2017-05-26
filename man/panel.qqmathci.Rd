@@ -2,11 +2,11 @@
 % Please edit documentation in R/panel-qqmathci.R
 \name{panel.qqmathci}
 \alias{panel.qqmathci}
-\title{Panel Function for Q-Q Plot Confidence Intervals}
+\title{Q-Q Plot Confidence Intervals (Panel Function)}
 \usage{
 panel.qqmathci(x, y = x, distribution = qnorm, probs = c(0.25, 0.75),
-  qtype = 7, groups = NULL, ci = 0.95, ci_col = "grey90", ...,
-  identifier = "qqmathci")
+  qtype = 7, groups = NULL, ci = 0.95, ci_alpha = 0.25,
+  col = plot.line$col, col.se = col, col.line, col.symbol, ...)
 }
 \arguments{
 \item{x}{ The original sample, possibly reduced to a fewer number of
@@ -39,35 +39,30 @@ panel.qqmathci(x, y = x, distribution = qnorm, probs = c(0.25, 0.75),
 
 \item{ci}{Confidence level}
 
-\item{ci_col}{Fill color of the confidence bands}
+\item{ci_alpha}{Alpha level for the color fill}
 
 \item{\dots}{Arguments passed to \code{\link[lattice:panel.superpose]{lattice::panel.superpose()}} and
-\code{\link[lattice:panel.polygon]{lattice::panel.polygon()}}.}
-
-\item{identifier}{
-    A character string that is prepended to the names of grobs
-    that are created by this panel function.
-  }
+\code{\link[lattice:panel.polygon]{lattice::panel.polygon()}}}
 }
 \value{
-Adds confidence levels to a trellis device such as that
-created by \code{\link[lattice:qqmath]{lattice::qqmath()}}.
+Augments a trellis plot panel, such as that
+created by \code{\link[lattice:qqmath]{lattice::qqmath()}}, with confidence levels.
 }
 \description{
-Panel function to go along with \code{\link[lattice:qqmath]{lattice::qqmath()}} and possibly
+Panel function to go along with \code{\link[lattice:qqmath]{lattice::qqmath()}} and
 \code{\link[lattice:panel.qqmathline]{lattice::panel.qqmathline()}}. Adds filled confidence bands to the Q-Q-plot.
 }
 \details{
 The function tries to figure out the density function counterpart to
-that provided in the argument \code{distribution}.
+that provided in the argument \code{distribution} by regular expressions.
 }
 \examples{
-library(lattice)
-qqmath(~ Sepal.Width | Species, data = iris, distribution = qunif,
-       panel = function(...) {
-         panel.qqmathci(...)
-         panel.qqmathline(...)
-         panel.qqmath(...)
+qqmath(~ height | voice.part, aspect = "xy", data = singer,
+       prepanel = prepanel.qqmathline,
+       panel = function(x, ...) {
+         panel.qqmathci(x, ...)
+         panel.qqmathline(x, ...)
+         panel.qqmath(x, ...)
        })
 }
 \seealso{
@@ -75,6 +70,5 @@ qqmath(~ Sepal.Width | Species, data = iris, distribution = qunif,
 \code{\link[lattice:panel.qqmath]{lattice::panel.qqmath()}}.
 }
 \author{
-Modified by Johan Larsson from \code{\link[lattice:panel.qqmathline]{lattice::panel.qqmathline()}} by
-Deepayan Sarkar.
+Johan Larsson.
 }

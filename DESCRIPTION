@@ -1,4 +1,4 @@
-Package: trelliswork
+Package: tactile
 Title: Extensions to Lattice
 Version: 0.0.0.9000
 Authors@R: person("Johan", "Larsson", email = "johanlarsson@outlook.com",
@@ -31,6 +31,6 @@ Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.0.1
-URL: https://github.com/jolars/trelliswork
-BugReports: https://github.com/jolars/trelliswork/issues
+URL: https://github.com/jolars/tactile
+BugReports: https://github.com/jolars/tactile/issues
 VignetteBuilder: knitr

@@ -1,4 +1,4 @@
 library(testthat)
-library(trelliswork)
+library(tactile)
 
-test_check("trelliswork")
+test_check("tactile")

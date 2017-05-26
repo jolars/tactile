@@ -9,7 +9,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-trelliswork provides an `xyplot()` method for `lm` objects -- usually generated
+tactile provides an `xyplot()` method for `lm` objects -- usually generated
 with `stats::lm()` or `stats::glm()`. It provides the same type of diagnostic
 plots that `stats::plot.lm()` covers, with some small modificiations.
 
@@ -34,15 +34,15 @@ plot(fit, which = 1:6)
 par(mfrow = c(1, 1))
 ```
 
-Or instead use the method provided by trelliswork.
+Or instead use the method provided by tactile.
 
 ```{r, fig.cap = "Plot diagnostics with `stats::plot.lm()`.", fig.width = 6, fig.height = 9.5}
-library(trelliswork)
+library(tactile)
 xyplot(fit, which = 1:6)
 ```
 
 You will see that the results are similar. The benefits, however, of using
-`xyplot.lm()` from trelliswork are that
+`xyplot.lm()` from tactile are that
 
 * handling of plot margins is much improved,
 * the plots are returned as a list of trellis objects (that can be updated),
@@ -68,14 +68,14 @@ stats_method <- function() {
   unlink(ff)
 }
 
-trelliswork_method <- function() {
+tactile_method <- function() {
   xyplot(fit, which = 1:2)
 }
 
-f <- microbenchmark::microbenchmark(stats_method(), trelliswork_method())
+f <- microbenchmark::microbenchmark(stats_method(), tactile_method())
 ```
 
-And next we plot the results. As you see, the trelliswork method is slower
+And next we plot the results. As you see, the tactile method is slower
 despite all the fluff we put around the call to `plot.lm()`.
 
 ```{r, fig.cap = "Boxplot of timing results of the `xyplot.lm()` compared with `plot.lm()`.", fig.width = 6}

@@ -1,4 +1,4 @@
-# latticework 0.0.0.9000
+# tactile 0.0.0.9000
 
 ## New functions
 * `xyplot.lm()` is an `xyplot` method that mimics the behavior of

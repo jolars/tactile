@@ -3,10 +3,9 @@ Title: Extensions to Lattice
 Version: 0.0.0.9000
 Authors@R: person("Johan", "Larsson", email = "johanlarsson@outlook.com",
                   role = c("aut", "cre"))
-Description: This package extends lattice and latticeExtra by providing new
-  high-level functions, methods for existing high-level functions, panel
-  functions, and themes. The objective is to replace base plotting functions
-  in order to be wholly reliant on trellis graphics in R.
+Description: Tactile (an anagram of lattice) extends the functionality of
+  lattice by providing new high-level functions, methods for existing functions,
+  new panel functions, and a new theme.
 Depends:
   R (>= 3.4.0),
   lattice
@@ -17,15 +16,15 @@ Imports:
   latticeExtra,
   RColorBrewer,
   stats,
-  utils,
-  zoo
+  utils
 Suggests:
   covr,
   forecast,
   knitr,
   microbenchmark,
   rmarkdown,
-  testthat
+  testthat,
+  zoo
 License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true

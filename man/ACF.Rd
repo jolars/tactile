@@ -8,13 +8,13 @@
 \title{Auto- and Cross- Covariance and -Correlation Function Estimation}
 \usage{
 ACF(x, lag.max = NULL, type = c("correlation", "covariance", "partial"),
-  plot = TRUE, na.action = na.fail, demean = TRUE, drop_lag0 = TRUE,
+  plot = TRUE, na.action = na.pass, demean = TRUE, drop_lag0 = TRUE,
   ...)
 
 CCF(x, y, lag.max = NULL, type = c("correlation", "covariance"),
-  plot = TRUE, na.action = na.fail, ...)
+  plot = TRUE, na.action = na.pass, ...)
 
-PACF(x, lag.max = NULL, plot = TRUE, na.action = na.fail, ...)
+PACF(x, lag.max = NULL, plot = TRUE, na.action = na.pass, ...)
 }
 \arguments{
 \item{x}{a univariate or multivariate (not \code{ccf}) numeric time
@@ -52,8 +52,8 @@ an \code{acf} object is returned
 }
 \description{
 The following are versions of the functions detailed in
-\code{\link[stats:acf]{stats::acf()}}. Usage is identical except for the plot functionality,
-which you can read about in \code{\link[=xyplot.acf]{xyplot.acf()}}.
+\code{\link[stats:acf]{stats::acf()}}. Usage is mostly identical except for the plot functionality,
+documented in \code{\link[=xyplot.acf]{xyplot.acf()}}.
 }
 \details{
 The confidence interval plotted in plot.acf is based on an uncorrelated
@@ -79,6 +79,7 @@ CCF(mdeaths, fdeaths)
 }
 \author{
 Original: Paul Gilbert, Martyn Plummer. Extensive modifications and
-univariate case of pacf by B. D. Ripley. Adaptation to lattice by
-Johan Larsson.
+univariate case of pacf by B. D. Ripley. Modified for tactile by
+Johan Larsson
 }
+\keyword{internal}

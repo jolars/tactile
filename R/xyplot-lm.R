@@ -25,7 +25,7 @@
 #' @examples
 #' fit <- lm(Sepal.Length ~ Sepal.Width, data = iris)
 #' xyplot(fit)
-#' xyplot(fit, which = 2)
+#' xyplot(fit, which = 5)
 xyplot.lm <-
   function(x,
            data = NULL,
@@ -40,6 +40,9 @@ xyplot.lm <-
            ...) {
   if (!is.numeric(which) || any(which < 1) || any(which > 6))
     stop("'which' must be in 1:6")
+
+  add.line <- trellis.par.get("add.line")
+  reference.line <- trellis.par.get("reference.line")
 
   isGlm <- inherits(x, "glm")
   show <- rep(FALSE, 6)
@@ -154,14 +157,16 @@ xyplot.lm <-
       main = main[[1]],
       panel = function(x, y, ...) {
         panel.abline(h = 0,
-                     col = trellis.par.get()$add.line$col,
-                     lty = 2)
+                     col = reference.line$col,
+                     lty = reference.line$lty,
+                     lwd = reference.line$lwd,
+                     alpha = reference.line$alpha)
         panel.xyplot(x, y, ...)
         if (id.n > 0) {
           y.id <- r[show.r]
           text.id(yh[show.r], y.id, show.r)
         }
-        panel.loess(x, y, ...)
+        panel.loess(x, y, col = add.line$col, ...)
       },
       ...
     )
@@ -199,7 +204,7 @@ xyplot.lm <-
                                       list(YL = as.name(ylab23)))),
       panel = function(x, y, ...) {
         panel.xyplot(x, y, ...)
-        panel.loess(x, y)
+        panel.loess(x, y, col = add.line$col, ...)
         if (id.n > 0)
           text.id(yhn0[show.rs], sqrtabsr[show.rs], show.rs)
       },
@@ -273,13 +278,16 @@ xyplot.lm <-
           xlab = "Factor Level Combinations",
           ylab = ylab5,
           panel = function(x, y, ...) {
-            panel.abline(h = 0, lty = 2, col = trellis.par.get()$add.line$col)
+            panel.abline(h = 0, lty = reference.line$lty,
+                         col = reference.line$col,
+                         lwd = reference.line$lwd,
+                         alpha = reference.line$alpha)
             panel.xyplot(x, y, ...)
             if (id.n > 0) {
               y.id <- rsp[show.rsp]
               text.id(xx[show.rsp], y.id, show.rsp)
             }
-            panel.loess(x, y, ...)
+            panel.loess(x, y, col = add.line$col, ...)
           },
           ...
         )
@@ -313,10 +321,17 @@ xyplot.lm <-
         xlim = lms,
         ylim = ylim,
         scales = list(y = list(tck = c(2, 0))),
+        key = list(corner = c(0, 0.02),
+                   text = list("Cook's distance", col = "darkorange"),
+                   lines = list(col = "darkorange", lty = 2)),
         panel = function(x, y, ...) {
-          panel.abline(h = 0, lty = 2, col = trellis.par.get()$add.line$col)
+          panel.abline(h = 0,
+                       lty = reference.line$lty,
+                       col = reference.line$col,
+                       lwd = reference.line$lwd,
+                       alpha = reference.line$alpha)
           panel.xyplot(x, y, ...)
-          panel.loess(x, y)
+          panel.loess(x, y, col = add.line$col, ...)
           if (id.n > 0) {
             y.id <- rsp[show.rsp]
             text.id(xx[show.rsp], y.id, show.rsp)
@@ -329,13 +344,6 @@ xyplot.lm <-
               llines(hh[ina], cl.h[ina], lty = 2, col = "darkorange")
               llines(hh[inb], -cl.h[inb], lty = 2, col = "darkorange")
             }
-            latticeExtra::panel.key(
-              text = "Cook's distance",
-              corner = c(0.0, 0.02),
-              lines = TRUE,
-              points = FALSE,
-              col = "darkorange"
-            )
             panel.axis(
               side = "right",
               at = c(-rev(aty), aty),
@@ -389,8 +397,10 @@ xyplot.lm <-
           latticeExtra::panel.ablineq(
             a = 0,
             b = bi2,
-            lty = 2,
-            col = trellis.par.get()$add.line$col,
+            lty = reference.line$lty,
+            col = reference.line$col,
+            lwd = reference.line$lwd,
+            alpha = reference.line$alpha,
             label = bval[i],
             rotate = TRUE,
             fontfamily = "sans",

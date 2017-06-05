@@ -25,16 +25,20 @@
 #' fit <- arima(lh, order = c(1, 1, 0))
 #' xyplot(fit, layout = c(2, 2))
 #' xyplot(fit, which = c(1:2, 4), layout = rbind(c(1, 1), c(2, 3)))
-xyplot.Arima <- function(x,
-                         data = NULL,
-                         which = 1:4,
-                         lag.max = NULL,
-                         gof.lag = NULL,
-                         qq.aspect = "iso",
-                         na.action = na.pass,
-                         main = NULL,
-                         layout = NULL,
-                         ...) {
+xyplot.Arima <- function(
+    x,
+    data = NULL,
+    which = 1:4,
+    lag.max = NULL,
+    gof.lag = NULL,
+    qq.aspect = "iso",
+    na.action = na.pass,
+    main = NULL,
+    layout = NULL,
+    ...
+  ) {
+  reference.line <- trellis.par.get("reference.line")
+
   show <- rep.int(FALSE, 4L)
   show[which] <- TRUE
   plots <- vector("list", 4L)
@@ -54,7 +58,7 @@ xyplot.Arima <- function(x,
       ylab = "Standardized residuals",
       ...,
       panel = function(...) {
-        panel.abline(h = 0L, col = trellis.par.get("add.line")$col)
+        panel.abline(h = 0L, col = reference.line$col)
         panel.xyplot(...)
       }
     )
@@ -89,7 +93,6 @@ xyplot.Arima <- function(x,
       if (lag.max <= df + 8)
         lag.max <- df + 8
     }
-
     plots[[3L]] <- ACF(r, na.action = na.action, lag.max = lag.max, ...)
   }
 
@@ -108,18 +111,16 @@ xyplot.Arima <- function(x,
     for (i in (df + 1):gof.lag)
       pval[i] <- Box.test(r, i, "Ljung-Box", df)$p.value
 
-    ll <- list(
+    plots[[4L]] <- do.call(xyplot, updateList(list(
       x = pval ~ seq_along(pval),
       xlab = "Lag",
       ylab = "Ljung-Box p-values",
       ylim = range(c(0, max(pval, na.rm = TRUE) * 1.08, 0.1)),
       panel = function(x, y, ...) {
-        panel.abline(h = 0.05, lty = 2L, col = trellis.par.get()$add.line$col)
+        panel.abline(h = 0.05, lty = 2L, col = reference.line$col)
         panel.xyplot(x, y, ...)
       }
-    )
-
-    plots[[4L]] <- do.call(xyplot, updateList(ll, list(...)))
+    ), list(...)))
   }
 
   grid_wrap(plots, layout = layout)

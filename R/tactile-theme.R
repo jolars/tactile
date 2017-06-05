@@ -8,11 +8,8 @@
 #' The theme currently modifies the default lattice theme so that
 #'
 #' * paddings (margins) are minimized,
-#' * axis tick lengths are halved,
-#' * fontface for axis labels is set to bold, and
+#' * axis tick lengths are halved, and
 #' * title size is decreased *slightly*.
-#'
-#' This theme is continually updated and is likely to change.
 #'
 #' @param fontsize A vector of two numeric scalars for text and symbols
 #'   respectively.
@@ -31,9 +28,7 @@
 #' trellis.par.set(tactile_theme())
 #' show.settings()
 #' trellis.par.set(opars)
-tactile_theme <- function(fontsize = c(12, 8),
-                              color = TRUE,
-                              ...) {
+tactile_theme <- function(fontsize = c(12, 8), color = TRUE, ...) {
   theme <- standard.theme(name = "pdf", color = color)
 
   theme <- updateList(theme, list(

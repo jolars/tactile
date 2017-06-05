@@ -131,14 +131,12 @@ bubbleplot.formula <- function(
 #'
 #' @inheritParams lattice::panel.xyplot
 #' @param z A numeric vector that areas of circles will be mapped to.
-#' @param groups
+#' @param groups Grouping variable (see [lattice::xyplot()]).
 #' @param cex Is used internally and user settings will be ignored.
 #' @param \dots Further arguments to pass to [lattice::panel.xyplot()].
 #'
 #' @return Plots a layer inside a panel of a `lattice` plot.
 #' @export
-#'
-#' @examples
 panel.bubbleplot <- function(x,
                              y,
                              z,

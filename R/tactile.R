@@ -1,15 +1,9 @@
 # Imports
 #' @import lattice
-#' @import latticeExtra
 #' @import stats
-#' @import zoo
-#' @importFrom utils modifyList
-#' @importFrom utils stack
-#' @importFrom grDevices extendrange
-#' @importFrom grDevices grey
-#' @importFrom grDevices palette
-#' @importFrom gridExtra grid.arrange
-#' @importFrom graphics plot
+#' @import grDevices
+#' @import graphics
+#' @import utils
 
 # Document the package
 #' @keywords internal

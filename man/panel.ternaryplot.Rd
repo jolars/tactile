@@ -4,28 +4,48 @@
 \alias{panel.ternaryplot}
 \title{Panel Function for Ternary Plots}
 \usage{
-panel.ternaryplot(x, y, grid = TRUE, labs, density = TRUE,
-  region = density, density_alpha = 0.25, ...)
+panel.ternaryplot(x, y, z, subscripts, response = NULL, density = FALSE,
+  region = density || !is.null(response), contour = density ||
+  !is.null(response), labels = !is.null(response), points = TRUE,
+  grid = TRUE, xlab, ylab, zlab, ...)
 }
 \arguments{
 \item{x}{Numeric vector}
 
 \item{y}{Numeric vector}
 
-\item{grid}{Draw a reference grid.}
-
-\item{labs}{A list of labels for the diagram, which may be in the form
-of expressions.}
-
-\item{\dots}{Arguments passed on to \code{\link[lattice:xyplot]{lattice::xyplot()}}.}
-
 \item{z}{Numeric vector}
 
 \item{subscripts}{See \code{\link[lattice:panel.xyplot]{lattice::panel.xyplot()}}.}
+
+\item{response}{An optional response variable}
+
+\item{density}{Density estimation via \code{\link[MASS:kde2]{MASS::kde2()}}}
+
+\item{region}{Fill density or response estimates with a color gradient.}
+
+\item{contour}{Draw contour lines for density and response estimates.}
+
+\item{labels}{Label contour lines.}
+
+\item{grid}{Draw a reference grid.}
+
+\item{xlab}{X axis label (the left dimension)}
+
+\item{ylab}{Y axis label (the right dimension)}
+
+\item{zlab}{Z axis label (the top dimension)}
+
+\item{...}{Arguments passed down to subsequent panel functions.}
+
+\item{plot_points}{Plot points}
 }
 \value{
 Plots a layer inside a panel of a \code{lattice} plot.
 }
 \description{
 Panel Function for Ternary Plots
+}
+\seealso{
+\link{panel.ternaryplot.density, panel.ternaryplot.response}
 }

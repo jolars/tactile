@@ -2,15 +2,157 @@
 % Please edit documentation in R/ternaryplot.R
 \name{ternaryplot}
 \alias{ternaryplot}
+\alias{ternaryplot.formula}
+\alias{ternaryplot.data.frame}
 \alias{ternaryplot.matrix}
 \title{Ternary Plot}
 \usage{
-ternaryplot(x, data = NULL, ...)
+ternaryplot(x, data, ...)
+
+\method{ternaryplot}{formula}(x, data = NULL, response = NULL,
+  groups = NULL, density = FALSE, region = density || !is.null(response),
+  contour = density || !is.null(response), labels = !is.null(response),
+  colorkey = region, xlab, ylab, zlab, xlim = c(-0.15, 1.15),
+  ylim = c(-0.3, 1), panel = panel.ternaryplot,
+  default.prepanel = lattice.getOption("prepanel.default.xyplot"), ...)
+
+\method{ternaryplot}{data.frame}(x, data = NULL, ...)
 
 \method{ternaryplot}{matrix}(x, data = NULL, ...)
 }
 \arguments{
-\item{...}{}
+\item{x}{See \code{Methods (by class)}.}
+
+\item{data}{A data frame in which the \code{formula}, \code{groups}, and conditioning
+variables are evaluated.}
+
+\item{...}{Arguments passed on to \code{\link[lattice:cloud]{lattice::cloud()}}.}
+
+\item{response}{An optional response variable}
+
+\item{groups}{
+    These arguments are described in the help page for
+    \code{\link{xyplot}}.
+  }
+
+\item{density}{Density estimation via \code{\link[MASS:kde2]{MASS::kde2()}}}
+
+\item{region}{
+    A logical flag, indicating whether regions between contour lines
+    should be filled as in a level plot.
+  }
+
+\item{contour}{
+    A logical flag, indicating whether to draw contour lines.
+  }
+
+\item{labels}{
+    Typically a logical indicating whether contour lines should be
+    labelled, but other possibilities for more sophisticated control
+    exists.  Details are documented in the help page for
+    \code{\link{panel.levelplot}}, to which this argument is passed on
+    unchanged.  That help page also documents the \code{label.style}
+    argument, which affects how the labels are rendered.
+  }
+
+\item{colorkey}{logical specifying whether a color key is to be drawn
+    alongside the plot, or a list describing the color key. The list may
+    contain the following components:
+
+    \describe{
+    
+      \item{\code{space}:}{
+        location of the colorkey, can be one of \code{"left"},
+	\code{"right"}, \code{"top"} and \code{"bottom"}.  Defaults to
+	\code{"right"}.
+      }
+      
+      \item{\code{x}, \code{y}:}{ location, currently unused }
+
+      \item{\code{col}:}{
+	A color ramp specification, as in the \code{col.regions}
+	argument in \code{\link{level.colors}}
+      }
+      
+      \item{\code{at}:}{
+        numeric vector specifying where the colors change. must be of
+        length 1 more than the col vector.
+      }
+
+      \item{\code{labels}:}{
+        a character vector for labelling the \code{at} values, or more
+        commonly, a list describing characteristics of the labels.  This
+	list may include components \code{labels}, \code{at},
+	\code{cex}, \code{col}, \code{rot}, \code{font}, \code{fontface}
+	and \code{fontfamily}.
+      }
+
+      \item{\code{tick.number}:}{ The approximate number of ticks desired. }
+
+      \item{\code{tck}:}{ A (scalar) multipler for tick lengths. }
+
+      \item{\code{corner}:}{ Interacts with x, y; currently unimplemented }
+
+      \item{\code{width}:}{ The width of the key }
+
+      \item{\code{height}:}{ The length of key as a fraction of the
+	appropriate side of plot.
+      } 
+
+      \item{\code{raster}:}{ A logical flag indicating whether the
+	colorkey should be rendered as a raster image using
+	\code{\link{grid.raster}}.  See also
+	\code{\link{panel.levelplot.raster}}.
+      }
+
+      \item{\code{interpolate}:}{ Logical flag, passed to
+	\code{\link{rasterGrob}} when \code{raster=TRUE}. }
+
+      \item{\code{axis.line}:}{ A list giving graphical parameters for
+	the color key boundary and tick marks.  Defaults to
+	\code{trellis.par.get("axis.line")}.  }
+
+      \item{\code{axis.text}:}{ A list giving graphical parameters for
+	the tick mark labels on the color key.  Defaults to
+	\code{trellis.par.get("axis.text")}.  }
+
+    }
+  }
+
+\item{xlab}{
+    These arguments are described in the help page for
+    \code{\link{xyplot}}.
+  }
+
+\item{ylab}{
+    These arguments are described in the help page for
+    \code{\link{xyplot}}.
+  }
+
+\item{zlab}{Z axis label (the top dimension)}
+
+\item{xlim}{
+    These arguments are described in the help page for
+    \code{\link{xyplot}}.
+  }
+
+\item{ylim}{
+    These arguments are described in the help page for
+    \code{\link{xyplot}}.
+  }
+
+\item{panel}{The default panel function used to create the display.}
+
+\item{default.prepanel}{
+    Fallback prepanel function.  See \code{\link{xyplot}}.
+  }
+}
+\value{
+An object of class \code{"trellis"}. The
+  \code{\link[lattice:update.trellis]{update}} method can be used to
+  update components of the object and the
+  \code{\link[lattice:print.trellis]{print}} method (usually called by
+  default) will plot it on an appropriate plotting device.
 }
 \description{
 A ternary diagram is a triangular diagram that displays proportions of
@@ -18,10 +160,24 @@ three variables.
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{matrix}: A matrix of exactly three columns, wherein the the
-first column is treated as \code{z}, the second as \code{x}, and the third as \code{y}.
+\item \code{formula}: A formula of the form \code{top ~ left * right}. Variables
+will be evaluated inside data if provided.
+
+\item \code{data.frame}: A data frame for which the first three columns will
+be mapped to the \emph{left}, \emph{right}, and \emph{top} dimensions of the ternary plot
+respectively.
+
+\item \code{matrix}: A matrix for which the
+first three columns will be mapped to the \emph{left}, \emph{right}, and \emph{top}
+dimensions of the ternary plot respectively.
 }}
 
 \examples{
 ternaryplot(Fertility ~ Agriculture * Catholic, data = swiss)
+ternaryplot(Catholic ~ Examination * Education, response = Infant.Mortality,
+            data = swiss, contour = FALSE)
+
+xyz <- data.frame(x = runif(50), y = runif(50), z = runif(50),
+                 f = gl(2, 25, labels = letters[1:2]))
+ternaryplot(z ~ x * y | f, data = xyz, density = TRUE)
 }

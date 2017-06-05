@@ -27,8 +27,7 @@
 Returns and plots a \code{trellis} object.
 }
 \description{
-This is a version of \code{\link[stats:plot.acf]{stats::plot.acf()}} designed for the special versions
-of the autocorrelation and autocovariance functions from \code{trelliswork}.
+This is a version of \code{\link[stats:plot.acf]{stats::plot.acf()}}.
 }
 \examples{
 z <- ts(matrix(rnorm(400), 100, 4), start = c(1961, 1), frequency = 12)

@@ -6,10 +6,9 @@
 \alias{tactile-package}
 \title{tactile: Extensions to Lattice}
 \description{
-This package extends lattice and latticeExtra by providing new
-high-level functions, methods for existing high-level functions, panel
-functions, and themes. The objective is to replace base plotting functions
-in order to be wholly reliant on trellis graphics in R.
+Tactile (an anagram of lattice) extends the functionality of
+lattice by providing new high-level functions, methods for existing functions,
+new panel functions, and a new theme.
 }
 \seealso{
 Useful links:

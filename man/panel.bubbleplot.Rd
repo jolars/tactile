@@ -13,9 +13,7 @@ panel.bubbleplot(x, y, z, groups = NULL, subscripts, cex = NULL, ...)
 
 \item{z}{A numeric vector that areas of circles will be mapped to.}
 
-\item{groups}{ an optional grouping variable.  If present,
-    \code{\link{panel.superpose}} will be used instead to display each
-    subgroup }
+\item{groups}{Grouping variable (see \code{\link[lattice:xyplot]{lattice::xyplot()}}).}
 
 \item{cex}{Is used internally and user settings will be ignored.}
 

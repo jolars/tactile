@@ -35,12 +35,9 @@ settings. It also provides a different color theme based partly on
 The theme currently modifies the default lattice theme so that
 \itemize{
 \item paddings (margins) are minimized,
-\item axis tick lengths are halved,
-\item fontface for axis labels is set to bold, and
+\item axis tick lengths are halved, and
 \item title size is decreased \emph{slightly}.
 }
-
-This theme is continually updated and is likely to change.
 }
 \examples{
 xyplot(speed ~ dist, data = cars, par.settings = tactile_theme())

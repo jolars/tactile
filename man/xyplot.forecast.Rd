@@ -2,14 +2,28 @@
 % Please edit documentation in R/xyplot-forecast.R
 \name{xyplot.forecast}
 \alias{xyplot.forecast}
-\title{Title}
+\title{Plot Forecasts with Trellis Graphics}
 \usage{
-\method{xyplot}{forecast}(x, data = NULL, interval = TRUE,
-  interval_col = trellis.par.get("reference.line")$col,
-  interval_alpha = 0.5, ...)
+\method{xyplot}{forecast}(x, data = NULL, ci = TRUE, ci_levels = x$level,
+  ci_key = ci, ci_pal = grDevices::hcl(0, 0, 45:100),
+  ci_alpha = trellis.par.get("regions")$alpha, ...)
 }
 \arguments{
-\item{...}{}
+\item{x}{An object of class \code{forecast}.}
+
+\item{data}{Data of observations left out of the model fit, usually
+"future" observations.}
+
+\item{ci}{Plot confidence intervals for the predictions.}
+
+\item{ci_levels}{The prediction levels to plot as a subset of those
+forecasted in \code{x}.}
+
+\item{ci_alpha}{Fill alpha for the confidence interval.}
+
+\item{...}{Arguments passed on to \code{\link[lattice:panel.xyplot]{lattice::panel.xyplot()}}.}
+
+\item{ci_col}{Color fill for the confidence interval.}
 }
 \value{
 An object of class \code{"trellis"}. The
@@ -19,5 +33,24 @@ An object of class \code{"trellis"}. The
   default) will plot it on an appropriate plotting device.
 }
 \description{
-Title
+Plot forecasts from \code{\link[forecast:forecast]{forecast::forecast()}}. It is built mostly to resemble
+the \code{\link[forecast:autoplot.forecast]{forecast::autoplot.forecast()}} and \code{\link[forecast:plot.forecast]{forecast::plot.forecast()}}
+functions, but in addition tries to plot the predictions on the original
+scale.
+}
+\details{
+This function requires the \strong{zoo} package.
+}
+\examples{
+require(forecast)
+train <- window(USAccDeaths, c(1973, 1), c(1977, 12))
+test <- window(USAccDeaths, c(1978, 1), c(1978, 12))
+fit <- arima(train, order = c(0, 1, 1), seasonal = list(order = c(0, 1, 1)))
+fcast1 <- forecast(fit, 12)
+xyplot(fcast1, test, grid = TRUE, auto.key = list(corner = c(0, 0.99)),
+       ci_key = list(title = "PI Level"))
+
+# A fan plot
+fcast2 <- forecast(fit, 12, level = seq(0, 95, 10))
+xyplot(fcast2, test, ci_pal = heat.colors(100))
 }

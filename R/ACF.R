@@ -1,8 +1,8 @@
 #' Auto- and Cross- Covariance and -Correlation Function Estimation
 #'
 #' The following are versions of the functions detailed in
-#' [stats::acf()]. Usage is identical except for the plot functionality,
-#' which you can read about in [xyplot.acf()].
+#' [stats::acf()]. Usage is mostly identical except for the plot functionality,
+#' documented in [xyplot.acf()].
 #'
 #' The confidence interval plotted in plot.acf is based on an uncorrelated
 #' series and should be treated with appropriate caution. Using `ci.type = "ma"`
@@ -20,8 +20,9 @@
 #' @seealso [xyplot.acf()], [stats::acf()], [lattice::xyplot()]
 #'
 #' @author Original: Paul Gilbert, Martyn Plummer. Extensive modifications and
-#'   univariate case of pacf by B. D. Ripley. Adaptation to lattice by
-#'   Johan Larsson.
+#'   univariate case of pacf by B. D. Ripley. Modified for tactile by
+#'   Johan Larsson
+#' @keywords internal
 #'
 #' @examples
 #' ACF(lh)
@@ -30,12 +31,11 @@
 NULL
 
 #' @describeIn ACF Autocorrelation and autocovariance
-#' @export
 ACF <- function(x,
                 lag.max = NULL,
                 type = c("correlation", "covariance", "partial"),
                 plot = TRUE,
-                na.action = na.fail,
+                na.action = na.pass,
                 demean = TRUE,
                 drop_lag0 = TRUE,
                 ...) {
@@ -61,13 +61,12 @@ ACF <- function(x,
 }
 
 #' @describeIn ACF Crosscorrelation and crosscovariance
-#' @export
 CCF <- function(x,
                 y,
                 lag.max = NULL,
                 type = c("correlation", "covariance"),
                 plot = TRUE,
-                na.action = na.fail,
+                na.action = na.pass,
                 ...) {
   out <- ccf(x = x, y = y, lag.max = lag.max, type = type, plot = FALSE,
              na.action = na.action)
@@ -82,11 +81,10 @@ CCF <- function(x,
 }
 
 #' @describeIn ACF Partial autocorrelation and autocovariance
-#' @export
 PACF <- function(x,
                  lag.max = NULL,
                  plot = TRUE,
-                 na.action = na.fail,
+                 na.action = na.pass,
                  ...) {
   out <- pacf(x = x, lag.max = lag.max, plot = FALSE, na.action = na.action)
 
@@ -101,8 +99,7 @@ PACF <- function(x,
 
 #' Plot Autocovariance and Autocorrelation Functions
 #'
-#' This is a version of [stats::plot.acf()] designed for the special versions
-#' of the autocorrelation and autocovariance functions from `trelliswork`.
+#' This is a version of [stats::plot.acf()].
 #'
 #' @inheritParams stats::plot.acf
 #' @param data only provided for method consistency and is ignored.
@@ -124,7 +121,7 @@ xyplot.acf <- function(x,
                        ci.type = c("white", "ma"),
                        ...) {
   ci.type <- match.arg(ci.type)
-  nser <- ncol(x$lag)
+  nser <- NCOL(x$lag)
 
   if (nser < 1L)
     stop("x$lag must have at least 1 column")
@@ -184,7 +181,7 @@ xyplot.acf <- function(x,
                   covariance = "ACF (cov)",
                   partial = "Partial ACF"),
     data = dd,
-    ylim = extendrange(ylim),
+    ylim = grDevices::extendrange(ylim),
     panel = function(x, y, ...) {
       if (with.ci && ci.type == "white") {
         panel.abline(h = c(clim0, -clim0), col = ci.col, lty = 2)
@@ -199,5 +196,5 @@ xyplot.acf <- function(x,
     }
   )
 
-  do.call(lattice::xyplot, updateList(plot_pars, list(...)))
+  do.call(xyplot, updateList(plot_pars, list(...)))
 }

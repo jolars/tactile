@@ -34,10 +34,6 @@ grid_wrap <- function(x, layout = NULL) {
 #'
 #' @return A rescaled version of `x`.
 #' @keywords internal
-#'
-#' @examples
-#' set.seed(1)
-#' rescale(1:10, old_min = 0)
 rescale <- function(x,
                     new_min = 0,
                     new_max = 1,
@@ -65,8 +61,7 @@ dont_plot <- function(x) {
 
 #' Update a List with User Input
 #'
-#' Modified version of [lattice:::updateList()] which relies on
-#' [utils::modifyList()].
+#' Wrapper for [utils::modifyList()].
 #'
 #' @param x A list to be updated.
 #' @param val Stuff to update `x` with.
@@ -121,8 +116,6 @@ xyz_to_xy <- function(form) {
 #' @return An error if the package namespace is not available.
 #'
 #' @keywords internal
-#' @examples
-#' require_pkg("lattice")
 require_pkg <- function(pkg) {
   if (!requireNamespace(pkg, quietly = TRUE))
     stop(paste("Package",

@@ -88,8 +88,6 @@ bubbleplot.formula <- function(
   ans <- eval.parent(ccall)
   ans$call <- ocall
 
-
-
   # Set up bubblekey (if required)
   if (isTRUE(bubblekey) || is.list(bubblekey)) {
     key_args <- list(
@@ -134,22 +132,27 @@ bubbleplot.formula <- function(
 #' @param groups Grouping variable (see [lattice::xyplot()]).
 #' @param cex Is used internally and user settings will be ignored.
 #' @param \dots Further arguments to pass to [lattice::panel.xyplot()].
+#' @param subscripts A vector of indexes to specify which observation to plot.
+#'   Normally does not need to be provided by the user.
 #'
 #' @return Plots a layer inside a panel of a `lattice` plot.
 #' @export
-panel.bubbleplot <- function(x,
-                             y,
-                             z,
-                             groups = NULL,
-                             subscripts,
-                             cex = NULL,
-                             ...) {
+panel.bubbleplot <- function(
+    x,
+    y,
+    z,
+    groups = NULL,
+    subscripts,
+    cex = NULL,
+    ...
+  ) {
   # include cex as argument in top function and then ignore it
+
   if (!is.null(groups))
-    panel.superpose(x,
-                    y,
-                    subscripts,
-                    groups,
+    panel.superpose(x = x,
+                    y = y,
+                    subscripts = subscripts,
+                    groups = groups,
                     panel.bubbleplot,
                     z = z,
                     ...)
@@ -157,8 +160,16 @@ panel.bubbleplot <- function(x,
     panel.xyplot(x, y, cex = z[subscripts], subscripts = subscripts, ...)
 }
 
-# Map z values to circle areas and generate pretty breakpoints for bubblekey
-# TO DO: Allow 0 to map to arbitrary circle area?
+#' Make Bubbles
+#'
+#' Map `z` to the area of bubbles.
+#'
+#' @param x A numeric vector.
+#' @param maxsize The max size (in cex) of the bubbles.
+#'
+#' @return A list with the new bubbles as well as pretty breakpoints along with
+#'   their respective cex values.
+#' @keywords internal
 make_bubbles <- function(x, maxsize) {
   stopifnot(all(x >= 0), is.numeric(x))
 

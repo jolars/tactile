@@ -1,4 +1,4 @@
-#' Q-Q Plot Confidence Intervals (Panel Function)
+#' Q-Q Diagram Confidence Intervals Panels
 #'
 #' Panel function to go along with [lattice::qqmath()] and
 #' [lattice::panel.qqmathline()]. Adds filled confidence bands to the Q-Q-plot.
@@ -8,9 +8,12 @@
 #'
 #' @inheritParams lattice::panel.qqmathline
 #' @param ci Confidence level
-#' @param ci_alpha Alpha level for the color fill
+#' @param alpha Alpha level for the color fill
 #' @param \dots Arguments passed to [lattice::panel.superpose()] and
 #'   [lattice::panel.polygon()]
+#' @param col Color fill for the confidence bands.
+#' @param col.line Color fill for the confidence bands. Is used internally
+#'   by [lattice::panel.superpose()] and should generally not be changed.
 #'
 #' @author Johan Larsson.
 #' @seealso [lattice::panel.qqmathline()], [lattice::qqmath()], and
@@ -36,13 +39,12 @@ panel.qqmathci <- function(
     qtype = 7,
     groups = NULL,
     ci = 0.95,
-    ci_alpha = 0.25,
-    col = plot.line$col,
-    col.se = col,
-    col.line,
-    col.symbol,
-    ...) {
-  plot.line <- trellis.par.get("plot.line")
+    alpha = 0.25,
+    col = trellis.par.get("plot.line")$col,
+    ...,
+    col.line) {
+  dots <- list(...)
+
   if (!missing(col.line))
     col <- col.line
 
@@ -62,16 +64,17 @@ panel.qqmathci <- function(
 
   nobs <- sum(!is.na(y))
   if (!is.null(groups))
-    panel.superpose(x = y,
-                    y = NULL,
-                    distribution = distribution,
-                    probs = probs,
-                    qtype = qtype,
-                    groups = groups,
-                    panel.groups = panel.qqmathci,
-                    ci = ci,
-                    ci_alpha = ci_alpha,
-                    ...)
+    do.call(panel.superpose, updateList(list(
+      x = y,
+      y = NULL,
+      distribution = distribution,
+      probs = probs,
+      qtype = qtype,
+      groups = groups,
+      panel.groups = panel.qqmathci,
+      ci = ci,
+      alpha = alpha
+    ), dots))
   else if (nobs > 0) {
     n   <- length(y)
     pp  <- ppoints(y)
@@ -86,11 +89,12 @@ panel.qqmathci <- function(
     upr <- fit + zz * se
     lwr <- fit - zz * se
 
-    panel.polygon(x = c(z, rev(z)),
-                  y = c(upr, rev(lwr)),
-                  alpha = ci_alpha,
-                  col = col.se,
-                  border = "transparent",
-                  ...)
+    do.call(panel.polygon, updateList(list(
+      x = c(z, rev(z)),
+      y = c(upr, rev(lwr)),
+      alpha = alpha,
+      col = col,
+      border = "transparent"
+    ), dots))
   } else return()
 }

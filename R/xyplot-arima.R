@@ -37,7 +37,6 @@ xyplot.Arima <- function(
     layout = NULL,
     ...
   ) {
-  reference.line <- trellis.par.get("reference.line")
 
   show <- rep.int(FALSE, 4L)
   show[which] <- TRUE
@@ -53,32 +52,30 @@ xyplot.Arima <- function(
 
   # Standardized residuals
   if (show[1L]) {
-    plots[[1L]] <- xyplot(
+    plots[[1L]] <- do.call(xyplot, updateList(list(
       rstd,
       ylab = "Standardized residuals",
-      ...,
       panel = function(...) {
-        panel.abline(h = 0L, col = reference.line$col)
+        panel.abline(h = 0L, reference = TRUE)
         panel.xyplot(...)
       }
-    )
+    ), list(...)))
   }
 
   # Q-Q-diagram of standardized residuals
   if (show[2L]) {
-    plots[[2L]] <- qqmath(
+    plots[[2L]] <- do.call(qqmath, updateList(list(
       ~ rstd,
       xlab = "Theoretical quantiles",
       ylab = "Standardized residuals",
       aspect = qq.aspect,
       prepanel = prepanel.qqmathline,
-      ...,
       panel = function(...) {
         panel.qqmathci(...)
         panel.qqmathline(...)
         panel.qqmath(...)
       }
-    )
+    ), list(...)))
   }
 
   if (any(show[3L:4L])) {
@@ -117,7 +114,7 @@ xyplot.Arima <- function(
       ylab = "Ljung-Box p-values",
       ylim = range(c(0, max(pval, na.rm = TRUE) * 1.08, 0.1)),
       panel = function(x, y, ...) {
-        panel.abline(h = 0.05, lty = 2L, col = reference.line$col)
+        panel.abline(h = 0.05, reference = TRUE)
         panel.xyplot(x, y, ...)
       }
     ), list(...)))

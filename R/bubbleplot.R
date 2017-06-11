@@ -25,31 +25,38 @@ bubbleplot <- function(x, data = NULL, ...) UseMethod("bubbleplot")
 #'   documentation in [lattice::xyplot()]. If both `auto.key` and `bubblekey`
 #'   are given and their `space` arguments (positions) conflict, bubblekey
 #'   will silently override the position of `auto.key`.
-#' @param allow.multiple See [lattice::xyplot()]
-#' @param outer See [lattice::xyplot()]
 #' @param panel See [lattice::xyplot()]. Here, we are passing an additional
 #'   variable, `z`, which is then used in [panel.bubbleplot()].
 #' @param groups See [lattice::xyplot()]
 #' @param subset See [lattice::xyplot()]
+#' @param outer Ignored.
+#' @param allow.multiple Ignored.
 #' @param drop.unused.levels See [lattice::xyplot()]
-#' @param \dots Further arguments to pass to [lattice::xyplot()].
+#' @param ... Further arguments to pass to [lattice::xyplot()].
 #'
 #' @rdname bubbleplot
 #' @export
 bubbleplot.formula <- function(
-    x,
-    data = NULL,
-    maxsize = 3,
-    bubblekey = TRUE,
-    panel = panel.bubbleplot,
-    groups = NULL,
-    subset = TRUE,
-    drop.unused.levels = lattice.getOption("drop.unused.levels"),
-    ...
-  ) {
+  x,
+  data = NULL,
+  maxsize = 3,
+  bubblekey = TRUE,
+  panel = panel.bubbleplot,
+  groups = NULL,
+  subset = TRUE,
+  drop.unused.levels = lattice.getOption("drop.unused.levels"),
+  ...,
+  outer,
+  allow.multiple
+) {
   new_groups <- substitute(groups)
   groups <- eval(substitute(groups), data, environment(x))
   subset <- eval(substitute(subset), data, environment(x))
+
+  if (!missing(outer))
+    warning("'outer' is ignored.")
+  if (!missing(allow.multiple))
+    warning("'allow.multiple' is ignored.")
 
   # Parse the formula as z ~ x * y
   form <- latticeParseFormula(
@@ -87,39 +94,15 @@ bubbleplot.formula <- function(
   ans$call <- ocall
 
   # Set up bubblekey (if required)
-  if (isTRUE(bubblekey) || is.list(bubblekey)) {
-    key_args <- list(
-      key = updateList(list(
-        title = form$left.name,
-        cex.title = 1,
-        text = list(as.character(bubbles$breaks)),
-        points = list(
-          col = if (is.null(groups)) trellis.par.get("plot.symbol")$col else 1,
-          pch = trellis.par.get("plot.symbol")$pch,
-          fill = trellis.par.get("plot.symbol")$fill,
-          alpha = trellis.par.get("plot.symbol")$alpha,
-          font = trellis.par.get("plot.symbol")$font,
-          cex = bubbles$breaks_cex
-        ),
-        # Padding purely by trial and error. Is there a smarter solution?
-        padding.text = maxsize * 1.3
-      ), if (is.list(bubblekey)) bubblekey else list())
-    )
-
-    # Find a position for the key
-    if (!is.null(key_args$key$space))
-      # First respect user input
-      key_pos <- key_args$key$space
-    else if (!is.null(ans$legend)) {
-      # Else
-      positions <- c("right", "top", "bottom", "left")
-      ii <- positions %in% names(ans$legend)
-      key_pos <- positions[!ii][1]
-    } else
-      key_pos <- "right"
-
-    ans[["legend"]][[key_pos]] <- list(fun = "draw.key", args = key_args)
-  }
+  ans$legend <- setup_key(
+    ans$legend,
+    bubblekey,
+    list(text = list(as.character(bubbles$breaks)),
+         title = form$left.name,
+         col = if (is.null(groups)) trellis.par.get("plot.symbol")$col else 1,
+         padding.text = maxsize * 1.3),
+    draw.key
+  )
   ans
 }
 

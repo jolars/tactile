@@ -42,6 +42,7 @@ xyplot.forecast <- function(
     ci_alpha = trellis.par.get("regions")$alpha,
     ...
   ) {
+  dots <- list(...)
   if (is.null(x$lower) | is.null(x$upper) | is.null(x$level))
     ci <- FALSE
   else if (!is.finite(max(x$upper)))
@@ -109,7 +110,7 @@ xyplot.forecast <- function(
       }
       panel.xyplot(x, grid = FALSE, ...)
     }
-  ), list(...)))
+  ), dots))
 
   # Setup a key?
   if (length(ci_levels) > 5) {

@@ -26,21 +26,21 @@
 #' xyplot(fit, layout = c(2, 2))
 #' xyplot(fit, which = c(1:2, 4), layout = rbind(c(1, 1), c(2, 3)))
 xyplot.Arima <- function(
-    x,
-    data = NULL,
-    which = 1:4,
-    lag.max = NULL,
-    gof.lag = NULL,
-    qq.aspect = "iso",
-    na.action = na.pass,
-    main = NULL,
-    layout = NULL,
-    ...
-  ) {
-
+  x,
+  data = NULL,
+  which = 1:4,
+  lag.max = NULL,
+  gof.lag = NULL,
+  qq.aspect = "iso",
+  na.action = na.pass,
+  main = NULL,
+  layout = NULL,
+  ...
+) {
   show <- rep.int(FALSE, 4L)
   show[which] <- TRUE
   plots <- vector("list", 4L)
+  dots <- list(...)
 
   if (!is.null(main))
     stopifnot(length(main) == sum(show))
@@ -59,7 +59,7 @@ xyplot.Arima <- function(
         panel.abline(h = 0L, reference = TRUE)
         panel.xyplot(...)
       }
-    ), list(...)))
+    ), dots))
   }
 
   # Q-Q-diagram of standardized residuals
@@ -75,7 +75,7 @@ xyplot.Arima <- function(
         panel.qqmathline(...)
         panel.qqmath(...)
       }
-    ), list(...)))
+    ), dots))
   }
 
   if (any(show[3L:4L])) {
@@ -117,8 +117,102 @@ xyplot.Arima <- function(
         panel.abline(h = 0.05, reference = TRUE)
         panel.xyplot(x, y, ...)
       }
-    ), list(...)))
+    ), dots))
   }
 
   grid_wrap(plots, layout = layout)
+}
+
+#' Auto- and Cross- Covariance and -Correlation Function Estimation
+#'
+#' The following are versions of the functions detailed in
+#' [stats::acf()]. Usage is mostly identical except for the plot functionality,
+#' documented in [xyplot.acf()].
+#'
+#' The confidence interval plotted in plot.acf is based on an uncorrelated
+#' series and should be treated with appropriate caution. Using `ci.type = "ma"`
+#' may potentially be less misleading.
+#'
+#' @name ACF
+#'
+#' @inheritParams stats::acf
+#' @param drop_lag0 drop the first lag?
+#' @param \dots further arguments to be passed to [xyplot.acf()].
+#'
+#' @return If `plot = TRUE`, returns and plots a trellis object. Otherwise,
+#'   an `acf` object is returned
+#'
+#' @seealso [xyplot.acf()], [stats::acf()], [lattice::xyplot()]
+#'
+#' @author Original: Paul Gilbert, Martyn Plummer. Extensive modifications and
+#'   univariate case of pacf by B. D. Ripley. Modified for tactile by
+#'   Johan Larsson
+#' @keywords internal
+NULL
+
+#' @describeIn ACF Autocorrelation and autocovariance
+ACF <- function(x,
+                lag.max = NULL,
+                type = c("correlation", "covariance", "partial"),
+                plot = TRUE,
+                na.action = na.pass,
+                demean = TRUE,
+                drop_lag0 = TRUE,
+                ...) {
+  out <- acf(x = x,
+             lag.max = lag.max,
+             type = type,
+             plot = FALSE,
+             na.action = na.action,
+             demean = demean)
+
+  if (drop_lag0) {
+    out$acf = out$acf[-1L, , , drop = FALSE]
+    out$lag = out$lag[-1L, , , drop = FALSE]
+  }
+
+  if (inherits(x, c("ts", "zoo")))
+    out$lag <- out$lag * frequency(x)
+
+  if (plot)
+    xyplot(x = out, ...)
+  else
+    out
+}
+
+#' @describeIn ACF Crosscorrelation and crosscovariance
+CCF <- function(x,
+                y,
+                lag.max = NULL,
+                type = c("correlation", "covariance"),
+                plot = TRUE,
+                na.action = na.pass,
+                ...) {
+  out <- ccf(x = x, y = y, lag.max = lag.max, type = type, plot = FALSE,
+             na.action = na.action)
+
+  if (inherits(x, c("ts", "zoo")) && inherits(y, c("ts", "zoo")))
+    out$lag <- out$lag * frequency(x)
+
+  if (plot)
+    xyplot(x = out, ...)
+  else
+    out
+}
+
+#' @describeIn ACF Partial autocorrelation and autocovariance
+PACF <- function(x,
+                 lag.max = NULL,
+                 plot = TRUE,
+                 na.action = na.pass,
+                 ...) {
+  out <- pacf(x = x, lag.max = lag.max, plot = FALSE, na.action = na.action)
+
+  if (inherits(x, c("ts", "zoo")))
+    out$lag <- out$lag * frequency(x)
+
+  if (plot)
+    xyplot(x = out, ...)
+  else
+    out
 }

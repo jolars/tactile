@@ -1,4 +1,4 @@
-#' tactile Theme
+#' Tactile Theme
 #'
 #' A custom theme for lattice that tries to make away with some of the
 #' (in this author's opinion) excessive margins that result from the default
@@ -23,12 +23,12 @@
 #' @export
 #'
 #' @examples
-#' xyplot(speed ~ dist, data = cars, par.settings = tactile_theme())
+#' xyplot(speed ~ dist, data = cars, par.settings = tactile.theme())
 #' opars <- trellis.par.get()
-#' trellis.par.set(tactile_theme())
+#' trellis.par.set(tactile.theme())
 #' show.settings()
 #' trellis.par.set(opars)
-tactile_theme <- function(fontsize = c(12, 8), color = TRUE, ...) {
+tactile.theme <- function(fontsize = c(12, 8), color = TRUE, ...) {
   theme <- standard.theme(name = "pdf", color = color)
 
   theme <- updateList(theme, list(

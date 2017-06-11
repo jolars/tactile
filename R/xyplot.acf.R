@@ -1,97 +1,3 @@
-#' Auto- and Cross- Covariance and -Correlation Function Estimation
-#'
-#' The following are versions of the functions detailed in
-#' [stats::acf()]. Usage is mostly identical except for the plot functionality,
-#' documented in [xyplot.acf()].
-#'
-#' The confidence interval plotted in plot.acf is based on an uncorrelated
-#' series and should be treated with appropriate caution. Using `ci.type = "ma"`
-#' may potentially be less misleading.
-#'
-#' @name ACF
-#'
-#' @inheritParams stats::acf
-#' @param drop_lag0 drop the first lag?
-#' @param \dots further arguments to be passed to [xyplot.acf()].
-#'
-#' @return If `plot = TRUE`, returns and plots a trellis object. Otherwise,
-#'   an `acf` object is returned
-#'
-#' @seealso [xyplot.acf()], [stats::acf()], [lattice::xyplot()]
-#'
-#' @author Original: Paul Gilbert, Martyn Plummer. Extensive modifications and
-#'   univariate case of pacf by B. D. Ripley. Modified for tactile by
-#'   Johan Larsson
-#' @keywords internal
-NULL
-
-#' @describeIn ACF Autocorrelation and autocovariance
-ACF <- function(x,
-                lag.max = NULL,
-                type = c("correlation", "covariance", "partial"),
-                plot = TRUE,
-                na.action = na.pass,
-                demean = TRUE,
-                drop_lag0 = TRUE,
-                ...) {
-  out <- acf(x = x,
-             lag.max = lag.max,
-             type = type,
-             plot = FALSE,
-             na.action = na.action,
-             demean = demean)
-
-  if (drop_lag0) {
-    out$acf = out$acf[-1L, , , drop = FALSE]
-    out$lag = out$lag[-1L, , , drop = FALSE]
-  }
-
-  if (inherits(x, c("ts", "zoo")))
-    out$lag <- out$lag * frequency(x)
-
-  if (plot)
-    xyplot(x = out, ...)
-  else
-    out
-}
-
-#' @describeIn ACF Crosscorrelation and crosscovariance
-CCF <- function(x,
-                y,
-                lag.max = NULL,
-                type = c("correlation", "covariance"),
-                plot = TRUE,
-                na.action = na.pass,
-                ...) {
-  out <- ccf(x = x, y = y, lag.max = lag.max, type = type, plot = FALSE,
-             na.action = na.action)
-
-  if (inherits(x, c("ts", "zoo")) && inherits(y, c("ts", "zoo")))
-    out$lag <- out$lag * frequency(x)
-
-  if (plot)
-    xyplot(x = out, ...)
-  else
-    out
-}
-
-#' @describeIn ACF Partial autocorrelation and autocovariance
-PACF <- function(x,
-                 lag.max = NULL,
-                 plot = TRUE,
-                 na.action = na.pass,
-                 ...) {
-  out <- pacf(x = x, lag.max = lag.max, plot = FALSE, na.action = na.action)
-
-  if (inherits(x, c("ts", "zoo")))
-    out$lag <- out$lag * frequency(x)
-
-  if (plot)
-    xyplot(x = out, ...)
-  else
-    out
-}
-
 #' Plot Autocovariance and Autocorrelation Functions
 #'
 #' This is a version of [stats::plot.acf()].
@@ -101,14 +7,13 @@ PACF <- function(x,
 #' @param \dots graphical parameters passed on to [lattice::xyplot()].
 #'
 #' @return Returns and plots a `trellis` object.
-#' @seealso [ACF()], [CCF()], [PACF()], [lattice::xyplot()],
-#'   [stats::plot.acf()], [stats::acf()].
+#' @seealso [lattice::xyplot()], [stats::plot.acf()], [stats::acf()].
 #'
 #' @export
 #'
 #' @examples
 #' z <- ts(matrix(rnorm(400), 100, 4), start = c(1961, 1), frequency = 12)
-#' ACF(z, ci.col = "black")
+#' xyplot(acf(z, ci.col = "black"))
 xyplot.acf <- function(x,
                        data = NULL,
                        ci = 0.95,

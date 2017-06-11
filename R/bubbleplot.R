@@ -41,8 +41,6 @@ bubbleplot.formula <- function(
     data = NULL,
     maxsize = 3,
     bubblekey = TRUE,
-    allow.multiple = is.null(groups) || outer,
-    outer = !is.null(groups),
     panel = panel.bubbleplot,
     groups = NULL,
     subset = TRUE,
@@ -60,8 +58,8 @@ bubbleplot.formula <- function(
     dimension = 3,
     subset = subset,
     groups = groups,
-    multiple = allow.multiple,
-    outer = outer,
+    multiple = FALSE,
+    outer = FALSE,
     subscripts = TRUE,
     drop = drop.unused.levels
   )
@@ -131,7 +129,7 @@ bubbleplot.formula <- function(
 #' @param z A numeric vector that areas of circles will be mapped to.
 #' @param groups Grouping variable (see [lattice::xyplot()]).
 #' @param cex Is used internally and user settings will be ignored.
-#' @param \dots Further arguments to pass to [lattice::panel.xyplot()].
+#' @param ... Further arguments to pass to [lattice::panel.xyplot()].
 #' @param subscripts A vector of indexes to specify which observation to plot.
 #'   Normally does not need to be provided by the user.
 #'
@@ -151,13 +149,13 @@ panel.bubbleplot <- function(
   if (!is.null(groups))
     panel.superpose(x = x,
                     y = y,
+                    z = z,
                     subscripts = subscripts,
                     groups = groups,
                     panel.bubbleplot,
-                    z = z,
                     ...)
   else
-    panel.xyplot(x, y, cex = z[subscripts], subscripts = subscripts, ...)
+    panel.xyplot(x, y, cex = z[subscripts], ...)
 }
 
 #' Make Bubbles

@@ -8,8 +8,7 @@
 bubbleplot(x, data = NULL, ...)
 
 \method{bubbleplot}{formula}(x, data = NULL, maxsize = 3,
-  bubblekey = TRUE, allow.multiple = is.null(groups) || outer,
-  outer = !is.null(groups), panel = panel.bubbleplot, groups = NULL,
+  bubblekey = TRUE, panel = panel.bubbleplot, groups = NULL,
   subset = TRUE,
   drop.unused.levels = lattice.getOption("drop.unused.levels"), ...)
 }
@@ -31,10 +30,6 @@ documentation in \code{\link[lattice:xyplot]{lattice::xyplot()}}. If both \code{
 are given and their \code{space} arguments (positions) conflict, bubblekey
 will silently override the position of \code{auto.key}.}
 
-\item{allow.multiple}{See \code{\link[lattice:xyplot]{lattice::xyplot()}}}
-
-\item{outer}{See \code{\link[lattice:xyplot]{lattice::xyplot()}}}
-
 \item{panel}{See \code{\link[lattice:xyplot]{lattice::xyplot()}}. Here, we are passing an additional
 variable, \code{z}, which is then used in \code{\link[=panel.bubbleplot]{panel.bubbleplot()}}.}
 
@@ -43,6 +38,10 @@ variable, \code{z}, which is then used in \code{\link[=panel.bubbleplot]{panel.b
 \item{subset}{See \code{\link[lattice:xyplot]{lattice::xyplot()}}}
 
 \item{drop.unused.levels}{See \code{\link[lattice:xyplot]{lattice::xyplot()}}}
+
+\item{allow.multiple}{See \code{\link[lattice:xyplot]{lattice::xyplot()}}}
+
+\item{outer}{See \code{\link[lattice:xyplot]{lattice::xyplot()}}}
 }
 \value{
 An object of class \code{"trellis"}. The

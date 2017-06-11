@@ -20,7 +20,7 @@ Normally does not need to be provided by the user.}
 
 \item{cex}{Is used internally and user settings will be ignored.}
 
-\item{\dots}{Further arguments to pass to \code{\link[lattice:panel.xyplot]{lattice::panel.xyplot()}}.}
+\item{...}{Further arguments to pass to \code{\link[lattice:panel.xyplot]{lattice::panel.xyplot()}}.}
 }
 \value{
 Plots a layer inside a panel of a \code{lattice} plot.

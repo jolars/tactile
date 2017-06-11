@@ -1,4 +1,4 @@
-#' Q-Q diagram for zoo time series
+#' Q-Q Diagram for Zoo Time Series
 #'
 #' Draw quantile-Quantile plots of a sample against a theoretical distribution,
 #' possibly conditioned on other variables.
@@ -12,7 +12,6 @@
 #' @return Plots and returns a `trellis` object.
 #' @author Original by Deepayan Sarkar. Method by Johan Larsson.
 #' @seealso [lattice::qqmath()], [zoo::zoo()], [lattice::panel.qqmathline()].
-#' @importFrom zoo coredata
 #' @export
 #'
 #' @examples
@@ -24,7 +23,7 @@ qqmath.zoo <- function(x,
                        ref = TRUE,
                        ci = TRUE,
                        ...) {
-  args <- list(
+  do.call(qqmath, updateList(list(
     x = ~ zoo::coredata(x),
     xlab = xlab,
     ylab = ylab,
@@ -35,6 +34,5 @@ qqmath.zoo <- function(x,
         panel.qqmathline(...)
       panel.qqmath(...)
     }
-  )
-  do.call(qqmath, updateList(args, list(...)))
+  ), list(...)))
 }

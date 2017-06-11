@@ -14,138 +14,59 @@ ternaryplot(x, data, ...)
   contour = density || !is.null(response), labels = !is.null(response),
   colorkey = region, xlab, ylab, zlab, xlim = c(-0.15, 1.15),
   ylim = c(-0.3, 1), panel = panel.ternaryplot,
-  default.prepanel = lattice.getOption("prepanel.default.xyplot"), ...)
+  default.prepanel = lattice.getOption("prepanel.default.xyplot"),
+  drop.unused.levels = lattice.getOption("drop.unused.levels"),
+  subset = TRUE, ...)
 
 \method{ternaryplot}{data.frame}(x, data = NULL, ...)
 
 \method{ternaryplot}{matrix}(x, data = NULL, ...)
 }
 \arguments{
-\item{x}{See \code{Methods (by class)}.}
+\item{x}{See \strong{Methods (by class)}.}
 
 \item{data}{A data frame in which the \code{formula}, \code{groups}, and conditioning
 variables are evaluated.}
 
-\item{...}{Arguments passed on to \code{\link[lattice:cloud]{lattice::cloud()}}.}
+\item{...}{Arguments that are passed on to other methods, particularly
+\code{\link[=panel.ternaryplot]{panel.ternaryplot()}}.}
 
 \item{response}{An optional response variable}
 
-\item{groups}{
-    These arguments are described in the help page for
-    \code{\link{xyplot}}.
-  }
+\item{groups}{A variable or expression to be evaluated in \code{data} and used to
+distinguish groups by varying graphical parameters.}
 
-\item{density}{Density estimation via \code{\link[MASS:kde2]{MASS::kde2()}}}
+\item{density}{Compute two-dimensional density estimates via \code{\link[MASS:kde2d]{MASS::kde2d()}}.}
 
-\item{region}{
-    A logical flag, indicating whether regions between contour lines
-    should be filled as in a level plot.
-  }
+\item{region}{Fill density or response estimates with a color gradient.}
 
-\item{contour}{
-    A logical flag, indicating whether to draw contour lines.
-  }
+\item{contour}{Draw contour lines for density and response estimates.}
 
-\item{labels}{
-    Typically a logical indicating whether contour lines should be
-    labelled, but other possibilities for more sophisticated control
-    exists.  Details are documented in the help page for
-    \code{\link{panel.levelplot}}, to which this argument is passed on
-    unchanged.  That help page also documents the \code{label.style}
-    argument, which affects how the labels are rendered.
-  }
+\item{labels}{Label contour lines.}
 
-\item{colorkey}{logical specifying whether a color key is to be drawn
-    alongside the plot, or a list describing the color key. The list may
-    contain the following components:
+\item{colorkey}{if \code{TRUE} automatically computes a colorkey for density
+or response estimates. Can also be a list (see \code{\link[lattice:levelplot]{lattice::levelplot()}} for
+details on this).}
 
-    \describe{
-    
-      \item{\code{space}:}{
-        location of the colorkey, can be one of \code{"left"},
-	\code{"right"}, \code{"top"} and \code{"bottom"}.  Defaults to
-	\code{"right"}.
-      }
-      
-      \item{\code{x}, \code{y}:}{ location, currently unused }
+\item{xlab}{X axis label (the left dimension)}
 
-      \item{\code{col}:}{
-	A color ramp specification, as in the \code{col.regions}
-	argument in \code{\link{level.colors}}
-      }
-      
-      \item{\code{at}:}{
-        numeric vector specifying where the colors change. must be of
-        length 1 more than the col vector.
-      }
-
-      \item{\code{labels}:}{
-        a character vector for labelling the \code{at} values, or more
-        commonly, a list describing characteristics of the labels.  This
-	list may include components \code{labels}, \code{at},
-	\code{cex}, \code{col}, \code{rot}, \code{font}, \code{fontface}
-	and \code{fontfamily}.
-      }
-
-      \item{\code{tick.number}:}{ The approximate number of ticks desired. }
-
-      \item{\code{tck}:}{ A (scalar) multipler for tick lengths. }
-
-      \item{\code{corner}:}{ Interacts with x, y; currently unimplemented }
-
-      \item{\code{width}:}{ The width of the key }
-
-      \item{\code{height}:}{ The length of key as a fraction of the
-	appropriate side of plot.
-      } 
-
-      \item{\code{raster}:}{ A logical flag indicating whether the
-	colorkey should be rendered as a raster image using
-	\code{\link{grid.raster}}.  See also
-	\code{\link{panel.levelplot.raster}}.
-      }
-
-      \item{\code{interpolate}:}{ Logical flag, passed to
-	\code{\link{rasterGrob}} when \code{raster=TRUE}. }
-
-      \item{\code{axis.line}:}{ A list giving graphical parameters for
-	the color key boundary and tick marks.  Defaults to
-	\code{trellis.par.get("axis.line")}.  }
-
-      \item{\code{axis.text}:}{ A list giving graphical parameters for
-	the tick mark labels on the color key.  Defaults to
-	\code{trellis.par.get("axis.text")}.  }
-
-    }
-  }
-
-\item{xlab}{
-    These arguments are described in the help page for
-    \code{\link{xyplot}}.
-  }
-
-\item{ylab}{
-    These arguments are described in the help page for
-    \code{\link{xyplot}}.
-  }
+\item{ylab}{Y axis label (the right dimension)}
 
 \item{zlab}{Z axis label (the top dimension)}
 
-\item{xlim}{
-    These arguments are described in the help page for
-    \code{\link{xyplot}}.
-  }
+\item{xlim}{X limits for the plot region.}
 
-\item{ylim}{
-    These arguments are described in the help page for
-    \code{\link{xyplot}}.
-  }
+\item{ylim}{Y limits for the plot region.}
 
-\item{panel}{The default panel function used to create the display.}
+\item{panel}{The panel function.}
 
-\item{default.prepanel}{
-    Fallback prepanel function.  See \code{\link{xyplot}}.
-  }
+\item{default.prepanel}{The default prepanel function.}
+
+\item{drop.unused.levels}{Drop unused conditioning or groups levels.}
+
+\item{subset}{An expression that evaluates to a logical or integer indexing
+vector. Like groups, it is evaluated in data. Only the resulting rows of
+data are used for the plot.}
 }
 \value{
 An object of class \code{"trellis"}. The
@@ -155,8 +76,10 @@ An object of class \code{"trellis"}. The
   default) will plot it on an appropriate plotting device.
 }
 \description{
-A ternary diagram is a triangular diagram that displays proportions of
-three variables.
+A ternary plot is a triangular diagram that displays proportions of
+three variables. It can be used to map three-dimensional data to a
+two-dimensional surface with the caveat that the data's original scales are
+lost (unless it was proportional data to begin with).#'
 }
 \section{Methods (by class)}{
 \itemize{
@@ -177,7 +100,7 @@ ternaryplot(Fertility ~ Agriculture * Catholic, data = swiss)
 ternaryplot(Catholic ~ Examination * Education, response = Infant.Mortality,
             data = swiss, contour = FALSE)
 
-xyz <- data.frame(x = runif(50), y = runif(50), z = runif(50),
-                 f = gl(2, 25, labels = letters[1:2]))
-ternaryplot(z ~ x * y | f, data = xyz, density = TRUE)
+ternaryplot(Or ~ An * Ab | Feldspar, data = feldspar)
+
+ternaryplot(Or ~ An * Ab, groups = Feldspar, data = feldspar, density = TRUE)
 }

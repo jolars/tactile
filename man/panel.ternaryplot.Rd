@@ -7,7 +7,8 @@
 panel.ternaryplot(x, y, z, subscripts, response = NULL, density = FALSE,
   region = density || !is.null(response), contour = density ||
   !is.null(response), labels = !is.null(response), points = TRUE,
-  grid = TRUE, xlab, ylab, zlab, ...)
+  grid = TRUE, density_breaks = NULL, xlab, ylab, zlab, xlab.default,
+  ylab.default, zlab.default, ...)
 }
 \arguments{
 \item{x}{Numeric vector}
@@ -20,7 +21,7 @@ panel.ternaryplot(x, y, z, subscripts, response = NULL, density = FALSE,
 
 \item{response}{An optional response variable}
 
-\item{density}{Density estimation via \code{\link[MASS:kde2]{MASS::kde2()}}}
+\item{density}{Compute two-dimensional density estimates via \code{\link[MASS:kde2d]{MASS::kde2d()}}.}
 
 \item{region}{Fill density or response estimates with a color gradient.}
 
@@ -28,7 +29,12 @@ panel.ternaryplot(x, y, z, subscripts, response = NULL, density = FALSE,
 
 \item{labels}{Label contour lines.}
 
+\item{points}{Draw points (via \code{\link[=panel.ternaryplot.xyplot]{panel.ternaryplot.xyplot()}}).}
+
 \item{grid}{Draw a reference grid.}
+
+\item{density_breaks}{Breaks for the density plot if used (see
+\code{\link[=panel.ternaryplot.density]{panel.ternaryplot.density()}}).}
 
 \item{xlab}{X axis label (the left dimension)}
 
@@ -36,9 +42,13 @@ panel.ternaryplot(x, y, z, subscripts, response = NULL, density = FALSE,
 
 \item{zlab}{Z axis label (the top dimension)}
 
-\item{...}{Arguments passed down to subsequent panel functions.}
+\item{xlab.default}{Internal argument}
 
-\item{plot_points}{Plot points}
+\item{ylab.default}{Internal argument}
+
+\item{zlab.default}{Internal argument}
+
+\item{...}{Arguments passed down to subsequent panel functions.}
 }
 \value{
 Plots a layer inside a panel of a \code{lattice} plot.
@@ -47,5 +57,9 @@ Plots a layer inside a panel of a \code{lattice} plot.
 Panel Function for Ternary Plots
 }
 \seealso{
-\link{panel.ternaryplot.density, panel.ternaryplot.response}
+The building blocks of this function are available as the separate
+panel functions \code{\link[=panel.ternaryplot.xyplot]{panel.ternaryplot.xyplot()}}, \code{\link[=panel.ternaryplot.grid]{panel.ternaryplot.grid()}},
+\code{\link[=panel.ternaryplot.scales]{panel.ternaryplot.scales()}}, \code{\link[=panel.ternaryplot.clip]{panel.ternaryplot.clip()}},
+\code{\link[=panel.ternaryplot.response]{panel.ternaryplot.response()}}, and \code{\link[=panel.ternaryplot.density]{panel.ternaryplot.density()}} in case
+the user would like to get complete control of the customization.
 }

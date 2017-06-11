@@ -69,11 +69,6 @@ may potentially be less misleading.
 \item \code{PACF}: Partial autocorrelation and autocovariance
 }}
 
-\examples{
-ACF(lh)
-PACF(lh)
-CCF(mdeaths, fdeaths)
-}
 \seealso{
 \code{\link[=xyplot.acf]{xyplot.acf()}}, \code{\link[stats:acf]{stats::acf()}}, \code{\link[lattice:xyplot]{lattice::xyplot()}}
 }

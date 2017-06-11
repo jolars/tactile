@@ -15,7 +15,4 @@ An error if the package namespace is not available.
 \description{
 Throw An Error if A Required Package Is Unavailable
 }
-\examples{
-require_pkg("lattice")
-}
 \keyword{internal}

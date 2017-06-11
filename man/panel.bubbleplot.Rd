@@ -15,6 +15,9 @@ panel.bubbleplot(x, y, z, groups = NULL, subscripts, cex = NULL, ...)
 
 \item{groups}{Grouping variable (see \code{\link[lattice:xyplot]{lattice::xyplot()}}).}
 
+\item{subscripts}{A vector of indexes to specify which observation to plot.
+Normally does not need to be provided by the user.}
+
 \item{cex}{Is used internally and user settings will be ignored.}
 
 \item{\dots}{Further arguments to pass to \code{\link[lattice:panel.xyplot]{lattice::panel.xyplot()}}.}

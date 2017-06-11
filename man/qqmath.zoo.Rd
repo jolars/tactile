@@ -2,7 +2,7 @@
 % Please edit documentation in R/qqmath-zoo.R
 \name{qqmath.zoo}
 \alias{qqmath.zoo}
-\title{Q-Q diagram for zoo time series}
+\title{Q-Q Diagram for Zoo Time Series}
 \usage{
 \method{qqmath}{zoo}(x, data = NULL, xlab = "Theoretical quantiles",
   ylab = "Sample quantiles", ref = TRUE, ci = TRUE, ...)

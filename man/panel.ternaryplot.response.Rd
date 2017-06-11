@@ -9,11 +9,11 @@ panel.ternaryplot.response(x, y, z, subscripts, response, region = TRUE,
   formula = response ~ poly(x, y), ...)
 }
 \arguments{
-\item{x}{ variables to be plotted in the scatterplot}
+\item{x}{Numeric vector}
 
-\item{y}{ variables to be plotted in the scatterplot}
+\item{y}{Numeric vector}
 
-\item{z}{A numeric vector that areas of circles will be mapped to.}
+\item{z}{Numeric vector}
 
 \item{subscripts}{See \code{\link[lattice:panel.xyplot]{lattice::panel.xyplot()}}.}
 

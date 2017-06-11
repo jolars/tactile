@@ -15,8 +15,7 @@ updateList(x, val)
 Returns an updated list.
 }
 \description{
-Modified version of \code{\link[lattice:::updateList]{lattice::::updateList()}} which relies on
-\code{\link[utils:modifyList]{utils::modifyList()}}.
+Wrapper for \code{\link[utils:modifyList]{utils::modifyList()}}.
 }
 \seealso{
 \code{\link[utils:modifyList]{utils::modifyList()}}

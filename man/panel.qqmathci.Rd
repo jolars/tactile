@@ -2,11 +2,11 @@
 % Please edit documentation in R/panel-qqmathci.R
 \name{panel.qqmathci}
 \alias{panel.qqmathci}
-\title{Q-Q Plot Confidence Intervals (Panel Function)}
+\title{Q-Q Diagram Confidence Intervals Panels}
 \usage{
 panel.qqmathci(x, y = x, distribution = qnorm, probs = c(0.25, 0.75),
-  qtype = 7, groups = NULL, ci = 0.95, ci_alpha = 0.25,
-  col = plot.line$col, col.se = col, col.line, col.symbol, ...)
+  qtype = 7, groups = NULL, ci = 0.95, alpha = 0.25,
+  col = trellis.par.get("plot.line")$col, ..., col.line)
 }
 \arguments{
 \item{x}{ The original sample, possibly reduced to a fewer number of
@@ -39,10 +39,15 @@ panel.qqmathci(x, y = x, distribution = qnorm, probs = c(0.25, 0.75),
 
 \item{ci}{Confidence level}
 
-\item{ci_alpha}{Alpha level for the color fill}
+\item{alpha}{Alpha level for the color fill}
+
+\item{col}{Color fill for the confidence bands.}
 
 \item{\dots}{Arguments passed to \code{\link[lattice:panel.superpose]{lattice::panel.superpose()}} and
 \code{\link[lattice:panel.polygon]{lattice::panel.polygon()}}}
+
+\item{col.line}{Color fill for the confidence bands. Is used internally
+by \code{\link[lattice:panel.superpose]{lattice::panel.superpose()}} and should generally not be changed.}
 }
 \value{
 Augments a trellis plot panel, such as that

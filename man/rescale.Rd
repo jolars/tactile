@@ -24,8 +24,4 @@ A rescaled version of \code{x}.
 \description{
 Uniform Rescaling
 }
-\examples{
-set.seed(1)
-rescale(1:10, old_min = 0)
-}
 \keyword{internal}

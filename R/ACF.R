@@ -23,11 +23,6 @@
 #'   univariate case of pacf by B. D. Ripley. Modified for tactile by
 #'   Johan Larsson
 #' @keywords internal
-#'
-#' @examples
-#' ACF(lh)
-#' PACF(lh)
-#' CCF(mdeaths, fdeaths)
 NULL
 
 #' @describeIn ACF Autocorrelation and autocovariance
@@ -184,7 +179,7 @@ xyplot.acf <- function(x,
     ylim = grDevices::extendrange(ylim),
     panel = function(x, y, ...) {
       if (with.ci && ci.type == "white") {
-        panel.abline(h = c(clim0, -clim0), col = ci.col, lty = 2)
+        panel.abline(h = c(clim0, -clim0), reference = TRUE, lty = 2L)
       } else if (with.ci.ma && current.row() == current.column()) {
         clim <- clim0 * sqrt(cumsum(c(1, 2 * y[-1]^2)))
         clim <- clim[-length(clim)]

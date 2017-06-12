@@ -22,7 +22,6 @@ Suggests:
   covr,
   forecast,
   knitr,
-  microbenchmark,
   rmarkdown,
   testthat,
   zoo

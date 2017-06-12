@@ -7,15 +7,8 @@ matrix:
   include:
     - os: linux
       dist: precise
-      compiler: gcc
+      compiler: clang
       r: release
-      addons:
-        apt:
-          packages:
-            - valgrind
-      r_check_args: '--as-cran --use-valgrind'
-      env:
-        - VALGRIND_OPTS='--leak-check=full --track-origins=yes'
       r_github_packages:
         - jimhester/covr
       after_success:
@@ -23,21 +16,27 @@ matrix:
 
     - os: linux
       dist: precise
-      compiler: clang
+      compiler: gcc
       r: release
 
     - os: linux
       dist: trusty
       r: devel
       compiler: clang
-      sudo: required
-      addons:
-        apt:
-          packages:
-            - r-cran-rjava
+
+    - os: linux
+      dist: trusty
+      r: devel
+      compiler: gcc
 
     - os: osx
       r: release
+      latex: false
+      r_build_args: '--no-build-vignettes'
+      r_check_args: '--ignore-vignettes --no-examples'
+
+    - os: osx
+      r: devel
       latex: false
       r_build_args: '--no-build-vignettes'
       r_check_args: '--ignore-vignettes --no-examples'

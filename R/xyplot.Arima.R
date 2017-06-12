@@ -3,21 +3,22 @@
 #' Diagnostic plots modelled after [stats::tsdiag()] with some modifications
 #' and corrections of p-values in the Box--Ljung test.
 #'
-#' @param x a fitted time-series model
-#' @param data ignored (only added for method consistency)
-#' @param which which plots should be plotted?
-#' @param na.action what to do about na.values when computing ACF?
-#' @param main optional titles for the plots
-#' @param lag.max number of lags to compute ACF for
-#' @param qq.aspect aspect of Q-Q plot (see [lattice::qqmath()])
+#' @param x A fitted time-series model
+#' @param data Ignored (only added for method consistency)
+#' @param which A sequence of integers between 1 and 4, identifiying the
+#'   plots to be shown.
+#' @param na.action Treatment of `NA`s.
+#' @param main Optional titles for the plots
+#' @param lag.max Number of lags to compute ACF for.
+#' @param qq.aspect Aspect of Q-Q plot (see [lattice::qqmath()]).
 #' @inheritParams stats::tsdiag
-#' @param layout either a numeric vector with (columns, rows) to use in the call
+#' @param layout Either a numeric vector with (columns, rows) to use in the call
 #'   to [gridExtra::grid.arrange()], or a layout matrix which will then be
 #'   passed as the `layout_matrix` in `grid.arrange()`.
-#' @param \dots parameters to pass to [xyplot()].
+#' @param ... Parameters to pass to [xyplot()].
 #'
 #' @seealso [stats::tsdiag()], [stats::arima()], [lattice::xyplot()],
-#'   [gridExtra::grid.arrange()], [stats::Box.test()], [ACF()].
+#'   [gridExtra::grid.arrange()], [stats::Box.test()].
 #' @return Plots a lattice plot and returns a `trellis` object.
 #' @export
 #'
@@ -41,6 +42,7 @@ xyplot.Arima <- function(
   show[which] <- TRUE
   plots <- vector("list", 4L)
   dots <- list(...)
+  add.line <- trellis.par.get("add.line")
 
   if (!is.null(main))
     stopifnot(length(main) == sum(show))
@@ -90,7 +92,9 @@ xyplot.Arima <- function(
       if (lag.max <= df + 8)
         lag.max <- df + 8
     }
-    plots[[3L]] <- ACF(r, na.action = na.action, lag.max = lag.max, ...)
+    autocor <- acf(r, na.action = na.action, lag.max = lag.max, plot = FALSE)
+
+    plots[[3L]] <- do.call(xyplot, updateList(list(x = autocor), dots))
   }
 
   # Box-Ljung p.tests
@@ -114,105 +118,11 @@ xyplot.Arima <- function(
       ylab = "Ljung-Box p-values",
       ylim = range(c(0, max(pval, na.rm = TRUE) * 1.08, 0.1)),
       panel = function(x, y, ...) {
-        panel.abline(h = 0.05, reference = TRUE)
+        panel.abline(h = 0.05, lty = 2)
         panel.xyplot(x, y, ...)
       }
     ), dots))
   }
 
   grid_wrap(plots, layout = layout)
-}
-
-#' Auto- and Cross- Covariance and -Correlation Function Estimation
-#'
-#' The following are versions of the functions detailed in
-#' [stats::acf()]. Usage is mostly identical except for the plot functionality,
-#' documented in [xyplot.acf()].
-#'
-#' The confidence interval plotted in plot.acf is based on an uncorrelated
-#' series and should be treated with appropriate caution. Using `ci.type = "ma"`
-#' may potentially be less misleading.
-#'
-#' @name ACF
-#'
-#' @inheritParams stats::acf
-#' @param drop_lag0 drop the first lag?
-#' @param \dots further arguments to be passed to [xyplot.acf()].
-#'
-#' @return If `plot = TRUE`, returns and plots a trellis object. Otherwise,
-#'   an `acf` object is returned
-#'
-#' @seealso [xyplot.acf()], [stats::acf()], [lattice::xyplot()]
-#'
-#' @author Original: Paul Gilbert, Martyn Plummer. Extensive modifications and
-#'   univariate case of pacf by B. D. Ripley. Modified for tactile by
-#'   Johan Larsson
-#' @keywords internal
-NULL
-
-#' @describeIn ACF Autocorrelation and autocovariance
-ACF <- function(x,
-                lag.max = NULL,
-                type = c("correlation", "covariance", "partial"),
-                plot = TRUE,
-                na.action = na.pass,
-                demean = TRUE,
-                drop_lag0 = TRUE,
-                ...) {
-  out <- acf(x = x,
-             lag.max = lag.max,
-             type = type,
-             plot = FALSE,
-             na.action = na.action,
-             demean = demean)
-
-  if (drop_lag0) {
-    out$acf = out$acf[-1L, , , drop = FALSE]
-    out$lag = out$lag[-1L, , , drop = FALSE]
-  }
-
-  if (inherits(x, c("ts", "zoo")))
-    out$lag <- out$lag * frequency(x)
-
-  if (plot)
-    xyplot(x = out, ...)
-  else
-    out
-}
-
-#' @describeIn ACF Crosscorrelation and crosscovariance
-CCF <- function(x,
-                y,
-                lag.max = NULL,
-                type = c("correlation", "covariance"),
-                plot = TRUE,
-                na.action = na.pass,
-                ...) {
-  out <- ccf(x = x, y = y, lag.max = lag.max, type = type, plot = FALSE,
-             na.action = na.action)
-
-  if (inherits(x, c("ts", "zoo")) && inherits(y, c("ts", "zoo")))
-    out$lag <- out$lag * frequency(x)
-
-  if (plot)
-    xyplot(x = out, ...)
-  else
-    out
-}
-
-#' @describeIn ACF Partial autocorrelation and autocovariance
-PACF <- function(x,
-                 lag.max = NULL,
-                 plot = TRUE,
-                 na.action = na.pass,
-                 ...) {
-  out <- pacf(x = x, lag.max = lag.max, plot = FALSE, na.action = na.action)
-
-  if (inherits(x, c("ts", "zoo")))
-    out$lag <- out$lag * frequency(x)
-
-  if (plot)
-    xyplot(x = out, ...)
-  else
-    out
 }

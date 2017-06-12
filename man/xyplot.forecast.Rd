@@ -5,7 +5,7 @@
 \title{Plot Forecasts with Trellis Graphics}
 \usage{
 \method{xyplot}{forecast}(x, data = NULL, ci = TRUE, ci_levels = x$level,
-  ci_key = ci, ci_pal = grDevices::hcl(0, 0, 45:100),
+  ci_key = ci, ci_pal = hcl(0, 0, 45:100),
   ci_alpha = trellis.par.get("regions")$alpha, ...)
 }
 \arguments{

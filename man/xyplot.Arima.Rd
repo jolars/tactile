@@ -2,24 +2,23 @@
 % Please edit documentation in R/xyplot.Arima.R
 \name{xyplot.Arima}
 \alias{xyplot.Arima}
-\title{Diagnostic Plots for Time-Series Fits with lattice}
+\title{Diagnostic Plots for ARIMA Models}
 \usage{
 \method{xyplot}{Arima}(x, data = NULL, which = 1:4, lag.max = NULL,
   gof.lag = NULL, qq.aspect = "iso", na.action = na.pass, main = NULL,
   layout = NULL, ...)
 }
 \arguments{
-\item{x}{A fitted time-series model}
+\item{x}{A fitted time-series model of class \code{Arima}.}
 
-\item{data}{Ignored (only added for method consistency)}
+\item{data}{Ignored}
 
 \item{which}{A sequence of integers between 1 and 4, identifiying the
 plots to be shown.}
 
 \item{lag.max}{Number of lags to compute ACF for.}
 
-\item{gof.lag}{the maximum number of lags for a Portmanteau
-    goodness-of-fit test}
+\item{gof.lag}{The maximum number of lags for the Ljung--Box test.}
 
 \item{qq.aspect}{Aspect of Q-Q plot (see \code{\link[lattice:qqmath]{lattice::qqmath()}}).}
 

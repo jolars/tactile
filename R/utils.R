@@ -8,7 +8,7 @@
 grid_wrap <- function(x, layout = NULL) {
   x <- x[!vapply(x, is.null, FUN.VALUE = logical(1))]
   if (length(x) == 1) {
-    stats::update(x[[1]])
+    update(x[[1]])
   } else {
     args <- list(grobs = x)
     if (!is.null(layout)) {
@@ -52,9 +52,9 @@ rescale <- function(x,
 #' @keywords internal
 dont_plot <- function(x) {
   tmp <- tempfile()
-  grDevices::png(tmp)
-  p <- graphics::plot(x)
-  grDevices::dev.off()
+  png(tmp)
+  p <- plot(x)
+  dev.off()
   unlink(tmp)
   invisible(p)
 }
@@ -77,7 +77,7 @@ updateList <- function(x, val) {
     tryCatch(val <- as.list(val))
   if (!is.list(x))
     tryCatch(x <- as.list(x))
-  utils::modifyList(x, val)
+  modifyList(x, val)
 }
 
 

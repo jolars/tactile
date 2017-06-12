@@ -25,7 +25,8 @@ plots to be shown.}
 
 \item{na.action}{Treatment of \code{NA}s.}
 
-\item{main}{Optional titles for the plots}
+\item{main}{Optional titles for the plots. Can also be \code{TRUE}, in which
+case a default list of titles will be added.}
 
 \item{layout}{Either a numeric vector with (columns, rows) to use in the call
 to \code{\link[gridExtra:grid.arrange]{gridExtra::grid.arrange()}}, or a layout matrix which will then be

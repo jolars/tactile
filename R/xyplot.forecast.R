@@ -13,12 +13,17 @@
 #' @param ci Plot confidence intervals for the predictions.
 #' @param ci_levels The prediction levels to plot as a subset of those
 #'   forecasted in `x`.
-#' @param ci_col Color fill for the confidence interval.
 #' @param ci_alpha Fill alpha for the confidence interval.
 #' @param ... Arguments passed on to [lattice::panel.xyplot()].
+#' @param ci_key Set to `TRUE` to draw a key automatically or provide a list
+#'   (if `length(ci_levels)` > 5 should work with [lattice::draw.colorkey()] and
+#'   otherwise with [lattice::draw.key()])
+#' @param ci_pal Color palette for the confidence bands.
 #'
 #' @inherit lattice::qqmath return
 #' @export
+#'
+#' @seealso [lattice::panel.xyplot()], [forecast::forecast()], [lattice::xyplot.ts()].
 #'
 #' @examples
 #' require(forecast)
@@ -63,9 +68,8 @@ xyplot.forecast <- function(
   if (any(!(ci_levels %in% x$level)))
     warning("Some (or all) of the required prediction intervals were not found in 'x'.")
 
-  if (!is.null(data)) {
+  if (!is.null(data))
     actual <- c(actual, zoo::as.zoo(data))
-  }
 
   fills <- grDevices::rgb(grDevices::colorRamp(ci_pal)(ci_levels / 100),
                           maxColorValue = 255)

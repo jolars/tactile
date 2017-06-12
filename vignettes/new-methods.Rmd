@@ -38,7 +38,7 @@ par(mfrow = c(1, 1))
 
 Or instead use the method provided by tactile.
 
-```{r, fig.cap = "Plot diagnostics with `stats::plot.lm()`.", fig.width = 6, fig.height = 9.5}
+```{r, fig.cap = "Plot diagnostics with `xyplot.lm()`.", fig.width = 6, fig.height = 9.5}
 library(tactile)
 xyplot(fit, which = 1:6)
 ```

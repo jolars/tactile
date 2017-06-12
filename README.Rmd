@@ -22,14 +22,14 @@ tactile is an R package that extends `lattice`.
 
 ## Installation
 
-You can install tactile from github with:
+You can install tactile from github with
 
 ```{r gh-installation, eval = FALSE}
 # install.packages("devtools")
 devtools::install_github("jolars/tactile")
 ```
 
-tactile is not currently on CRAN. A submission is planned.
+tactile is not currently on CRAN but a submission is planned.
 
 ## License
 

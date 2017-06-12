@@ -259,7 +259,7 @@ panel.ternaryplot <- function(
 #' Axes and Labels for Ternary Plots
 #'
 #' @inheritParams lattice::panel.cloud
-#' @param Where to draw tick marks.
+#' @param at Where to draw tick marks.
 #' @param ... Currently ignored.
 #'
 #' @inherit panel.bubbleplot return

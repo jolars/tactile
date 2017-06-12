@@ -8,15 +8,19 @@
   "ma"), ci_col = trellis.par.get("add.line")$col, ci_lty = 2, ...)
 }
 \arguments{
-\item{x}{an object of class \code{"acf"}.}
+\item{x}{An ´acf´ object.}
 
-\item{data}{only provided for method consistency and is ignored.}
+\item{data}{Ignored}
 
-\item{ci}{coverage probability for confidence interval.  Plotting of
-    the confidence interval is suppressed if \code{ci} is zero or
-    negative.}
+\item{ci}{Confidence level.}
 
-\item{\dots}{graphical parameters passed on to \code{\link[lattice:xyplot]{lattice::xyplot()}}.}
+\item{ci_type}{Type of confidence level.}
+
+\item{ci_col}{Line color for the confidence levels.}
+
+\item{ci_lty}{Line type for the confidence levels.}
+
+\item{...}{Arguments passed on to \code{\link[lattice:xyplot]{lattice::xyplot()}}.}
 }
 \value{
 Returns and plots a \code{trellis} object.

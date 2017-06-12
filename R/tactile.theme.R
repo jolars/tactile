@@ -13,8 +13,8 @@
 #'
 #' @param fontsize A vector of two numeric scalars for text and symbols
 #'   respectively.
-#' @inheritParams lattice::standard.theme
-#' @param \dots Additional named options.
+#' @param ... Additional named options.
+#' @param color Colorized theme.
 #'
 #' @return A list of graphical parameters that for instance could be supplied
 #'   inside a call to [lattice::xyplot()] or set via
@@ -57,8 +57,8 @@ tactile.theme <- function(fontsize = c(12, 8), color = TRUE, ...) {
 
   if (color) {
     symbol <- RColorBrewer::brewer.pal(n = 9, "Set1")[c(2:1, 3:5, 7:9)]
-    fill   <- grDevices::adjustcolor(symbol, offset = c(0.4, 0.4, 0.4, 0),
-                                     transform = diag(c(0.7, 0.7, 0.7, 0.7)))
+    fill   <- adjustcolor(symbol, offset = c(0.4, 0.4, 0.4, 0),
+                          transform = diag(c(0.7, 0.7, 0.7, 0.7)))
 
     region    <- RColorBrewer::brewer.pal(n = 11, "Spectral")
     reference <- "#e8e8e8"

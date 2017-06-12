@@ -2,9 +2,13 @@
 #'
 #' This is a version of [stats::plot.acf()].
 #'
-#' @inheritParams stats::plot.acf
-#' @param data only provided for method consistency and is ignored.
-#' @param \dots graphical parameters passed on to [lattice::xyplot()].
+#' @param x An ´acf´ object.
+#' @param ci Confidence level.
+#' @param ci_type Type of confidence level.
+#' @param ci_col Line color for the confidence levels.
+#' @param ci_lty Line type for the confidence levels.
+#' @param ... Arguments passed on to [lattice::xyplot()].
+#' @param data Ignored
 #'
 #' @author Original by Brian Ripley.
 #'
@@ -16,13 +20,15 @@
 #' @examples
 #' z <- ts(matrix(rnorm(400), 100, 4), start = c(1961, 1), frequency = 12)
 #' xyplot(acf(z))
-xyplot.acf <- function(x,
-                       data = NULL,
-                       ci = 0.95,
-                       ci_type = c("white", "ma"),
-                       ci_col = trellis.par.get("add.line")$col,
-                       ci_lty = 2,
-                       ...) {
+xyplot.acf <- function(
+  x,
+  data = NULL,
+  ci = 0.95,
+  ci_type = c("white", "ma"),
+  ci_col = trellis.par.get("add.line")$col,
+  ci_lty = 2,
+  ...
+) {
   ci_type <- match.arg(ci_type)
   nser <- NCOL(x$lag)
 

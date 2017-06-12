@@ -2,7 +2,7 @@
 % Please edit documentation in R/qqmath.zoo.R
 \name{qqmath.zoo}
 \alias{qqmath.zoo}
-\title{Q-Q Diagram for Zoo Objects}
+\title{Q-Q Plots for Zoo Objects}
 \usage{
 \method{qqmath}{zoo}(x, data = NULL, xlab = "Theoretical quantiles",
   ylab = "Sample quantiles", ref = TRUE, ci = TRUE, ...)
@@ -12,13 +12,13 @@
 
 \item{data}{Ignored}
 
-\item{xlab}{X axis label.}
+\item{xlab}{X axis label}
 
-\item{ylab}{Y axis label.}
+\item{ylab}{Y axis label}
 
-\item{ref}{Plot a reference line via \code{\link[lattice:panel.qqmathline]{lattice::panel.qqmathline()}}}
+\item{ref}{Plot a reference line via \code{\link[lattice:panel.qqmathline]{lattice::panel.qqmathline()}}.}
 
-\item{ci}{Plot confidence levels via \code{\link[=panel.qqmathci]{panel.qqmathci()}}}
+\item{ci}{Plot confidence levels via \code{\link[=panel.qqmathci]{panel.qqmathci()}}.}
 
 \item{...}{Parameters to pass on to \code{\link[lattice:qqmath]{lattice::qqmath()}}.}
 }
@@ -30,11 +30,12 @@ Draw quantile-Quantile plots of a sample against a theoretical distribution,
 possibly conditioned on other variables.
 }
 \examples{
-qqmath(zoo::zoo(lh))
+if (require(zoo))
+  qqmath(zoo(lh))
 }
 \seealso{
 \code{\link[lattice:qqmath]{lattice::qqmath()}}, \code{\link[zoo:zoo]{zoo::zoo()}}, \code{\link[lattice:panel.qqmathline]{lattice::panel.qqmathline()}}.
 }
 \author{
-Original by Deepayan Sarkar. Method by Johan Larsson.
+Original by Deepayan Sarkar.
 }

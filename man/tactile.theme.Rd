@@ -10,15 +10,9 @@ tactile.theme(fontsize = c(12, 8), color = TRUE, ...)
 \item{fontsize}{A vector of two numeric scalars for text and symbols
 respectively.}
 
-\item{color}{ logical, whether the initial settings should be color or
-    black and white.  Defaults to \code{FALSE} for postscript devices,
-    \code{TRUE} otherwise.  Note that this only applies to the initial
-    choice of colors, which can be overridden using \code{theme} or
-    subsequent calls to \code{\link{trellis.par.set}} (and by arguments
-    supplied directly in high level calls for some settings).
-  }
+\item{color}{Colorized theme.}
 
-\item{\dots}{Additional named options.}
+\item{...}{Additional named options.}
 }
 \value{
 A list of graphical parameters that for instance could be supplied

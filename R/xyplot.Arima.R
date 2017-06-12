@@ -1,10 +1,10 @@
-#' Diagnostic Plots for Time-Series Fits with lattice
+#' Diagnostic Plots for ARIMA Models
 #'
 #' Diagnostic plots modelled after [stats::tsdiag()] with some modifications
 #' and corrections of p-values in the Box--Ljung test.
 #'
-#' @param x A fitted time-series model
-#' @param data Ignored (only added for method consistency)
+#' @param x A fitted time-series model of class `Arima`.
+#' @param data Ignored
 #' @param which A sequence of integers between 1 and 4, identifiying the
 #'   plots to be shown.
 #' @param na.action Treatment of `NA`s.
@@ -12,7 +12,7 @@
 #'   case a default list of titles will be added.
 #' @param lag.max Number of lags to compute ACF for.
 #' @param qq.aspect Aspect of Q-Q plot (see [lattice::qqmath()]).
-#' @inheritParams stats::tsdiag
+#' @param gof.lag The maximum number of lags for the Ljung--Box test.
 #' @param layout Either a numeric vector with (columns, rows) to use in the call
 #'   to [gridExtra::grid.arrange()], or a layout matrix which will then be
 #'   passed as the `layout_matrix` in `grid.arrange()`.
@@ -55,7 +55,7 @@ xyplot.Arima <- function(
   titles <- rep.int("", 4L)
 
   if (is.character(main)) {
-    stopifnot(length(main) >= sum(show))
+    stopifnot(length(main) == sum(show))
     titles[which] <- main
   } else if (isTRUE(main)) {
     titles <- c("Standardized residuals over time",
@@ -120,7 +120,7 @@ xyplot.Arima <- function(
     plots[[3L]] <- do.call(xyplot, updateList(list(
       x = autocor,
       main = main[3L]
-    ),dots))
+    ), dots))
   }
 
   # Box-Ljung p.tests

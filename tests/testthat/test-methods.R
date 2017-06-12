@@ -8,5 +8,6 @@ test_that("xyplot.Arima", {
 
 test_that("xyplot.forecast", {
   fit <- forecast::forecast(arima(lh, c(0, 0, 1)))
+  expect_error(fit, NA)
 })
 

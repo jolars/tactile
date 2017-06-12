@@ -32,19 +32,9 @@ panel.ternaryplot.scales(xlab, ylab, zlab, xlab.default, ylab.default,
 
 \item{zlab.default}{ for internal use  }
 
-\item{at}{
-    deals with specification of colors when \code{drape = TRUE} in
-    \code{\link{wireframe}}.  \code{at} can be a numeric vector,
-    \code{col.regions} a vector of colors, and \code{alpha.regions} a
-    numeric scalar controlling transparency.  The resulting behaviour is
-    similar to \code{\link{levelplot}}, \code{at} giving the breakpoints
-    along the z-axis where colors change, and the other two determining
-    the colors of the facets that fall in between.
-  }
+\item{at}{Where to draw tick marks.}
 
 \item{...}{Currently ignored.}
-
-\item{Where}{to draw tick marks.}
 }
 \value{
 Plots a layer inside a panel of a \code{lattice} plot.

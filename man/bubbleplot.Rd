@@ -10,7 +10,8 @@ bubbleplot(x, data = NULL, ...)
 \method{bubbleplot}{formula}(x, data = NULL, maxsize = 3,
   bubblekey = TRUE, panel = panel.bubbleplot, groups = NULL,
   subset = TRUE,
-  drop.unused.levels = lattice.getOption("drop.unused.levels"), ...)
+  drop.unused.levels = lattice.getOption("drop.unused.levels"), ..., outer,
+  allow.multiple)
 }
 \arguments{
 \item{x}{A formula of the form \code{z ~ x * y}, where \code{x} and \code{y} have the usual
@@ -20,7 +21,7 @@ mapped to the size of bubbles.}
 \item{data}{A data.frame, list or environment wherein the formula and
 groups arguments can be evaluated.}
 
-\item{\dots}{Further arguments to pass to \code{\link[lattice:xyplot]{lattice::xyplot()}}.}
+\item{...}{Further arguments to pass to \code{\link[lattice:xyplot]{lattice::xyplot()}}.}
 
 \item{maxsize}{Maximum size (in cex) for the bubbles.}
 
@@ -39,9 +40,9 @@ variable, \code{z}, which is then used in \code{\link[=panel.bubbleplot]{panel.b
 
 \item{drop.unused.levels}{See \code{\link[lattice:xyplot]{lattice::xyplot()}}}
 
-\item{allow.multiple}{See \code{\link[lattice:xyplot]{lattice::xyplot()}}}
+\item{outer}{Ignored.}
 
-\item{outer}{See \code{\link[lattice:xyplot]{lattice::xyplot()}}}
+\item{allow.multiple}{Ignored.}
 }
 \value{
 An object of class \code{"trellis"}. The

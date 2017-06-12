@@ -10,7 +10,7 @@
 \item{Feldspar}{Coexisting feldspars, \emph{Alkali} or \emph{Plagioclase}}
 \item{Or}{Proportion of orthoclase}
 \item{An}{Proportion of anorthite}
-\item{Al}{Proportion of albite}
+\item{Ab}{Proportion of albite}
 \item{Temperature}{Temperature of the reaction (degrees centigrade)}
 \item{Pressure}{Pressure of the reaction (bars)}
 }}

@@ -19,7 +19,7 @@ This method is provided so that a user may use lattice graphics throughout out a
 document, say for a lab report, and produce consistent graphic material that
 can be changed on a general level (for instance by using `lattice.options()`).
 
-## Usage
+### Usage
 
 We fit a simple linear model
 
@@ -54,36 +54,6 @@ via `gridExtra::grid.arrange()` automatically and arguments `nrow` and `ncol`
 have been made accessible in the `xyplot.lm()` call to enable manual
 specifications.
 
-## Performance
-
-The downside is that `xyplot.lm()` is **much** slower than `stats::plot.lm()`
-when more than one plot is requested, which we can exemplify by
-
-```{r, fig.keep = "none"}
-stats_method <- function() {
-  ff <- tempfile()
-  png(filename = ff)
-  par(mfrow = c(2, 1))
-  res <- plot(fit, which = 1:2)
-  par(mfrow = c(1, 1))
-  dev.off()
-  unlink(ff)
-}
-
-tactile_method <- function() {
-  xyplot(fit, which = 1:2)
-}
-
-f <- microbenchmark::microbenchmark(stats_method(), tactile_method())
-```
-
-And next we plot the results. As you see, the tactile method is slower
-despite all the fluff we put around the call to `plot.lm()`.
-
-```{r, fig.cap = "Boxplot of timing results of the `xyplot.lm()` compared with `plot.lm()`.", fig.width = 6}
-lattice::bwplot(expr ~ time, data = f)
-```
-
 ## `xyplot.Arima`: ARIMA Model Diagnostics
 
 This function is similar to `xyplot.lm()` but is modelled after
@@ -104,20 +74,40 @@ the Ljung--Box test to account for the fact that we've fit a model
 xyplot(fit)
 ```
 
-## ´xyplot.forecast()`: Plotting forecasts with tactile
+## `xyplot.forecast()`: Plotting forecasts with tactile
 
+Robert Hyndman's excellent
+[forecast](https://cran.r-project.org/package=forecast) package has built-in
+functions for plotting forecasts. These have been reworked to use lattice
+graphics in tactile, and also try to place the forecasts on the time
+scale of the original data (if such is provided).
+
+For this example, we user `USAccDeaths`, a time series giving the monthly totals
+of accidental deaths in the USA. We begin by separating the series into
+a training and test set.
 
 ```{r}
-#' require(forecast)
-#' train <- window(USAccDeaths, c(1973, 1), c(1977, 12))
-#' test <- window(USAccDeaths, c(1978, 1), c(1978, 12))
-#' fit <- arima(train, order = c(0, 1, 1), seasonal = list(order = c(0, 1, 1)))
-#' fcast1 <- forecast(fit, 12)
-#' xyplot(fcast1, test, grid = TRUE, auto.key = list(corner = c(0, 0.99)),
-#'        ci_key = list(title = "PI Level"))
-#'
-#' # A fan plot
-#' fcast2 <- forecast(fit, 12, level = seq(0, 95, 10))
-#' xyplot(fcast2, test, ci_pal = heat.colors(100))
+library(forecast)
+train <- window(USAccDeaths, c(1973, 1), c(1977, 12))
+test <- window(USAccDeaths, c(1978, 1), c(1978, 12))
+```
+
+Then we fit the model and plot the results.
+
+```{r, fig.width = 6, fig.height = 3}
+fit <- arima(train, order = c(0, 1, 1), seasonal = list(order = c(0, 1, 1)))
+fcast1 <- forecast(fit, 12)
+xyplot(fcast1, test, grid = TRUE, auto.key = list(corner = c(0, 0.99)),
+       ci_key = list(title = "PI Level"))
+```
+
+A so called fan plot can be achieved by increasing the number of prediction
+intervals in the call to `forecast`. We also switch to a separate 
+color palette by using the `ci_pal` argument.
+
+```{r, fig.width = 6, fig.height = 3}
+# A fan plot
+fcast2 <- forecast(fit, 12, level = seq(0, 95, 10))
+xyplot(fcast2, test, ci_pal = heat.colors(100))
 ```
 

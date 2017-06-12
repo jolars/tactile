@@ -38,15 +38,15 @@
 #' fcast2 <- forecast(fit, 12, level = seq(0, 95, 10))
 #' xyplot(fcast2, test, ci_pal = heat.colors(100))
 xyplot.forecast <- function(
-    x,
-    data = NULL,
-    ci = TRUE,
-    ci_levels = x$level,
-    ci_key = ci,
-    ci_pal = grDevices::hcl(0, 0, 45:100),
-    ci_alpha = trellis.par.get("regions")$alpha,
-    ...
-  ) {
+  x,
+  data = NULL,
+  ci = TRUE,
+  ci_levels = x$level,
+  ci_key = ci,
+  ci_pal = hcl(0, 0, 45:100),
+  ci_alpha = trellis.par.get("regions")$alpha,
+  ...
+) {
   dots <- list(...)
   if (is.null(x$lower) | is.null(x$upper) | is.null(x$level))
     ci <- FALSE
@@ -71,8 +71,8 @@ xyplot.forecast <- function(
   if (!is.null(data))
     actual <- c(actual, zoo::as.zoo(data))
 
-  fills <- grDevices::rgb(grDevices::colorRamp(ci_pal)(ci_levels / 100),
-                          maxColorValue = 255)
+  fills <- rgb(grDevices::colorRamp(ci_pal)(ci_levels / 100),
+               maxColorValue = 255)
 
   dd <- merge(Actual = actual, Fitted = pred)
   upr <- zoo::zoo(x$upper[, which_levels], zoo::index(x$mean))
@@ -82,8 +82,8 @@ xyplot.forecast <- function(
     dd,
     superpose = TRUE,
     lty = 1:2,
-    ylim = grDevices::extendrange(c(zoo::coredata(dd), zoo::coredata(upr),
-                                    zoo::coredata(lwr))),
+    ylim = extendrange(c(zoo::coredata(dd), zoo::coredata(upr),
+                         zoo::coredata(lwr))),
     panel = function(x, grid = FALSE, ...) {
       if (grid)
         panel.grid(h = -1, v = -1)
@@ -121,7 +121,7 @@ xyplot.forecast <- function(
     out$legend <- setup_key(
       out$legend,
       ci_key,
-      list(col = grDevices::adjustcolor(fills, alpha.f = ci_alpha),
+      list(col = adjustcolor(fills, alpha.f = ci_alpha),
            at = c(ci_levels / 100, 1)),
       draw.colorkey
     )

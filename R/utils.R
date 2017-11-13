@@ -15,8 +15,8 @@ grid_wrap <- function(x, layout = NULL) {
       if (is.matrix(layout)) {
         args$layout_matrix <- layout
       } else {
-        args$ncol <- layout[1]
-        args$nrow <- layout[2]
+        args$ncol <- layout[1L]
+        args$nrow <- layout[2L]
       }
     }
     do.call(gridExtra::grid.arrange, args)
@@ -50,10 +50,10 @@ rescale <- function(x,
 #' @return Invisibly returns whatever `plot(x)` would normally returns, but
 #'   does not plot anything (which is the point).
 #' @keywords internal
-dont_plot <- function(x) {
+dont_plot <- function(x, ...) {
   tmp <- tempfile()
   png(tmp)
-  p <- plot(x)
+  p <- plot(x, ...)
   dev.off()
   unlink(tmp)
   invisible(p)

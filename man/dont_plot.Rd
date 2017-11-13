@@ -4,7 +4,7 @@
 \alias{dont_plot}
 \title{Suppress Plotting}
 \usage{
-dont_plot(x)
+dont_plot(x, ...)
 }
 \arguments{
 \item{x}{Object to call \code{\link[graphics:plot]{graphics::plot()}} on.}

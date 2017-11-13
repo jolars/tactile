@@ -99,7 +99,14 @@ bubbleplot.formula <- function(
     bubblekey,
     list(text = list(as.character(bubbles$breaks)),
          title = form$left.name,
-         col = if (is.null(groups)) trellis.par.get("plot.symbol")$col else 1,
+         points = list(
+           col = if (is.null(groups)) trellis.par.get("plot.symbol")$col else 1,
+           pch = trellis.par.get("plot.symbol")$pch,
+           fill = trellis.par.get("plot.symbol")$fill,
+           alpha = trellis.par.get("plot.symbol")$alpha,
+           font = trellis.par.get("plot.symbol")$font,
+           cex = bubbles$breaks_cex
+          ),
          padding.text = maxsize * 1.3),
     draw.key
   )

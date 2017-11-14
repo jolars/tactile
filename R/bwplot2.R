@@ -1,5 +1,3 @@
-
-
 #' An extended box and whiskers plot
 #'
 #' An extended version of [lattice::bwplot()]. The only modification is to

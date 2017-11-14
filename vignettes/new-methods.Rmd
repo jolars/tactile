@@ -1,10 +1,11 @@
 ---
-title: "New Methods in tactile"
+title: "New Methods for Lattice"
+subtitle: "tactile"
 author: "Johan Larsson"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{New Methods for Lattice}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

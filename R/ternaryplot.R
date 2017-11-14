@@ -90,6 +90,7 @@ ternaryplot.formula <- function(
   ccall$panel <- panel
   ccall$default.prepanel <- default.prepanel
   ccall$density <- density
+  ccall$contour <- contour
   ccall$region <- region
   ccall$data <- data
   ccall$aspect <- "iso"
@@ -220,7 +221,7 @@ panel.ternaryplot <- function(
     panel.ternaryplot.grid()
 
   # Density?
-  if (density)
+  if (density || contour)
     panel.ternaryplot.density(
       x = x,
       y = y,
@@ -417,7 +418,7 @@ panel.ternaryplot.scales <- function(
 
 #' Reference Grid for Ternary Plot
 #'
-#' @param at Where to draw the reference lines#'
+#' @param at Where to draw the reference lines
 #' @param alpha Alpha
 #' @param col Color
 #' @param lty Line type
@@ -474,7 +475,7 @@ panel.ternaryplot.response <- function(
     response,
     region = TRUE,
     contour = TRUE,
-    labels = contour,
+    labels = isTRUE(contour),
     fun = c("glm", "lm"),
     formula = response ~ poly(x, y),
     ...
@@ -599,7 +600,7 @@ panel.ternaryplot.density <- function(
     n = 100,
     region = TRUE,
     contour = FALSE,
-    labels = TRUE,
+    labels = isTRUE(contour),
     density_breaks = NULL,
     ...
   ) {
@@ -689,14 +690,14 @@ panel.ternaryplot.density <- function(
 #'
 #' @inherit panel.bubbleplot return
 #' @export
-panel.ternaryplot.xyplot <- function(x, y, z, ...) {
+panel.ternaryplot.xyplot <- function(x, y, z, subscripts, ...) {
   stopifnot(is.numeric(x), is.numeric(y), is.numeric(z))
 
-  xyz <- data.frame(x, y, z)
+  xyz <- data.frame(x, y, z)[subscripts, ]
   lrt <- xyz / rowSums(xyz)
   xy <- tern_cart(lrt)
 
-  panel.xyplot(xy$x, xy$y, ...)
+  panel.xyplot(xy$x, xy$y, subscripts = subscripts, ...)
 }
 
 #' Plot Region Clipping for Ternary Plots

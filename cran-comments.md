@@ -1,7 +1,9 @@
 ## Test environments
-* local OS X install, R 3.4.2
-* ubuntu 14.04 (on travis-ci), R 3.4.2
-* win-builder (devel and release)
+* windows 10 (local), release
+* ubuntu 14.04 (on travis-ci), release, devel
+* windows server (on appveyor), release, devel
+* win-builder, devel
+* OSX (on travis-ci) release
 
 ## R CMD check results
 

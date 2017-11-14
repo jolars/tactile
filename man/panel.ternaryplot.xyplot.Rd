@@ -13,6 +13,8 @@ panel.ternaryplot.xyplot(x, y, z, subscripts, ...)
 
 \item{z}{Numeric vector of values in the original space}
 
+\item{subscripts}{see \code{\link[lattice:xyplot]{lattice::xyplot()}}.}
+
 \item{...}{Arguments that are passed on to \code{\link[lattice:panel.xyplot]{lattice::panel.xyplot()}}.}
 }
 \value{

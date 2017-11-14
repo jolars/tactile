@@ -34,6 +34,8 @@ bwplot2(x, data = NULL, ...)
 \item{drop.unused.levels}{see \code{\link[lattice:bwplot]{lattice::bwplot()}}}
 
 \item{subset}{see \code{\link[lattice:bwplot]{lattice::bwplot()}}}
+
+\item{xlab}{see \code{\link[lattice:bwplot]{lattice::bwplot()}}}
 }
 \value{
 An object of class \code{"trellis"}. The

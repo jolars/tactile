@@ -102,20 +102,22 @@ bwplot2.formula <- function(
 
 #' @rdname bwplot2
 #' @export
-bwplot2.numeric <- function(x,
-                            data = NULL,
-                            xlab = deparse(substitute(x)),
-                            ...) {
-    ocall <- sys.call(sys.parent())
-    ocall[[1]] <- quote(bwplot2)
-    ccall <- match.call()
-    if (!is.null(ccall$data))
-      warning("explicit 'data' specification ignored")
-    ccall$data <- environment()
-    ccall$xlab <- xlab
-    ccall$x <- ~ x
-    ccall[[1]] <- quote(lattice::bwplot)
-    ans <- eval.parent(ccall)
-    ans$call <- ocall
-    ans
-  }
+bwplot2.numeric <- function(
+  x,
+  data = NULL,
+  xlab = deparse(substitute(x)),
+  ...
+) {
+  ocall <- sys.call(sys.parent())
+  ocall[[1]] <- quote(bwplot2)
+  ccall <- match.call()
+  if (!is.null(ccall$data))
+    warning("explicit 'data' specification ignored")
+  ccall$data <- environment()
+  ccall$xlab <- xlab
+  ccall$x <- ~ x
+  ccall[[1]] <- quote(lattice::bwplot)
+  ans <- eval.parent(ccall)
+  ans$call <- ocall
+  ans
+}

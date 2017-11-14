@@ -20,3 +20,12 @@ test_that("xyplot.lm throws errors with incorrect input", {
   expect_error(xyplot(fit, which = "something"))
 })
 
+test_that("normal plotting works", {
+  expect_error(dont_plot(
+    bwplot2(variety ~ yield,
+            groups = site,
+            data = barley,
+            par.settings = tactile.theme())),
+    NA)
+})
+

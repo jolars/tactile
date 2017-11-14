@@ -686,6 +686,7 @@ panel.ternaryplot.density <- function(
 #' @param x Numeric vector of values in the original space
 #' @param y Numeric vector of values in the original space
 #' @param z Numeric vector of values in the original space
+#' @param subscripts see [lattice::xyplot()].
 #' @param ... Arguments that are passed on to [lattice::panel.xyplot()].
 #'
 #' @inherit panel.bubbleplot return

@@ -12,6 +12,7 @@
 #' @param groups see [lattice::bwplot()]
 #' @param drop.unused.levels see [lattice::bwplot()]
 #' @param subset see [lattice::bwplot()]
+#' @param xlab see [lattice::bwplot()]
 #'
 #' @inherit bubbleplot return
 #' @export

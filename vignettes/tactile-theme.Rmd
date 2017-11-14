@@ -1,0 +1,60 @@
+---
+title: "The tactile Theme"
+subtitle: "tactile"
+author: "Johan Larsson"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{The tactile Theme}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+**tactile** introduces a new theme for **latice** that does a few things,
+namely
+
+* minimizes paddings around the plot,
+* halves axis tick lengths,
+* uses a color theme based on **RColorBrewer**,
+* decreases title size *slightly*,
+* Sets strip backgrounds to grey.
+
+We now turn to illustrating the differences. First, we use
+`lattice::show.settings()` for an overview over the default settings.
+
+```{r, fig.show = "hold", fig.width = 6, fig.height = 4}
+library(tactile)
+show.settings()
+show.settings(tactile.theme())
+```
+
+Then we plot a sample plot (from
+[http://latticeextra.r-forge.r-project.org/](http://latticeextra.r-forge.r-project.org/)).
+
+```{r, fig.width = 6, fig.height = 4.5}
+set.seed(0)
+
+## create a plot to demonstrate graphical settings
+obj <- xyplot(Sepal.Length + Sepal.Width ~ Petal.Length + Petal.Width, iris,
+              type = c("p", "r"), jitter.x = TRUE, jitter.y = TRUE, factor = 5,
+              auto.key = list(lines = TRUE, rectangles = TRUE))
+obj <- update(obj,
+              legend = list(right = list(fun = "draw.colorkey", 
+                                         args = list(list(at = 0:100)))))
+
+## draw with default theme
+obj
+```
+
+```{r, fig.width = 6, fig.height = 4.5}
+## draw with tactile.theme()
+update(obj, par.settings = tactile.theme())
+```
+

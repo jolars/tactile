@@ -33,8 +33,8 @@ tactile.theme <- function(fontsize = c(12, 8), color = TRUE, ...) {
 
   theme <- updateList(theme, list(
     fontsize = list(text = fontsize[1], points = fontsize[2]),
-    strip.background = list(col = rep.int("grey90", 7)),
-    strip.shingle = list(col = rep.int("grey70", 7)),
+    strip.background = list(col = rep("grey95", 7)),
+    strip.shingle = list(col = rep("grey70", 7)),
     strip.text = list(cex = 0.75),
     layout.heights = list(top.padding = 0.1,
                           bottom.padding = 0.1,
@@ -57,8 +57,9 @@ tactile.theme <- function(fontsize = c(12, 8), color = TRUE, ...) {
 
   if (color) {
     symbol <- RColorBrewer::brewer.pal(n = 9, "Set1")[c(2:1, 3:5, 7:9)]
-    fill   <- adjustcolor(symbol, offset = c(0.4, 0.4, 0.4, 0),
-                          transform = diag(c(0.7, 0.7, 0.7, 0.7)))
+    fill   <- adjustcolor(symbol,
+                          offset = c(0.5, 0.5, 0.5, 0),
+                          transform = diag(c(0.6, 0.6, 0.6, 0.6)))
 
     region    <- RColorBrewer::brewer.pal(n = 11, "Spectral")
     reference <- "#e8e8e8"
@@ -66,31 +67,32 @@ tactile.theme <- function(fontsize = c(12, 8), color = TRUE, ...) {
     fg        <- "black"
 
     theme <- updateList(theme, list(
-      plot.polygon      = list(col = fill[1], border = fg[1]),
-      box.rectangle     = list(col = symbol[1]),
-      box.umbrella      = list(col = symbol[1]),
-      dot.line          = list(col = reference),
-      dot.symbol        = list(col = symbol[1]),
-      plot.line         = list(col = symbol[1]),
-      plot.symbol       = list(col = symbol[1]),
-      regions           = list(col = grDevices::colorRampPalette(region)(100)),
-      reference.line    = list(col = reference),
-      superpose.line    = list(col = symbol),
-      superpose.symbol  = list(col = symbol),
-      superpose.polygon = list(col = fill, border = fg),
-      background        = list(col = bg),
       add.line          = list(col = fg),
       add.text          = list(col = fg),
-      box.dot           = list(col = fg),
       axis.line         = list(col = fg),
       axis.text         = list(col = fg),
-      strip.border      = list(col = fg),
+      background        = list(col = bg),
+      box.rectangle     = list(col = fg, fill = fill[1]),
+      box.dot           = list(pch = "|", col = fg),
+      box.umbrella      = list(col = fg, lty = 1),
       box.3d            = list(col = fg),
+      dot.line          = list(col = reference),
+      dot.symbol        = list(col = symbol[1]),
       par.xlab.text     = list(col = fg),
       par.ylab.text     = list(col = fg),
       par.zlab.text     = list(col = fg),
       par.main.text     = list(col = fg),
-      par.sub.text      = list(col = fg)))
+      par.sub.text      = list(col = fg),
+      plot.line         = list(col = symbol[1]),
+      plot.polygon      = list(col = fill[1], border = fg),
+      plot.symbol       = list(col = symbol[1]),
+      reference.line    = list(col = reference),
+      regions           = list(col = grDevices::colorRampPalette(region)(100)),
+      superpose.line    = list(col = symbol),
+      superpose.polygon = list(col = fill),
+      superpose.symbol  = list(col = symbol, fill = fill),
+      strip.border      = list(col = fg)
+    ))
   }
   updateList(theme, list(...))
 }

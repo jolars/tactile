@@ -5,7 +5,7 @@
 \title{Response Panels for Ternary Plots}
 \usage{
 panel.ternaryplot.response(x, y, z, subscripts, response, region = TRUE,
-  contour = TRUE, labels = contour, fun = c("glm", "lm"),
+  contour = TRUE, labels = isTRUE(contour), fun = c("glm", "lm"),
   formula = response ~ poly(x, y), ...)
 }
 \arguments{

@@ -5,7 +5,7 @@
 \title{Two-Dimensional Density Estimation for Ternary Plots}
 \usage{
 panel.ternaryplot.density(x, y, z, subscripts, n = 100, region = TRUE,
-  contour = FALSE, labels = TRUE, density_breaks = NULL, ...)
+  contour = FALSE, labels = isTRUE(contour), density_breaks = NULL, ...)
 }
 \arguments{
 \item{x}{Numeric vector}

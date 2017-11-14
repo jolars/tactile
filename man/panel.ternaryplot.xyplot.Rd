@@ -4,7 +4,7 @@
 \alias{panel.ternaryplot.xyplot}
 \title{Ternary Plot Wrapper for lattice::xyplot}
 \usage{
-panel.ternaryplot.xyplot(x, y, z, ...)
+panel.ternaryplot.xyplot(x, y, z, subscripts, ...)
 }
 \arguments{
 \item{x}{Numeric vector of values in the original space}

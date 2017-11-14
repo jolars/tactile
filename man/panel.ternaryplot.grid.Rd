@@ -9,7 +9,7 @@ panel.ternaryplot.grid(at = seq.int(0, 1, by = 0.2),
   lty = reference.line$lty, lwd = reference.line$lwd)
 }
 \arguments{
-\item{at}{Where to draw the reference lines#'}
+\item{at}{Where to draw the reference lines}
 
 \item{alpha}{Alpha}
 

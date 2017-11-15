@@ -1,6 +1,6 @@
 Package: tactile
 Title: Extensions to Lattice
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R: person("Johan", "Larsson", email = "johanlarsson@outlook.com",
                   role = c("aut", "cre"))
 Description: Tactile (an anagram of Lattice) extends the functionality of

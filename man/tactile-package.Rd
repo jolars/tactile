@@ -4,11 +4,11 @@
 \name{tactile-package}
 \alias{tactile}
 \alias{tactile-package}
-\title{tactile: Extensions to Lattice}
+\title{tactile: New and Extended Plots, Methods, and Panel Functions for Lattice}
 \description{
 Tactile (an anagram of Lattice) extends the functionality of
-the Lattice package  by providing new high-level functions, methods for
-existing functions, new panel functions, and a new theme.
+the Lattice package by providing new high-level functions, methods for
+existing functions, panel functions, and theme.
 }
 \seealso{
 Useful links:

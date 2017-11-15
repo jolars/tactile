@@ -6,36 +6,17 @@ warnings_are_errors: true
 matrix:
   include:
     - os: linux
-      dist: precise
-      compiler: clang
       r: release
-      r_packages: forecast
       r_github_packages:
         - jimhester/covr
       after_success:
         - Rscript -e 'covr::codecov()'
 
     - os: linux
-      dist: precise
-      compiler: gcc
-      r_packages: forecast
-      r: release
-
-    - os: linux
-      dist: trusty
       r: devel
-      compiler: clang
-      r_packages: forecast
-
-    - os: linux
-      dist: trusty
-      r: devel
-      r_packages: forecast
-      compiler: gcc
 
     - os: osx
       r: release
-      r_packages: forecast
       latex: false
       r_build_args: '--no-build-vignettes'
       r_check_args: '--ignore-vignettes --no-examples'

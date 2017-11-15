@@ -13,5 +13,5 @@
 in the description with single quotes, avoided starting the
 description with the package names, and have properly credited 
 authors of packages whose code I have used in the package.
-* This is the second resubmission. In this versiosn I have
+* This is the second resubmission. In this version I have
 properly credited Brian Ripley as an author in the DESCRIPTION file.

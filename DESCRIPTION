@@ -5,7 +5,7 @@ Authors@R: c(person("Johan", "Larsson", email = "johanlarsson@outlook.com",
                     role = c("aut", "cre")),
              person("Deepayan", "Sarkar", role = c("ctb", "cph"),
                     comment = "lattice"))
-Description: This package, 'tactile' (an anagram of lattice), extends the
+Description: This package's name, an anagram of 'lattice', extends the
   functionality of the 'lattice' package by providing new high-level functions,
   methods for existing functions, panel functions, and theme.
 Depends:

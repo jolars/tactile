@@ -6,7 +6,7 @@
 \alias{tactile-package}
 \title{tactile: New and Extended Plots, Methods, and Panel Functions for 'lattice'}
 \description{
-This package, 'tactile' (an anagram of lattice), extends the
+This package's name, an anagram of 'lattice', extends the
 functionality of the 'lattice' package by providing new high-level functions,
 methods for existing functions, panel functions, and theme.
 }
@@ -23,7 +23,7 @@ Useful links:
 
 Other contributors:
 \itemize{
-  \item Sarkar Deepayan (lattice) [contributor, copyright holder]
+  \item Deepayan Sarkar (lattice) [contributor, copyright holder]
 }
 
 }

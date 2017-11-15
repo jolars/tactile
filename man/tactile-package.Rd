@@ -4,11 +4,11 @@
 \name{tactile-package}
 \alias{tactile}
 \alias{tactile-package}
-\title{tactile: New and Extended Plots, Methods, and Panel Functions for Lattice}
+\title{tactile: New and Extended Plots, Methods, and Panel Functions for 'lattice'}
 \description{
-Tactile (an anagram of Lattice) extends the functionality of
-the Lattice package by providing new high-level functions, methods for
-existing functions, panel functions, and theme.
+This package, 'tactile' (an anagram of lattice), extends the
+functionality of the 'lattice' package by providing new high-level functions,
+methods for existing functions, panel functions, and theme.
 }
 \seealso{
 Useful links:
@@ -20,6 +20,11 @@ Useful links:
 }
 \author{
 \strong{Maintainer}: Johan Larsson \email{johanlarsson@outlook.com}
+
+Other contributors:
+\itemize{
+  \item Sarkar Deepayan (lattice) [contributor, copyright holder]
+}
 
 }
 \keyword{internal}

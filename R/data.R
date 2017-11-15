@@ -32,5 +32,5 @@
 #'   \item{Pressure}{Pressure of the reaction (bars)}
 #' }
 #' @source Elkins LT, Grove TL. Ternary feldspar experiments and thermodynamic
-#'   models. American Mineralogist. 1990;75(5–6):544–59.
+#'   models. American Mineralogist. 1990;75(5-6):544-59.
 "feldspar"

@@ -6,9 +6,8 @@
 \alias{tactile-package}
 \title{tactile: New and Extended Plots, Methods, and Panel Functions for 'lattice'}
 \description{
-This package's name, an anagram of 'lattice', extends the
-functionality of the 'lattice' package by providing new high-level functions,
-methods for existing functions, panel functions, and theme.
+Extensions to 'lattice', providing new high-level
+functions, methods for existing functions, panel functions, and a theme.
 }
 \seealso{
 Useful links:

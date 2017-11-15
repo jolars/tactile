@@ -23,6 +23,7 @@ Useful links:
 Other contributors:
 \itemize{
   \item Deepayan Sarkar (lattice) [contributor, copyright holder]
+  \item Brian Ripley (stats::plot.acf) [contributor]
 }
 
 }

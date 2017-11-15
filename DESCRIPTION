@@ -4,7 +4,9 @@ Version: 0.1.0
 Authors@R: c(person("Johan", "Larsson", email = "johanlarsson@outlook.com",
                     role = c("aut", "cre")),
              person("Deepayan", "Sarkar", role = c("ctb", "cph"),
-                    comment = "lattice"))
+                    comment = "lattice"),
+             person("Brian", "Ripley", role = c("ctb"),
+                    comment = "stats::plot.acf"))
 Description: Extensions to 'lattice', providing new high-level
   functions, methods for existing functions, panel functions, and a theme.
 Depends:

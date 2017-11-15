@@ -13,7 +13,7 @@
 
 \item{data}{Ignored}
 
-\item{which}{A sequence of integers between 1 and 4, identifiying the
+\item{which}{A sequence of integers between 1 and 4, identifying the
 plots to be shown.}
 
 \item{lag.max}{Number of lags to compute ACF for.}

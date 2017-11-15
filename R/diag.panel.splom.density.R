@@ -4,9 +4,9 @@
 #' [lattice::splom()] call with the `diag.panel` argument.
 #'
 #' @param x data vector corresponding to that row / column (which will be the
-#'   same for diagonal ‘panels’).
+#'   same for diagonal 'panels').
 #' @inheritParams stats::density
-#' @param \dots Further arguments passed on to [lattice::diag.panel.splom()] and
+#' @param ... Further arguments passed on to [lattice::diag.panel.splom()] and
 #'   [lattice::panel.lines()].
 #' @seealso [lattice::diag.panel.splom()], [lattice::splom()],
 #'   [stats::density()].

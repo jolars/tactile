@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{get_fun}
 \alias{get_fun}
-\title{Retrieve a Function by Name or Defintion}
+\title{Retrieve a Function by Name or Definition}
 \usage{
 get_fun(fun)
 }
@@ -10,6 +10,6 @@ get_fun(fun)
 \item{fun}{Character or function.}
 }
 \description{
-Retrieve a Function by Name or Defintion
+Retrieve a Function by Name or Definition
 }
 \keyword{internal}

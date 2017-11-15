@@ -21,7 +21,7 @@ bwplot2(x, data = NULL, ...)
 
 \item{data}{see \code{\link[lattice:bwplot]{lattice::bwplot()}}}
 
-\item{...}{arguments pased down to \code{\link[lattice:bwplot]{lattice::bwplot()}}}
+\item{...}{arguments passed down to \code{\link[lattice:bwplot]{lattice::bwplot()}}}
 
 \item{allow.multiple}{see \code{\link[lattice:bwplot]{lattice::bwplot()}}}
 

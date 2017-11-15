@@ -9,7 +9,7 @@ diag.panel.splom.density(x, bw = "nrd0", adjust = 1, kernel = "gaussian",
 }
 \arguments{
 \item{x}{data vector corresponding to that row / column (which will be the
-same for diagonal ‘panels’).}
+same for diagonal 'panels').}
 
 \item{bw}{the smoothing bandwidth to be used.  The kernels are scaled
     such that this is the standard deviation of the smoothing kernel.
@@ -54,7 +54,7 @@ same for diagonal ‘panels’).}
     always makes sense to specify \code{n} as a power of two.
   }
 
-\item{\dots}{Further arguments passed on to \code{\link[lattice:diag.panel.splom]{lattice::diag.panel.splom()}} and
+\item{...}{Further arguments passed on to \code{\link[lattice:diag.panel.splom]{lattice::diag.panel.splom()}} and
 \code{\link[lattice:panel.lines]{lattice::panel.lines()}}.}
 }
 \description{

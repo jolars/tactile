@@ -13,7 +13,7 @@ object.}
 
 \item{key}{A key specification, usually the user input.}
 
-\item{default_key}{The default key specifications that may be overrided by
+\item{default_key}{The default key specifications that may be overridden by
 the user.}
 
 \item{fun}{The function to draw the key, such as \code{\link[lattice:draw.colorkey]{lattice::draw.colorkey()}}.}

@@ -5,7 +5,7 @@
 #'
 #' @param x A fitted time-series model of class `Arima`.
 #' @param data Ignored
-#' @param which A sequence of integers between 1 and 4, identifiying the
+#' @param which A sequence of integers between 1 and 4, identifying the
 #'   plots to be shown.
 #' @param na.action Treatment of `NA`s.
 #' @param main Optional titles for the plots. Can also be `TRUE`, in which

@@ -2,7 +2,7 @@
 #'
 #' This is a version of [stats::plot.acf()].
 #'
-#' @param x An ´acf´ object.
+#' @param x An 'acf' object.
 #' @param ci Confidence level.
 #' @param ci_type Type of confidence level.
 #' @param ci_col Line color for the confidence levels.

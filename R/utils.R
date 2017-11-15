@@ -81,7 +81,7 @@ updateList <- function(x, val) {
 }
 
 
-#' Retrieve a Function by Name or Defintion
+#' Retrieve a Function by Name or Definition
 #'
 #' @param fun Character or function.
 #' @keywords internal
@@ -127,11 +127,11 @@ require_pkg <- function(pkg) {
 
 #' Sequential palette helper.
 #'
-#' Divides the regions palette from lattice in half when it doesn't make
+#' Divides the regions palette from lattice in half when it does not make
 #' sense to have a diverging palette.
 #'
 #' @param n Number of colors to generate
-#' @param \dots Stuff to pass on to [grDevices::colorRampPalette()]
+#' @param ... Stuff to pass on to [grDevices::colorRampPalette()]
 #' @keywords internal
 seq_pal <- function(n, bias = 1, space = "Lab", ...) {
   col <- trellis.par.get("regions")$col
@@ -147,7 +147,7 @@ seq_pal <- function(n, bias = 1, space = "Lab", ...) {
 #' @param legend a list of legends, usually the `$legend` slot of a trellis
 #'   object.
 #' @param key A key specification, usually the user input.
-#' @param default_key The default key specifications that may be overrided by
+#' @param default_key The default key specifications that may be overridden by
 #'   the user.
 #' @param fun The function to draw the key, such as [lattice::draw.colorkey()].
 #' @param pos Preferences for the position of the new key.

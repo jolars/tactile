@@ -8,7 +8,7 @@
   "ma"), ci_col = trellis.par.get("add.line")$col, ci_lty = 2, ...)
 }
 \arguments{
-\item{x}{An ´acf´ object.}
+\item{x}{An 'acf' object.}
 
 \item{data}{Ignored}
 

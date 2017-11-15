@@ -5,7 +5,7 @@
 #'
 #' @param x see [lattice::bwplot()]
 #' @param data see [lattice::bwplot()]
-#' @param ... arguments pased down to [lattice::bwplot()]
+#' @param ... arguments passed down to [lattice::bwplot()]
 #' @param allow.multiple see [lattice::bwplot()]
 #' @param outer see [lattice::bwplot()]
 #' @param auto.key see [lattice::bwplot()]

@@ -9,3 +9,7 @@
 0 errors | 0 warnings | 1 note
 
 * This is a new release.
+* This is a resubmission. In this version I have wrapped package names
+in the description with single quotes, avoided starting the
+description with the package names, and have properly credited 
+authors of packages whose code I have used in the package.

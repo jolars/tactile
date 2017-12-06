@@ -28,3 +28,16 @@ updateList <- function(x, val) {
     tryCatch(val <- as.list(val))
   modifyList(x, val)
 }
+
+scale.limits <- function(x) {
+  if (is.factor(x))
+    levels(x)
+  else if (is.numeric(x))
+    range(x, finite = TRUE)
+  else range(x, na.rm = TRUE)
+}
+
+prepanel.null <- function () {
+  list(xlim = rep(NA_real_, 2), ylim = rep(NA_real_, 2), dx = NA_real_,
+       dy = NA_real_)
+}

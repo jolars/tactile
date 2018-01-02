@@ -1,24 +1,28 @@
 ---
-title: "New High-Level Functions"
+title: "New high-level functions"
 subtitle: "tactile"
 author: "Johan Larsson"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{New High-Level Functions}
+  %\VignetteIndexEntry{New high-level functions}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
-knitr::opts_chunk$set(fig.width = 4,
-                      fig.height = 4)
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 4,
+  fig.height = 4
+)
 ```
 
 **tactile** introduces a few new high-level functions to the latticeverse.
 This vignette will be updated as new functions are added.
 
-## Ternary plots
+## `ternaryplot()`: Ternary plots
 
 Ternary plots display proportions of three variables on a two-dimensional grid
 are popular in compositional analysis. tactile can be used to generate 
@@ -32,7 +36,7 @@ by Grove and Jenkins that has been imported into tactile and made available
 simply by calling `feldspar`. We begin with the simplest form of a 
 ternary plot.
 
-```{r}
+```{r ternaryplot1}
 library(tactile)
 ternaryplot(Or ~ An * Ab, data = feldspar)
 ```
@@ -42,7 +46,7 @@ and we may benefit here by, for instance, grouping variables by the
 *coexisting feldspar* facor `Feldspar`. Here, we also remove the useless
 box around the plot.
 
-```{r, fig.width = 7}
+```{r ternaryplot2, fig.width = 7}
 ternaryplot(Or ~ An * Ab, groups = Feldspar, data = feldspar,
             auto.key = list(space = "right"),
             par.settings = list(axis.line = list(col = "transparent")))
@@ -53,7 +57,7 @@ with a larger dataset, is to add two-dimensional density estimates. We do this
 by setting the `density` argument to `TRUE`. Instead of superposing the
 two types of composite feldspars, we now condition instead.
 
-```{r, fig.width = 7}
+```{r ternaryplot3, fig.width = 7}
 ternaryplot(Or ~ An * Ab | Feldspar, data = feldspar, density = TRUE)
 ```
 
@@ -67,14 +71,14 @@ and will here use the temperature of the reaction from the feldspar
 experiments, offering examples of a version with region fills and one
 with contours.
 
-```{r, fig.show = "hold"}
+```{r ternaryplot4, fig.show = "hold"}
 ternaryplot(Or ~ An * Ab, response = Pressure, data = feldspar,
             contour = FALSE)
 ternaryplot(Or ~ An * Ab, response = Pressure, data = feldspar, region = FALSE)
 ```
 
 
-## Bubbleplots
+## `bubbleplot()`: Bubbleplots
 
 Bubble plots are simple scatter plots that have been extended to a third
 dimensions by mapping a third variable to the size (area) of the plot symbols,
@@ -88,7 +92,7 @@ features of 32 cars from the *1974 Motor Trend US* magazine. We start
 by mapping the displacement to the bubble size against horsepower (hp) 
 and weight (wt).
 
-```{r, fig.width = 6}
+```{r bubbleplot1, fig.width = 6}
 bubbleplot(disp ~ hp * wt, groups = cyl, data = mtcars, auto.key = TRUE)
 ```
 
@@ -96,7 +100,7 @@ More elaborate designs can be fashioned if we were to combine the plot
 with some of the specialized panel functions from lattice. Here, we also
 change to a filled circle design with semitransparent bubbles.
 
-```{r, fig.width = 7, fig.height = 3.5}
+```{r bubbleplot2, fig.width = 7, fig.height = 3.5}
 bubbleplot(disp ~ hp * wt | factor(cyl), data = mtcars, auto.key = TRUE,
            pch = 16, alpha = 0.5, layout = c(3, 1),
            panel = function(x, y, z, ...) {

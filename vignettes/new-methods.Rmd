@@ -1,14 +1,23 @@
 ---
-title: "New Methods for Lattice"
+title: "New methods"
 subtitle: "tactile"
 author: "Johan Larsson"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{New Methods for Lattice}
+  %\VignetteIndexEntry{New methods}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+  fig.width = 4,
+  fig.height = 3.2
+)
+```
 
 ## `xyplot.lm()`: Linear model diagnostics 
 

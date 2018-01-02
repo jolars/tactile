@@ -1,11 +1,11 @@
 ---
-title: "The tactile Theme"
+title: "The tactile theme"
 subtitle: "tactile"
 author: "Johan Larsson"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{The tactile Theme}
+  %\VignetteIndexEntry{The tactile theme}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

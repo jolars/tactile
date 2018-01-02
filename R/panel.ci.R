@@ -3,6 +3,8 @@
 #' @inheritParams lattice::panel.xyplot
 #' @param lower lower confidence limits
 #' @param upper upper confidence limits
+#' @param subscripts see [lattice::xyplot()]
+#' @param alpha opacity for the fill
 #'
 #' @export
 #'
@@ -32,7 +34,6 @@ panel.ci <- function(
     subscripts,
     col,
     fill = if (is.null(groups)) plot.line$col else superpose.line$col,
-    border = if (is.null(groups)) plot.line$col else superpose.line$col,
     alpha = 0.15,
     lty = 0,
     lwd = if (is.null(groups)) plot.line$lwd else superpose.line$lwd,

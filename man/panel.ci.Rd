@@ -5,7 +5,6 @@
 \title{Panel function for confidence interval}
 \usage{
 panel.ci(x, y, lower, upper, groups = NULL, subscripts, col, fill = if
-  (is.null(groups)) plot.line$col else superpose.line$col, border = if
   (is.null(groups)) plot.line$col else superpose.line$col, alpha = 0.15,
   lty = 0, lwd = if (is.null(groups)) plot.line$lwd else superpose.line$lwd,
   grid = FALSE, ..., col.line = if (is.null(groups)) plot.line$col else
@@ -24,6 +23,8 @@ panel.ci(x, y, lower, upper, groups = NULL, subscripts, col, fill = if
     \code{\link{panel.superpose}} will be used instead to display each
     subgroup }
 
+\item{subscripts}{see \code{\link[lattice:xyplot]{lattice::xyplot()}}}
+
 \item{col}{
     default colours are obtained from \code{plot.symbol} and
     \code{plot.line} using \code{\link{trellis.par.get}}.
@@ -33,6 +34,8 @@ panel.ci(x, y, lower, upper, groups = NULL, subscripts, col, fill = if
     other graphical parameters.  \code{fill} serves the purpose of
     \code{bg} in \code{\link{points}} for certain values of \code{pch}
   }
+
+\item{alpha}{opacity for the fill}
 
 \item{lty}{
     other graphical parameters.  \code{fill} serves the purpose of

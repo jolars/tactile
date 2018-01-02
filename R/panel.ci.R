@@ -14,7 +14,7 @@
 #' dd <- cbind(newdat, pred)
 #'
 #' xyplot(fit ~ Petal.Length, groups = Species, data = dd,
-#'        prepanel = prepanel.ci,
+#'        prepanel = prepanel.ci, auto.key = list(lines = TRUE, points = FALSE),
 #'        ylab = "Petal Width",
 #'        xlab = "Petal Length",
 #'        lower = dd$lwr, upper = dd$upr, type = "l",

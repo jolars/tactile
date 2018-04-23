@@ -1,4 +1,5 @@
-# tactile 0.1.0.9000
+# tactile 0.2.0
+
 ## New panel functions
 * `panel.ci` plots confidence levels for an `xyplot`-type of plot, provided
 that confidence limits are given to arguments `lower` and `upper` in the

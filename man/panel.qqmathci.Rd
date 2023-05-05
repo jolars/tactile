@@ -4,9 +4,19 @@
 \alias{panel.qqmathci}
 \title{Q-Q Diagram Confidence Intervals Panels}
 \usage{
-panel.qqmathci(x, y = x, distribution = qnorm, probs = c(0.25, 0.75),
-  qtype = 7, groups = NULL, ci = 0.95, alpha = 0.25,
-  col = trellis.par.get("plot.line")$col, ..., col.line)
+panel.qqmathci(
+  x,
+  y = x,
+  distribution = qnorm,
+  probs = c(0.25, 0.75),
+  qtype = 7,
+  groups = NULL,
+  ci = 0.95,
+  alpha = 0.25,
+  col = trellis.par.get("plot.line")$col,
+  ...,
+  col.line
+)
 }
 \arguments{
 \item{x}{ The original sample, possibly reduced to a fewer number of
@@ -44,7 +54,7 @@ panel.qqmathci(x, y = x, distribution = qnorm, probs = c(0.25, 0.75),
 \item{col}{Color fill for the confidence bands.}
 
 \item{\dots}{Arguments passed to \code{\link[lattice:panel.superpose]{lattice::panel.superpose()}} and
-\code{\link[lattice:panel.polygon]{lattice::panel.polygon()}}}
+\code{\link[lattice:llines]{lattice::panel.polygon()}}}
 
 \item{col.line}{Color fill for the confidence bands. Is used internally
 by \code{\link[lattice:panel.superpose]{lattice::panel.superpose()}} and should generally not be changed.}

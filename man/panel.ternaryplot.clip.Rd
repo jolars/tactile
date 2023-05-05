@@ -4,9 +4,12 @@
 \alias{panel.ternaryplot.clip}
 \title{Plot Region Clipping for Ternary Plots}
 \usage{
-panel.ternaryplot.clip(xl = current.panel.limits()$x,
-  yl = current.panel.limits()$y, border = "transparent", col = if
-  (background$col == "transparent") "#FFFFFF" else background$col)
+panel.ternaryplot.clip(
+  xl = current.panel.limits()$x,
+  yl = current.panel.limits()$y,
+  border = "transparent",
+  col = if (background$col == "transparent") "#FFFFFF" else background$col
+)
 }
 \arguments{
 \item{xl}{X axis limits}

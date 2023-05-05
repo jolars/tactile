@@ -7,7 +7,7 @@
 dont_plot(x, ...)
 }
 \arguments{
-\item{x}{Object to call \code{\link[graphics:plot]{graphics::plot()}} on.}
+\item{x}{Object to call \code{\link[graphics:plot.default]{graphics::plot()}} on.}
 }
 \value{
 Invisibly returns whatever \code{plot(x)} would normally returns, but

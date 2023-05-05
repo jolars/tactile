@@ -4,9 +4,19 @@
 \alias{panel.ternaryplot.response}
 \title{Response Panels for Ternary Plots}
 \usage{
-panel.ternaryplot.response(x, y, z, subscripts, response, region = TRUE,
-  contour = TRUE, labels = isTRUE(contour), fun = c("glm", "lm"),
-  formula = response ~ poly(x, y), ...)
+panel.ternaryplot.response(
+  x,
+  y,
+  z,
+  subscripts,
+  response,
+  region = TRUE,
+  contour = TRUE,
+  labels = isTRUE(contour),
+  fun = c("glm", "lm"),
+  formula = response ~ poly(x, y),
+  ...
+)
 }
 \arguments{
 \item{x}{Numeric vector}
@@ -29,8 +39,8 @@ panel.ternaryplot.response(x, y, z, subscripts, response, region = TRUE,
 
 \item{formula}{Formula for the function.}
 
-\item{...}{Arguments passed on to \code{\link[lattice:panel.lines]{lattice::panel.lines()}},
-\code{\link[lattice:panel.polygon]{lattice::panel.polygon()}}, \code{\link[lattice:panel.text]{lattice::panel.text()}}.}
+\item{...}{Arguments passed on to \code{\link[lattice:llines]{lattice::panel.lines()}},
+\code{\link[lattice:llines]{lattice::panel.polygon()}}, \code{\link[lattice:llines]{lattice::panel.text()}}.}
 }
 \value{
 Plots a layer inside a panel of a \code{lattice} plot.

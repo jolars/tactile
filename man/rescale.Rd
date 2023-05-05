@@ -4,8 +4,13 @@
 \alias{rescale}
 \title{Uniform Rescaling}
 \usage{
-rescale(x, new_min = 0, new_max = 1, old_min = min(x, na.rm = TRUE),
-  old_max = max(x, na.rm = TRUE))
+rescale(
+  x,
+  new_min = 0,
+  new_max = 1,
+  old_min = min(x, na.rm = TRUE),
+  old_max = max(x, na.rm = TRUE)
+)
 }
 \arguments{
 \item{x}{A numeric vector to rescale}

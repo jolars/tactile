@@ -4,11 +4,16 @@
 \alias{setup_key}
 \title{Key Setup}
 \usage{
-setup_key(legend, key, default_key, fun, pos = c("right", "top", "bottom",
-  "left"))
+setup_key(
+  legend,
+  key,
+  default_key,
+  fun,
+  pos = c("right", "top", "bottom", "left")
+)
 }
 \arguments{
-\item{legend}{a list of legends, usually the \code{$legend} slot of a trellis
+\item{legend}{a list of legends, usually the \verb{$legend} slot of a trellis
 object.}
 
 \item{key}{A key specification, usually the user input.}

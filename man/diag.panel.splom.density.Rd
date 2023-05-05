@@ -4,8 +4,15 @@
 \alias{diag.panel.splom.density}
 \title{Diagonal Density Panels}
 \usage{
-diag.panel.splom.density(x, bw = "nrd0", adjust = 1, kernel = "gaussian",
-  weights = NULL, n = 512, ...)
+diag.panel.splom.density(
+  x,
+  bw = "nrd0",
+  adjust = 1,
+  kernel = "gaussian",
+  weights = NULL,
+  n = 512,
+  ...
+)
 }
 \arguments{
 \item{x}{data vector corresponding to that row / column (which will be the
@@ -16,7 +23,7 @@ same for diagonal 'panels').}
     (Note this differs from the reference books cited below, and from S-PLUS.)
 
     \code{bw} can also be a character string giving a rule to choose the
-    bandwidth.  See \code{\link{bw.nrd}}. \cr The default,
+    bandwidth.  See \code{\link[stats]{bw.nrd}}. \cr The default,
     \code{"nrd0"}, has remained the default for historical and
     compatibility reasons, rather than as a general recommendation,
     where e.g., \code{"SJ"} would rather fit, see also Venables and
@@ -30,32 +37,30 @@ same for diagonal 'panels').}
     This makes it easy to specify values like \sQuote{half the default}
     bandwidth.}
 
-\item{kernel}{a character string giving the smoothing kernel
-    to be used. This must partially match one of \code{"gaussian"},
-    \code{"rectangular"}, \code{"triangular"}, \code{"epanechnikov"},
-    \code{"biweight"}, \code{"cosine"} or \code{"optcosine"}, with default
-    \code{"gaussian"}, and may be abbreviated to a unique prefix (single
-    letter).
-
-    \code{"cosine"} is smoother than \code{"optcosine"}, which is the
-    usual \sQuote{cosine} kernel in the literature and almost MSE-efficient.
-    However, \code{"cosine"} is the version used by S.
-  }
-
 \item{weights}{numeric vector of non-negative observation weights,
     hence of same length as \code{x}. The default \code{NULL} is
     equivalent to \code{weights = rep(1/nx, nx)} where \code{nx} is the
-    length of (the finite entries of) \code{x[]}.}
+    length of (the finite entries of) \code{x[]}.  If \code{na.rm = TRUE}
+    and there are \code{NA}'s in \code{x}, they \emph{and} the
+    corresponding weights are removed before computations.  In that case,
+    when the original weights have summed to one, they are re-scaled to
+    keep doing so.
+
+    Note that weights are \emph{not} taken into account for automatic
+    bandwidth rules, i.e., when \code{bw} is a string.  When the weights
+    are proportional to true counts \code{cn}, \code{density(x = rep(x, cn))}
+    may be used instead of \code{weights}.
+  }
 
 \item{n}{the number of equally spaced points at which the density is
     to be estimated.  When \code{n > 512}, it is rounded up to a power
-    of 2 during the calculations (as \code{\link{fft}} is used) and the
-    final result is interpolated by \code{\link{approx}}.  So it almost
+    of 2 during the calculations (as \code{\link[stats]{fft}} is used) and the
+    final result is interpolated by \code{\link[stats]{approx}}.  So it almost
     always makes sense to specify \code{n} as a power of two.
   }
 
-\item{...}{Further arguments passed on to \code{\link[lattice:diag.panel.splom]{lattice::diag.panel.splom()}} and
-\code{\link[lattice:panel.lines]{lattice::panel.lines()}}.}
+\item{...}{Further arguments passed on to \code{\link[lattice:panel.pairs]{lattice::diag.panel.splom()}} and
+\code{\link[lattice:llines]{lattice::panel.lines()}}.}
 }
 \description{
 Plots univariate density estimates estimates to be used in a
@@ -68,6 +73,6 @@ splom(~ iris[1:4],
       pscales = 0)
 }
 \seealso{
-\code{\link[lattice:diag.panel.splom]{lattice::diag.panel.splom()}}, \code{\link[lattice:splom]{lattice::splom()}},
+\code{\link[lattice:panel.pairs]{lattice::diag.panel.splom()}}, \code{\link[lattice:splom]{lattice::splom()}},
 \code{\link[stats:density]{stats::density()}}.
 }

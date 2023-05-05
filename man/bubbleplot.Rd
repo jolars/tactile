@@ -7,11 +7,19 @@
 \usage{
 bubbleplot(x, data = NULL, ...)
 
-\method{bubbleplot}{formula}(x, data = NULL, maxsize = 3,
-  bubblekey = TRUE, panel = panel.bubbleplot, groups = NULL,
+\method{bubbleplot}{formula}(
+  x,
+  data = NULL,
+  maxsize = 3,
+  bubblekey = TRUE,
+  panel = panel.bubbleplot,
+  groups = NULL,
   subset = TRUE,
-  drop.unused.levels = lattice.getOption("drop.unused.levels"), ..., outer,
-  allow.multiple)
+  drop.unused.levels = lattice.getOption("drop.unused.levels"),
+  ...,
+  outer,
+  allow.multiple
+)
 }
 \arguments{
 \item{x}{A formula of the form \code{z ~ x * y}, where \code{x} and \code{y} have the usual

@@ -4,13 +4,23 @@
 \alias{xyplot.lm}
 \title{Lattice plot diagnostics for lm objects}
 \usage{
-\method{xyplot}{lm}(x, data = NULL, which = c(1:3, 5), main = FALSE,
-  id.n = 3, labels.id = names(residuals(x)), cex.id = 0.75,
-  cook.levels = c(0.5, 1), label.pos = c(4, 2), layout = NULL, ...)
+\method{xyplot}{lm}(
+  x,
+  data = NULL,
+  which = c(1:3, 5),
+  main = FALSE,
+  id.n = 3,
+  labels.id = names(residuals(x)),
+  cex.id = 0.75,
+  cook.levels = c(0.5, 1),
+  label.pos = c(4, 2),
+  layout = NULL,
+  ...
+)
 }
 \arguments{
-\item{x}{\code{lm} object, typically result of \code{\link{lm}} or
-    \code{\link{glm}}.}
+\item{x}{\code{lm} object, typically result of \code{\link[stats]{lm}} or
+    \code{\link[stats]{glm}}.}
 
 \item{data}{Only provided for method consistency and is ignored.}
 
@@ -31,10 +41,10 @@ vector of length 6.}
 \item{cook.levels}{levels of Cook's distance at which to draw contours.}
 
 \item{label.pos}{positioning of labels, for the left half and right
-    half of the graph respectively, for plots 1-3.}
+    half of the graph respectively, for plots 1-3, 5, 6.}
 
-\item{layout}{a numeric vector with \code{[columns, rows]} to use in the call
-to \code{\link[gridExtra:grid.arrange]{gridExtra::grid.arrange()}}, or a layout matrix which will then be
+\item{layout}{a numeric vector with \verb{[columns, rows]} to use in the call
+to \code{\link[gridExtra:arrangeGrob]{gridExtra::grid.arrange()}}, or a layout matrix which will then be
 passed as the \code{layout_matrix} in \code{grid.arrange()}.}
 
 \item{\dots}{arguments to be passed to \code{\link[lattice:xyplot]{lattice::xyplot()}}.}

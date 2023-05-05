@@ -6,8 +6,7 @@
 \alias{tactile-package}
 \title{tactile: New and Extended Plots, Methods, and Panel Functions for 'lattice'}
 \description{
-Extensions to 'lattice', providing new high-level
-functions, methods for existing functions, panel functions, and a theme.
+Extensions to 'lattice', providing new high-level functions, methods for existing functions, panel functions, and a theme.
 }
 \seealso{
 Useful links:
@@ -18,7 +17,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Johan Larsson \email{johanlarsson@outlook.com} (0000-0002-4029-5945)
+\strong{Maintainer}: Johan Larsson \email{johanlarsson@outlook.com} (\href{https://orcid.org/0000-0002-4029-5945}{ORCID})
 
 Other contributors:
 \itemize{

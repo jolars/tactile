@@ -44,27 +44,27 @@ ternaryplot <- function(x, data, ...) {
 #' @describeIn ternaryplot A formula of the form `top ~ left * right`. Variables
 #'   will be evaluated inside data if provided.
 #' @export
-ternaryplot.formula <- function(
-  x,
-  data = NULL,
-  response = NULL,
-  groups = NULL,
-  density = FALSE,
-  region = density || !is.null(response),
-  contour = density || !is.null(response),
-  labels = !is.null(response),
-  colorkey = region,
-  xlab,
-  ylab,
-  zlab,
-  xlim = c(-0.15, 1.15),
-  ylim = c(-0.30, 1),
-  panel = panel.ternaryplot,
-  default.prepanel = lattice.getOption("prepanel.default.xyplot"),
-  drop.unused.levels = lattice.getOption("drop.unused.levels"),
-  subset = TRUE,
-  ...
-) {
+ternaryplot.formula <-
+  function(x,
+           data = NULL,
+           response = NULL,
+           groups = NULL,
+           density = FALSE,
+           region = density || !is.null(response),
+           contour = density || !is.null(response),
+           labels = !is.null(response),
+           colorkey = region,
+           xlab,
+           ylab,
+           zlab,
+           xlim = c(-0.15, 1.15),
+           ylim = c(-0.30, 1),
+           panel = panel.ternaryplot,
+           default.prepanel = lattice.getOption("prepanel.default.xyplot"),
+           drop.unused.levels = lattice.getOption("drop.unused.levels"),
+           subset = TRUE,
+           ...)
+{
   response <- eval(substitute(response), data, environment(x))
   groups <- eval(substitute(groups), data, environment(x))
   subset <- eval(substitute(subset), data, environment(x))

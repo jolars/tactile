@@ -36,19 +36,19 @@ bubbleplot <- function(x, data = NULL, ...) UseMethod("bubbleplot")
 #'
 #' @rdname bubbleplot
 #' @export
-bubbleplot.formula <- function(
-  x,
-  data = NULL,
-  maxsize = 3,
-  bubblekey = TRUE,
-  panel = panel.bubbleplot,
-  groups = NULL,
-  subset = TRUE,
-  drop.unused.levels = lattice.getOption("drop.unused.levels"),
-  ...,
-  outer,
-  allow.multiple
-) {
+bubbleplot.formula <-
+  function(x,
+           data = NULL,
+           maxsize = 3,
+           bubblekey = TRUE,
+           panel = panel.bubbleplot,
+           groups = NULL,
+           subset = TRUE,
+           drop.unused.levels = lattice.getOption("drop.unused.levels"),
+           ...,
+           outer,
+           allow.multiple)
+{
   new_groups <- substitute(groups)
   groups <- eval(substitute(groups), data, environment(x))
   subset <- eval(substitute(subset), data, environment(x))

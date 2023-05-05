@@ -9,7 +9,7 @@ seq_pal(n, bias = 1, space = "Lab", ...)
 \arguments{
 \item{n}{Number of colors to generate}
 
-\item{...}{Stuff to pass on to \code{\link[grDevices:colorRampPalette]{grDevices::colorRampPalette()}}}
+\item{...}{Stuff to pass on to \code{\link[grDevices:colorRamp]{grDevices::colorRampPalette()}}}
 }
 \description{
 Divides the regions palette from lattice in half when it does not make

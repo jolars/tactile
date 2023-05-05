@@ -4,23 +4,19 @@
 \alias{panel.ternaryplot.scales}
 \title{Axes and Labels for Ternary Plots}
 \usage{
-panel.ternaryplot.scales(xlab, ylab, zlab, xlab.default, ylab.default,
-  zlab.default, at = seq.int(0, 1, by = 0.2), ...)
+panel.ternaryplot.scales(
+  xlab,
+  ylab,
+  zlab,
+  xlab.default,
+  ylab.default,
+  zlab.default,
+  at = seq.int(0, 1, by = 0.2),
+  ...
+)
 }
 \arguments{
-\item{xlab}{
-    Labels, have to be lists. Typically the user will not manipulate
-    these, but instead control this via arguments to \code{cloud}
-    directly.
-  }
-
-\item{ylab}{
-    Labels, have to be lists. Typically the user will not manipulate
-    these, but instead control this via arguments to \code{cloud}
-    directly.
-  }
-
-\item{zlab}{
+\item{xlab, ylab, zlab}{
     Labels, have to be lists. Typically the user will not manipulate
     these, but instead control this via arguments to \code{cloud}
     directly.

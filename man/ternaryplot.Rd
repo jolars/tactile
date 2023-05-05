@@ -9,14 +9,27 @@
 \usage{
 ternaryplot(x, data, ...)
 
-\method{ternaryplot}{formula}(x, data = NULL, response = NULL,
-  groups = NULL, density = FALSE, region = density || !is.null(response),
-  contour = density || !is.null(response), labels = !is.null(response),
-  colorkey = region, xlab, ylab, zlab, xlim = c(-0.15, 1.15),
-  ylim = c(-0.3, 1), panel = panel.ternaryplot,
+\method{ternaryplot}{formula}(
+  x,
+  data = NULL,
+  response = NULL,
+  groups = NULL,
+  density = FALSE,
+  region = density || !is.null(response),
+  contour = density || !is.null(response),
+  labels = !is.null(response),
+  colorkey = region,
+  xlab,
+  ylab,
+  zlab,
+  xlim = c(-0.15, 1.15),
+  ylim = c(-0.3, 1),
+  panel = panel.ternaryplot,
   default.prepanel = lattice.getOption("prepanel.default.xyplot"),
   drop.unused.levels = lattice.getOption("drop.unused.levels"),
-  subset = TRUE, ...)
+  subset = TRUE,
+  ...
+)
 
 \method{ternaryplot}{data.frame}(x, data = NULL, ...)
 
@@ -83,18 +96,18 @@ lost (unless it was proportional data to begin with).#'
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{formula}: A formula of the form \code{top ~ left * right}. Variables
+\item \code{ternaryplot(formula)}: A formula of the form \code{top ~ left * right}. Variables
 will be evaluated inside data if provided.
 
-\item \code{data.frame}: A data frame for which the first three columns will
+\item \code{ternaryplot(data.frame)}: A data frame for which the first three columns will
 be mapped to the \emph{left}, \emph{right}, and \emph{top} dimensions of the ternary plot
 respectively.
 
-\item \code{matrix}: A matrix for which the
+\item \code{ternaryplot(matrix)}: A matrix for which the
 first three columns will be mapped to the \emph{left}, \emph{right}, and \emph{top}
 dimensions of the ternary plot respectively.
-}}
 
+}}
 \examples{
 ternaryplot(Fertility ~ Agriculture * Catholic, data = swiss)
 ternaryplot(Catholic ~ Examination * Education, response = Infant.Mortality,

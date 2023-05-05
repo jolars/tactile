@@ -7,19 +7,13 @@
 prepanel.ci(x, y, lower, upper, subscripts, groups = NULL, ...)
 }
 \arguments{
-\item{x}{x and y values, numeric or factor}
-
-\item{y}{x and y values, numeric or factor}
+\item{x, y}{x and y values, numeric or factor}
 
 \item{lower}{lower confidence limits}
 
 \item{upper}{upper confidence limits}
 
-\item{subscripts}{ See \code{\link{xyplot}}.  Whenever
-    appropriate, calculations are done separately for each group and
-    then combined.  }
-
-\item{groups}{ See \code{\link{xyplot}}.  Whenever
+\item{groups, subscripts}{ See \code{\link[lattice]{xyplot}}.  Whenever
     appropriate, calculations are done separately for each group and
     then combined.  }
 

@@ -4,8 +4,18 @@
 \alias{panel.ternaryplot.density}
 \title{Two-Dimensional Density Estimation for Ternary Plots}
 \usage{
-panel.ternaryplot.density(x, y, z, subscripts, n = 100, region = TRUE,
-  contour = FALSE, labels = isTRUE(contour), density_breaks = NULL, ...)
+panel.ternaryplot.density(
+  x,
+  y,
+  z,
+  subscripts,
+  n = 100,
+  region = TRUE,
+  contour = FALSE,
+  labels = isTRUE(contour),
+  density_breaks = NULL,
+  ...
+)
 }
 \arguments{
 \item{x}{Numeric vector}
@@ -30,8 +40,8 @@ integer vector.
 \item{density_breaks}{Breaks for the density plot if used (see
 \code{\link[=panel.ternaryplot.density]{panel.ternaryplot.density()}}).}
 
-\item{...}{Arguments that will be passed on to \code{\link[lattice:panel.lines]{lattice::panel.lines()}},
-\code{\link[lattice:panel.polygon]{lattice::panel.polygon()}}, and \code{\link[lattice:panel.text]{lattice::panel.text()}}.}
+\item{...}{Arguments that will be passed on to \code{\link[lattice:llines]{lattice::panel.lines()}},
+\code{\link[lattice:llines]{lattice::panel.polygon()}}, and \code{\link[lattice:llines]{lattice::panel.text()}}.}
 }
 \value{
 Plots a layer inside a panel of a \code{lattice} plot.

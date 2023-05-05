@@ -4,9 +4,18 @@
 \alias{xyplot.Arima}
 \title{Diagnostic Plots for ARIMA Models}
 \usage{
-\method{xyplot}{Arima}(x, data = NULL, which = 1:4, lag.max = NULL,
-  gof.lag = NULL, qq.aspect = "iso", na.action = na.pass, main = NULL,
-  layout = NULL, ...)
+\method{xyplot}{Arima}(
+  x,
+  data = NULL,
+  which = 1:4,
+  lag.max = NULL,
+  gof.lag = NULL,
+  qq.aspect = "iso",
+  na.action = na.pass,
+  main = NULL,
+  layout = NULL,
+  ...
+)
 }
 \arguments{
 \item{x}{A fitted time-series model of class \code{Arima}.}
@@ -28,7 +37,7 @@ plots to be shown.}
 case a default list of titles will be added.}
 
 \item{layout}{Either a numeric vector with (columns, rows) to use in the call
-to \code{\link[gridExtra:grid.arrange]{gridExtra::grid.arrange()}}, or a layout matrix which will then be
+to \code{\link[gridExtra:arrangeGrob]{gridExtra::grid.arrange()}}, or a layout matrix which will then be
 passed as the \code{layout_matrix} in \code{grid.arrange()}.}
 
 \item{...}{Parameters to pass to \code{\link[=xyplot]{xyplot()}}.}
@@ -47,5 +56,5 @@ xyplot(fit, which = c(1:2, 4), layout = rbind(c(1, 1), c(2, 3)))
 }
 \seealso{
 \code{\link[stats:tsdiag]{stats::tsdiag()}}, \code{\link[stats:arima]{stats::arima()}}, \code{\link[lattice:xyplot]{lattice::xyplot()}},
-\code{\link[gridExtra:grid.arrange]{gridExtra::grid.arrange()}}, \code{\link[stats:Box.test]{stats::Box.test()}}.
+\code{\link[gridExtra:arrangeGrob]{gridExtra::grid.arrange()}}, \code{\link[stats:box.test]{stats::Box.test()}}.
 }

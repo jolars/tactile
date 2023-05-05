@@ -4,9 +4,16 @@
 \alias{xyplot.forecast}
 \title{Plot Forecasts with Trellis Graphics}
 \usage{
-\method{xyplot}{forecast}(x, data = NULL, ci = TRUE, ci_levels = x$level,
-  ci_key = ci, ci_pal = hcl(0, 0, 45:100),
-  ci_alpha = trellis.par.get("regions")$alpha, ...)
+\method{xyplot}{forecast}(
+  x,
+  data = NULL,
+  ci = TRUE,
+  ci_levels = x$level,
+  ci_key = ci,
+  ci_pal = hcl(0, 0, 45:100),
+  ci_alpha = trellis.par.get("regions")$alpha,
+  ...
+)
 }
 \arguments{
 \item{x}{An object of class \code{forecast}.}
@@ -37,8 +44,8 @@ An object of class \code{"trellis"}. The
   default) will plot it on an appropriate plotting device.
 }
 \description{
-Plot forecasts from \code{\link[forecast:forecast]{forecast::forecast()}}. It is built mostly to resemble
-the \code{\link[forecast:autoplot.forecast]{forecast::autoplot.forecast()}} and \code{\link[forecast:plot.forecast]{forecast::plot.forecast()}}
+Plot forecasts from \code{\link[forecast:reexports]{forecast::forecast()}}. It is built mostly to resemble
+the \code{\link[forecast:plot.forecast]{forecast::autoplot.forecast()}} and \code{\link[forecast:plot.forecast]{forecast::plot.forecast()}}
 functions, but in addition tries to plot the predictions on the original
 scale.
 }
@@ -61,5 +68,5 @@ if (require(forecast)) {
 }
 }
 \seealso{
-\code{\link[lattice:panel.xyplot]{lattice::panel.xyplot()}}, \code{\link[forecast:forecast]{forecast::forecast()}}, \code{\link[lattice:xyplot.ts]{lattice::xyplot.ts()}}.
+\code{\link[lattice:panel.xyplot]{lattice::panel.xyplot()}}, \code{\link[forecast:reexports]{forecast::forecast()}}, \code{\link[lattice:xyplot.ts]{lattice::xyplot.ts()}}.
 }

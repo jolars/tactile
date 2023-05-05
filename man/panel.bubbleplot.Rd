@@ -7,9 +7,7 @@
 panel.bubbleplot(x, y, z, groups = NULL, subscripts, cex = NULL, ...)
 }
 \arguments{
-\item{x}{ variables to be plotted in the scatterplot}
-
-\item{y}{ variables to be plotted in the scatterplot}
+\item{x, y}{ variables to be plotted in the scatterplot }
 
 \item{z}{A numeric vector that areas of circles will be mapped to.}
 

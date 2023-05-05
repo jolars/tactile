@@ -4,7 +4,8 @@
 \name{feldspar}
 \alias{feldspar}
 \title{Ternary feldspar experiments and thermodynamic models}
-\format{A data frame of 40 rows and 7 columns:
+\format{
+A data frame of 40 rows and 7 columns:
 \describe{
 \item{Experiment}{The ID of the experiment}
 \item{Feldspar}{Coexisting feldspars, \emph{Alkali} or \emph{Plagioclase}}
@@ -13,7 +14,8 @@
 \item{Ab}{Proportion of albite}
 \item{Temperature}{Temperature of the reaction (degrees centigrade)}
 \item{Pressure}{Pressure of the reaction (bars)}
-}}
+}
+}
 \source{
 Elkins LT, Grove TL. Ternary feldspar experiments and thermodynamic
 models. American Mineralogist. 1990;75(5-6):544-59.

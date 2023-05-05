@@ -4,11 +4,27 @@
 \alias{panel.ternaryplot}
 \title{Panel Function for Ternary Plots}
 \usage{
-panel.ternaryplot(x, y, z, subscripts, response = NULL, density = FALSE,
-  region = density || !is.null(response), contour = density ||
-  !is.null(response), labels = !is.null(response), points = TRUE,
-  grid = TRUE, density_breaks = NULL, xlab, ylab, zlab, xlab.default,
-  ylab.default, zlab.default, ...)
+panel.ternaryplot(
+  x,
+  y,
+  z,
+  subscripts,
+  response = NULL,
+  density = FALSE,
+  region = density || !is.null(response),
+  contour = density || !is.null(response),
+  labels = !is.null(response),
+  points = TRUE,
+  grid = TRUE,
+  density_breaks = NULL,
+  xlab,
+  ylab,
+  zlab,
+  xlab.default,
+  ylab.default,
+  zlab.default,
+  ...
+)
 }
 \arguments{
 \item{x}{Numeric vector}

@@ -4,8 +4,15 @@
 \alias{qqmath.zoo}
 \title{Q-Q Plots for Zoo Objects}
 \usage{
-\method{qqmath}{zoo}(x, data = NULL, xlab = "Theoretical quantiles",
-  ylab = "Sample quantiles", ref = TRUE, ci = TRUE, ...)
+\method{qqmath}{zoo}(
+  x,
+  data = NULL,
+  xlab = "Theoretical quantiles",
+  ylab = "Sample quantiles",
+  ref = TRUE,
+  ci = TRUE,
+  ...
+)
 }
 \arguments{
 \item{x}{A \code{zoo} object}

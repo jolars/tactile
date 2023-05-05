@@ -8,34 +8,40 @@
 \usage{
 bwplot2(x, data = NULL, ...)
 
-\method{bwplot2}{formula}(x, data = NULL, allow.multiple = is.null(groups)
-  || outer, outer = FALSE, auto.key = FALSE, groups = NULL,
-  drop.unused.levels = lattice.getOption("drop.unused.levels"), ...,
-  subset = TRUE)
+\method{bwplot2}{formula}(
+  x,
+  data = NULL,
+  allow.multiple = is.null(groups) || outer,
+  outer = FALSE,
+  auto.key = FALSE,
+  groups = NULL,
+  drop.unused.levels = lattice.getOption("drop.unused.levels"),
+  ...,
+  subset = TRUE
+)
 
-\method{bwplot2}{numeric}(x, data = NULL, xlab = deparse(substitute(x)),
-  ...)
+\method{bwplot2}{numeric}(x, data = NULL, xlab = deparse(substitute(x)), ...)
 }
 \arguments{
-\item{x}{see \code{\link[lattice:bwplot]{lattice::bwplot()}}}
+\item{x}{see \code{\link[lattice:xyplot]{lattice::bwplot()}}}
 
-\item{data}{see \code{\link[lattice:bwplot]{lattice::bwplot()}}}
+\item{data}{see \code{\link[lattice:xyplot]{lattice::bwplot()}}}
 
-\item{...}{arguments passed down to \code{\link[lattice:bwplot]{lattice::bwplot()}}}
+\item{...}{arguments passed down to \code{\link[lattice:xyplot]{lattice::bwplot()}}}
 
-\item{allow.multiple}{see \code{\link[lattice:bwplot]{lattice::bwplot()}}}
+\item{allow.multiple}{see \code{\link[lattice:xyplot]{lattice::bwplot()}}}
 
-\item{outer}{see \code{\link[lattice:bwplot]{lattice::bwplot()}}}
+\item{outer}{see \code{\link[lattice:xyplot]{lattice::bwplot()}}}
 
-\item{auto.key}{see \code{\link[lattice:bwplot]{lattice::bwplot()}}}
+\item{auto.key}{see \code{\link[lattice:xyplot]{lattice::bwplot()}}}
 
-\item{groups}{see \code{\link[lattice:bwplot]{lattice::bwplot()}}}
+\item{groups}{see \code{\link[lattice:xyplot]{lattice::bwplot()}}}
 
-\item{drop.unused.levels}{see \code{\link[lattice:bwplot]{lattice::bwplot()}}}
+\item{drop.unused.levels}{see \code{\link[lattice:xyplot]{lattice::bwplot()}}}
 
-\item{subset}{see \code{\link[lattice:bwplot]{lattice::bwplot()}}}
+\item{subset}{see \code{\link[lattice:xyplot]{lattice::bwplot()}}}
 
-\item{xlab}{see \code{\link[lattice:bwplot]{lattice::bwplot()}}}
+\item{xlab}{see \code{\link[lattice:xyplot]{lattice::bwplot()}}}
 }
 \value{
 An object of class \code{"trellis"}. The
@@ -45,7 +51,7 @@ An object of class \code{"trellis"}. The
   default) will plot it on an appropriate plotting device.
 }
 \description{
-An extended version of \code{\link[lattice:bwplot]{lattice::bwplot()}}. The only modification is to
+An extended version of \code{\link[lattice:xyplot]{lattice::bwplot()}}. The only modification is to
 group and stack box plots if \code{groups} is provided.
 }
 \examples{

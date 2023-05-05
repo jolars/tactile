@@ -4,8 +4,15 @@
 \alias{xyplot.acf}
 \title{Plot Autocovariance and Autocorrelation Functions}
 \usage{
-\method{xyplot}{acf}(x, data = NULL, ci = 0.95, ci_type = c("white",
-  "ma"), ci_col = trellis.par.get("add.line")$col, ci_lty = 2, ...)
+\method{xyplot}{acf}(
+  x,
+  data = NULL,
+  ci = 0.95,
+  ci_type = c("white", "ma"),
+  ci_col = trellis.par.get("add.line")$col,
+  ci_lty = 2,
+  ...
+)
 }
 \arguments{
 \item{x}{An 'acf' object.}

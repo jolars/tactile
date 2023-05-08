@@ -1,6 +1,8 @@
 # News
 
-## tactile 0.2.0.9000
+## tactile 0.2.1
+
+* Update example in vignette to work with changes in lattice.
 
 ## tactile 0.2.0
 

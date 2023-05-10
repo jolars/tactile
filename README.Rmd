@@ -2,6 +2,12 @@
 output: github_document
 ---
 
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/jolars/tactile/actions/workflows/R-CMD-check.yaml/badge.svg)](h ttps://github.com/jolars/tactile/actions/workflows/R-CMD-check.yaml)
+[![Coverage status](https://codecov.io/gh/jolars/tactile/branch/master/graph/badge.svg)](https://codecov.io/github/jolars/tactile?branch=master)
+[![CRAN status](http://www.r-pkg.org/badges/version/tactile)](https://cran.r-project.org/package=tactile)
+<!-- badges: end -->
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 ```{r, echo = FALSE}
@@ -11,11 +17,6 @@ knitr::opts_chunk$set(
   fig.path = "README-"
 )
 ```
-
-[![Travis-CI Build Status](https://travis-ci.org/jolars/tactile.svg?branch=master)](https://travis-ci.org/jolars/tactile)
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/jolars/tactile?branch=master&svg=true)](https://ci.appveyor.com/project/jolars/tactile)
-[![Coverage status](https://codecov.io/gh/jolars/tactile/branch/master/graph/badge.svg)](https://codecov.io/github/jolars/tactile?branch=master)
-[![CRAN status](http://www.r-pkg.org/badges/version/tactile)](https://cran.r-project.org/package=tactile)
 
 # tactile
 

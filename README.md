@@ -1,14 +1,20 @@
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-[![Travis-CI Build Status](https://travis-ci.org/jolars/tactile.svg?branch=master)](https://travis-ci.org/jolars/tactile) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/jolars/tactile?branch=master&svg=true)](https://ci.appveyor.com/project/jolars/tactile) [![Coverage status](https://codecov.io/gh/jolars/tactile/branch/master/graph/badge.svg)](https://codecov.io/github/jolars/tactile?branch=master) [![CRAN status](http://www.r-pkg.org/badges/version/tactile)](https://cran.r-project.org/package=tactile)
+<!-- badges: start -->
 
-tactile
-=======
+[![R-CMD-check](https://github.com/jolars/tactile/actions/workflows/R-CMD-check.yaml/badge.svg)](h%20ttps://github.com/jolars/tactile/actions/workflows/R-CMD-check.yaml)
+[![Coverage
+status](https://codecov.io/gh/jolars/tactile/branch/master/graph/badge.svg)](https://codecov.io/github/jolars/tactile?branch=master)
+[![CRAN
+status](http://www.r-pkg.org/badges/version/tactile)](https://cran.r-project.org/package=tactile)
+<!-- badges: end -->
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+# tactile
 
 tactile is an R package that extends `lattice`.
 
-Installation
-------------
+## Installation
 
 You can install the current stable release from CRAN with
 
@@ -23,7 +29,7 @@ or the development version from github by running
 devtools::install_github("jolars/tactile")
 ```
 
-License
--------
+## License
 
-tactile is open source software, licensed under the GPL-3. See the [LICENSE](LICENSE) for details.
+tactile is open source software, licensed under the GPL-3. See the
+[LICENSE](LICENSE) for details.

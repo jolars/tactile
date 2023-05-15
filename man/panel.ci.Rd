@@ -34,7 +34,15 @@ panel.ci(
 
 \item{subscripts}{see \code{\link[lattice:xyplot]{lattice::xyplot()}}}
 
+\item{col}{line color}
+
+\item{fill}{fill color}
+
 \item{alpha}{opacity for the fill}
+
+\item{lty}{line type}
+
+\item{lwd}{line width}
 
 \item{grid}{
     A logical flag, character string, or list specifying whether and how
@@ -60,6 +68,8 @@ panel.ci(
     as graphical parameters to low level plotting functions, or to the
     panel functions performing smoothing, if applicable.
   }
+
+\item{col.line}{line color. Supercedes \code{col} if both are specified.}
 }
 \description{
 Panel function for confidence interval

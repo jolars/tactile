@@ -5,6 +5,11 @@
 #' @param upper upper confidence limits
 #' @param subscripts see [lattice::xyplot()]
 #' @param alpha opacity for the fill
+#' @param col line color
+#' @param fill fill color
+#' @param lty line type
+#' @param lwd line width
+#' @param col.line line color. Supercedes `col` if both are specified.
 #'
 #' @export
 #'

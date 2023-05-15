@@ -37,6 +37,9 @@ same for diagonal 'panels').}
     This makes it easy to specify values like \sQuote{half the default}
     bandwidth.}
 
+\item{kernel}{the smoothing kernel to be used. See \code{\link[stats:density]{stats::density()}} for
+options.}
+
 \item{weights}{numeric vector of non-negative observation weights,
     hence of same length as \code{x}. The default \code{NULL} is
     equivalent to \code{weights = rep(1/nx, nx)} where \code{nx} is the
@@ -68,9 +71,10 @@ Plots univariate density estimates estimates to be used in a
 }
 \examples{
 splom(~ iris[1:4],
-      data = iris,
-      diag.panel = diag.panel.splom.density,
-      pscales = 0)
+  data = iris,
+  diag.panel = diag.panel.splom.density,
+  pscales = 0
+)
 }
 \seealso{
 \code{\link[lattice:panel.pairs]{lattice::diag.panel.splom()}}, \code{\link[lattice:splom]{lattice::splom()}},

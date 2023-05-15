@@ -1,7 +1,7 @@
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/jolars/tactile/actions/workflows/R-CMD-check.yaml/badge.svg)](h%20ttps://github.com/jolars/tactile/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/jolars/tactile/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jolars/tactile/actions/workflows/R-CMD-check.yaml)
 [![Coverage
 status](https://codecov.io/gh/jolars/tactile/branch/master/graph/badge.svg)](https://codecov.io/github/jolars/tactile?branch=master)
 [![CRAN

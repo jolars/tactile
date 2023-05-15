@@ -52,11 +52,14 @@ obj <- xyplot(
   auto.key = list(lines = TRUE, rectangles = TRUE, space = "top")
 )
 
-obj <- update(obj,
-  legend = list(right = list(
-    fun = "draw.colorkey",
-    args = list(list(at = 0:100))
-  ))
+obj <- update(
+  obj,
+  legend = list(
+    right = list(
+      fun = "draw.colorkey",
+      args = list(list(at = 0:100))
+    )
+  )
 )
 
 ## draw with default theme

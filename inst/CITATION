@@ -15,7 +15,7 @@ citHeader(paste("To cite ", pkg, "in publications, please use:"))
 bibentry(
   bibtype      = "Manual",
   title        = paste0("{", pkg, "}: ", title),
-  author       = personList(as.person("Johan Larsson")),
+  author       = as.person("Johan Larsson"),
   year         = year,
   note         = note,
   url          = paste0("https://cran.r-project.org/package=", pkg)

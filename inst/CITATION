@@ -13,10 +13,10 @@ note <- paste("R package version", vers)
 citHeader(paste("To cite ", pkg, "in publications, please use:"))
 
 bibentry(
-  bibtype      = "Manual",
-  title        = paste0("{", pkg, "}: ", title),
-  author       = as.person("Johan Larsson"),
-  year         = year,
-  note         = note,
-  url          = paste0("https://cran.r-project.org/package=", pkg)
+  bibtype = "Manual",
+  title   = paste0("{", pkg, "}: ", title),
+  author  = as.person("Johan Larsson"),
+  year    = year,
+  note    = note,
+  url     = paste0("https://cran.r-project.org/package=", pkg)
 )

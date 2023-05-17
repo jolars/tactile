@@ -3,7 +3,7 @@
 
 [![R-CMD-check](https://github.com/jolars/tactile/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jolars/tactile/actions/workflows/R-CMD-check.yaml)
 [![Coverage
-status](https://codecov.io/gh/jolars/tactile/branch/master/graph/badge.svg)](https://codecov.io/github/jolars/tactile?branch=master)
+status](https://app.codecov.io/github/jolars/tactile/branch/master/graph/badge.svg)](https://app.codecov.io/github/jolars/tactile?branch=master)
 [![CRAN
 status](http://www.r-pkg.org/badges/version/tactile)](https://cran.r-project.org/package=tactile)
 <!-- badges: end -->

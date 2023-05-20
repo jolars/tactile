@@ -39,6 +39,4 @@ devtools::install_github("jolars/tactile")
 
 ## License
 
-tactile is open source software, licensed under the GPL-3. See the
-[LICENSE](LICENSE) for details.
-
+tactile is open source software, licensed under the GPL-3.

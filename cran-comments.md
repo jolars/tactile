@@ -1,8 +1,12 @@
+# CRAN Comments
+
 ## Test environments
-* antergos 18.4, release
-* ubuntu 14.04 (on travis-ci), release and devel
+
+* ubuntu 22.04, release (github)
+* ubuntu 20.04, release (r-hub)
+* fedora, devel (r-hub)
+* windows server 2022, devel (r-hub)
 * win-builder, release and devel
-* osx (on travis-ci) release
 
 ## R CMD check results
 

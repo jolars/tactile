@@ -9,19 +9,19 @@ Authors@R: c(person("Johan", "Larsson", email = "johanlarsson@outlook.com",
              person("Brian", "Ripley", role = c("ctb"),
                     comment = "stats::plot.acf"))
 Description: Extensions to 'lattice', providing new high-level
-  functions, methods for existing functions, panel functions, and a theme.
+    functions, methods for existing functions, panel functions, and a theme.
 Depends:
-  R (>= 3.4.0),
-  lattice
+    R (>= 3.4.0),
+    lattice
 Imports:
-  grDevices,
-  grid,
-  gridExtra,
-  latticeExtra,
-  MASS,
-  RColorBrewer,
-  stats,
-  utils
+    grDevices,
+    grid,
+    gridExtra,
+    latticeExtra,
+    MASS,
+    RColorBrewer,
+    stats,
+    utils
 Suggests:
     covr,
     forecast,

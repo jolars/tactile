@@ -9,7 +9,7 @@
 #' @param fill fill color
 #' @param lty line type
 #' @param lwd line width
-#' @param col.line line color. Supercedes `col` if both are specified.
+#' @param col.line line color. Supersedes `col` if both are specified.
 #'
 #' @export
 #'

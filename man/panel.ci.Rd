@@ -69,7 +69,7 @@ panel.ci(
     panel functions performing smoothing, if applicable.
   }
 
-\item{col.line}{line color. Supercedes \code{col} if both are specified.}
+\item{col.line}{line color. Supersedes \code{col} if both are specified.}
 }
 \description{
 Panel function for confidence interval

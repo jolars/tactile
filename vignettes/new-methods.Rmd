@@ -23,9 +23,9 @@ knitr::opts_chunk$set(
 
 tactile provides an `xyplot()` method for `lm` objects -- usually generated
 with `stats::lm()` or `stats::glm()`. It provides the same type of diagnostic
-plots that `stats::plot.lm()` covers, with some small modificiations.
-
+plots that `stats::plot.lm()` covers, with some small modifications
 This method is provided so that a user may use lattice graphics throughout out a
+
 document, say for a lab report, and produce consistent graphic material that
 can be changed on a general level (for instance by using `lattice.options()`).
 
@@ -66,7 +66,7 @@ specifications.
 
 ## `xyplot.Arima`: ARIMA Model Diagnostics
 
-This function is similar to `xyplot.lm()` but is modelled after
+This function is similar to `xyplot.lm()` but is modeled after
 `stats::tsdiag()`. First, we look at the output from the original.
 
 ```{r, fig.height = 6, fig.width = 4}

@@ -43,13 +43,15 @@ ternaryplot(Or ~ An * Ab, data = feldspar)
 
 All of the bells and whistles of lattice graphics are available in tactile too,
 and we may benefit here by, for instance, grouping variables by the
-*coexisting feldspar* facor `Feldspar`. Here, we also remove the useless
+*coexisting feldspar* factor `Feldspar`. Here, we also remove the useless
 box around the plot.
 
 ```{r ternaryplot2, fig.width = 7}
-ternaryplot(Or ~ An * Ab, groups = Feldspar, data = feldspar,
-            auto.key = list(space = "right"),
-            par.settings = list(axis.line = list(col = "transparent")))
+ternaryplot(Or ~ An * Ab,
+  groups = Feldspar, data = feldspar,
+  auto.key = list(space = "right"),
+  par.settings = list(axis.line = list(col = "transparent"))
+)
 ```
 
 Another feature to visualize the compositions, which would make more sense
@@ -72,8 +74,10 @@ experiments, offering examples of a version with region fills and one
 with contours.
 
 ```{r ternaryplot4, fig.show = "hold"}
-ternaryplot(Or ~ An * Ab, response = Pressure, data = feldspar,
-            contour = FALSE)
+ternaryplot(Or ~ An * Ab,
+  response = Pressure, data = feldspar,
+  contour = FALSE
+)
 ternaryplot(Or ~ An * Ab, response = Pressure, data = feldspar, region = FALSE)
 ```
 
@@ -101,11 +105,13 @@ with some of the specialized panel functions from lattice. Here, we also
 change to a filled circle design with semitransparent bubbles.
 
 ```{r bubbleplot2, fig.width = 7, fig.height = 3.5}
-bubbleplot(disp ~ hp * wt | factor(cyl), data = mtcars, auto.key = TRUE,
-           pch = 16, alpha = 0.5, layout = c(3, 1),
-           panel = function(x, y, z, ...) {
-             panel.lmline(x, y, ...)
-             panel.bubbleplot(x, y, z, ...)
-           })
+bubbleplot(disp ~ hp * wt | factor(cyl),
+  data = mtcars, auto.key = TRUE,
+  pch = 16, alpha = 0.5, layout = c(3, 1),
+  panel = function(x, y, z, ...) {
+    panel.lmline(x, y, ...)
+    panel.bubbleplot(x, y, z, ...)
+  }
+)
 ```
 

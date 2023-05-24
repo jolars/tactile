@@ -11,3 +11,4 @@
 ^\.github$
 ^Makefile$
 ^docs$
+^revdep$

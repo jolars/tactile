@@ -29,12 +29,14 @@ for instance, having fitted a model and then made predictions using that
 model.
 
 As an example, we will try to predict petal width from petal length
-and speices, using the `iris` dataset.
+and species, using the `iris` dataset.
 
 ```{r model}
-mod <- lm(Petal.Width ~ Petal.Length*Species, data = iris)
-newdat <- expand.grid(Petal.Length = seq(1, 7, by = 0.1),
-                     Species = c("setosa", "versicolor", "virginica"))
+mod <- lm(Petal.Width ~ Petal.Length * Species, data = iris)
+newdat <- expand.grid(
+  Petal.Length = seq(1, 7, by = 0.1),
+  Species = c("setosa", "versicolor", "virginica")
+)
 pred <- predict(mod, newdat, interval = "confidence")
 dd <- cbind(newdat, pred)
 ```
@@ -44,17 +46,19 @@ including 95% confidence levels using the following lines.
 
 ```{r panel-ci, fig.cap="Example of using panel.ci."}
 library(tactile)
-xyplot(fit ~ Petal.Length, groups = Species, data = dd,
-       prepanel = prepanel.ci, auto.key = list(lines = TRUE, points = FALSE),
-       ylab = "Petal Width",
-       xlab = "Petal Length",
-       lower = dd$lwr,
-       upper = dd$upr,
-       type = "l",
-        panel = function(...) {
-          panel.ci(..., alpha = 0.15, grid = TRUE)
-          panel.xyplot(...)
-        })
+xyplot(fit ~ Petal.Length,
+  groups = Species, data = dd,
+  prepanel = prepanel.ci, auto.key = list(lines = TRUE, points = FALSE),
+  ylab = "Petal Width",
+  xlab = "Petal Length",
+  lower = dd$lwr,
+  upper = dd$upr,
+  type = "l",
+  panel = function(...) {
+    panel.ci(..., alpha = 0.15, grid = TRUE)
+    panel.xyplot(...)
+  }
+)
 ```
 
 Also note the use of the `prepanel.ci()` function that we provide the
@@ -67,14 +71,16 @@ and `lattice::panel.qqmathline()` to provide confidence
 intervals for the theoretical quantities. A rather contrived example follows.
 
 ```{r qqmath, fig.cap="Example of using panel.qqmathci."}
-qqmath(~ height | voice.part, aspect = "xy", data = singer,
-       prepanel = prepanel.qqmathline,
-       distribution = qnorm,
-       ci = 0.9,
-       panel = function(x, ...) {
-         panel.qqmathci(x, ...)
-         panel.qqmathline(x, ...)
-         panel.qqmath(x, ...)
-       })
+qqmath(~ height | voice.part,
+  aspect = "xy", data = singer,
+  prepanel = prepanel.qqmathline,
+  distribution = qnorm,
+  ci = 0.9,
+  panel = function(x, ...) {
+    panel.qqmathci(x, ...)
+    panel.qqmathline(x, ...)
+    panel.qqmath(x, ...)
+  }
+)
 ```
 

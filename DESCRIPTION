@@ -23,12 +23,13 @@ Imports:
   stats,
   utils
 Suggests:
-  covr,
-  forecast,
-  knitr,
-  rmarkdown,
-  testthat,
-  zoo
+    covr,
+    forecast,
+    knitr,
+    rmarkdown,
+    spelling,
+    testthat,
+    zoo
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
@@ -37,3 +38,4 @@ RoxygenNote: 7.2.3
 URL: https://github.com/jolars/tactile
 BugReports: https://github.com/jolars/tactile/issues
 VignetteBuilder: knitr
+Language: en-US

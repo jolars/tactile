@@ -1,0 +1,5 @@
+url: https://jolars.github.io/tactile/
+template:
+  bootstrap: 5
+development:
+  mode: auto

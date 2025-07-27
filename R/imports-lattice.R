@@ -30,7 +30,7 @@ updateList <- function(x, val) {
   modifyList(x, val)
 }
 
-scale.limits <- function(x) {
+scale_limits <- function(x) {
   if (is.factor(x)) {
     levels(x)
   } else if (is.numeric(x)) {

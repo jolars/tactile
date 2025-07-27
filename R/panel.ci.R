@@ -196,8 +196,8 @@ prepanel.ci <- function(
       dy <- diff(as.numeric(y[ord]))
     }
     list(
-      xlim = scale.limits(x),
-      ylim = scale.limits(c(lower, upper)),
+      xlim = scale_limits(x),
+      ylim = scale_limits(c(lower, upper)),
       dx = dx,
       dy = dy,
       xat = if (is.factor(x)) sort(unique(as.numeric(x))) else NULL,

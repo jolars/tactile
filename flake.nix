@@ -43,6 +43,7 @@
                 knitr
                 latticeExtra
                 lattice
+                covr
               ];
             })
           ];

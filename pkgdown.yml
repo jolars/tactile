@@ -1,0 +1,12 @@
+pandoc: 3.1.11
+pkgdown: 2.1.3
+pkgdown_sha: ~
+articles:
+  new-high-level-functions: new-high-level-functions.html
+  new-methods: new-methods.html
+  new-panel-functions: new-panel-functions.html
+  tactile-theme: tactile-theme.html
+last_built: 2025-07-27T18:59Z
+urls:
+  reference: https://jolars.github.io/tactile/reference
+  article: https://jolars.github.io/tactile/articles

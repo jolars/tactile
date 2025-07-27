@@ -12,3 +12,4 @@
 ^Makefile$
 ^docs$
 ^revdep$
+^CRAN-SUBMISSION$

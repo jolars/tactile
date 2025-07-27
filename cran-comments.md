@@ -2,20 +2,18 @@
 
 ## Test environments
 
-* ubuntu 22.04, release (github)
-* ubuntu 20.04, release (r-hub)
-* fedora, devel (r-hub)
-* windows server 2022, devel (r-hub)
-* win-builder, release and devel
+- nixos-unstable gcc, R-release (local)
+- Windows, R-devel (win-builder)
+- Windows, R-release (win-builder)
+- Ubuntu-latest, R-release and R-devel (github)
+- Windows-latest, R-release (github)
+- Mac OS X-latest, R-release (github)
 
 ## R CMD check results
 
-0 errors | 0 warnings | 0 note
+0 errors | 0 warnings | 0 notes
 
-## revdepcheck results
+## Reverse dependencies
 
-We checked 1 reverse dependencies (0 from CRAN + 1 from Bioconductor),
-comparing R CMD check results across CRAN and dev versions of this package.
-
-* We saw 0 new problems
-* We failed to check 0 packages
+We checked reverse dependency aqp for compatibility with the new
+version and found no issues.

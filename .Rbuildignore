@@ -13,3 +13,8 @@
 ^docs$
 ^revdep$
 ^CRAN-SUBMISSION$
+^.direnv$
+^flake\.lock$
+^flake\.nix$
+^\.envrc$
+^Taskfile.yml$

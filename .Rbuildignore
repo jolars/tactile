@@ -18,3 +18,4 @@
 ^flake\.nix$
 ^\.envrc$
 ^Taskfile.yml$
+^_pkgdown.yml$

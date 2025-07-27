@@ -16,7 +16,7 @@
 #' @param layout Either a numeric vector with (columns, rows) to use in the call
 #'   to [gridExtra::grid.arrange()], or a layout matrix which will then be
 #'   passed as the `layout_matrix` in `grid.arrange()`.
-#' @param ... Parameters to pass to [xyplot()].
+#' @param ... Parameters to pass to [lattice::xyplot()].
 #'
 #' @seealso [stats::tsdiag()], [stats::arima()], [lattice::xyplot()],
 #'   [gridExtra::grid.arrange()], [stats::Box.test()].

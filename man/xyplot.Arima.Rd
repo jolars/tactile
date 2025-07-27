@@ -40,7 +40,7 @@ case a default list of titles will be added.}
 to \code{\link[gridExtra:arrangeGrob]{gridExtra::grid.arrange()}}, or a layout matrix which will then be
 passed as the \code{layout_matrix} in \code{grid.arrange()}.}
 
-\item{...}{Parameters to pass to \code{\link[=xyplot]{xyplot()}}.}
+\item{...}{Parameters to pass to \code{\link[lattice:xyplot]{lattice::xyplot()}}.}
 }
 \value{
 Plots a lattice plot and returns a \code{trellis} object.

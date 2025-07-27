@@ -77,8 +77,7 @@ tsdiag(fit)
 To use the method from tactile, we just call `xyplot()` on the model fit. The
 most prominent difference here is that we've added a Q-Q plot of the
 standardized residuals as well, but also that we're correcting
-the Ljung--Box test to account for the fact that we've fit a model
-([see this](http://www.stat.pitt.edu/stoffer/tsa4/Rissues.htm)).
+the Ljung--Box test to account for the fact that we've fit a model.
 
 ```{r, fig.width = 7, fig.height = 5}
 xyplot(fit)

@@ -36,20 +36,21 @@
 #' )
 #'
 panel.ci <- function(
-    x,
-    y,
-    lower,
-    upper,
-    groups = NULL,
-    subscripts,
-    col,
-    fill = if (is.null(groups)) plot.line$col else superpose.line$col,
-    alpha = 0.15,
-    lty = 0,
-    lwd = if (is.null(groups)) plot.line$lwd else superpose.line$lwd,
-    grid = FALSE,
-    ...,
-    col.line = if (is.null(groups)) plot.line$col else superpose.line$col) {
+  x,
+  y,
+  lower,
+  upper,
+  groups = NULL,
+  subscripts,
+  col,
+  fill = if (is.null(groups)) plot.line$col else superpose.line$col,
+  alpha = 0.15,
+  lty = 0,
+  lwd = if (is.null(groups)) plot.line$lwd else superpose.line$lwd,
+  grid = FALSE,
+  ...,
+  col.line = if (is.null(groups)) plot.line$col else superpose.line$col
+) {
   plot.line <- trellis.par.get("plot.line")
   superpose.line <- trellis.par.get("superpose.line")
 
@@ -64,7 +65,8 @@ panel.ci <- function(
   # Borrowed from panel.xyplot()
   if (!identical(grid, FALSE)) {
     if (!is.list(grid)) {
-      grid <- switch(as.character(grid),
+      grid <- switch(
+        as.character(grid),
         "TRUE" = list(h = -1, v = -1, x = x, y = y),
         h = list(h = -1, v = 0, y = y),
         v = list(h = 0, v = -1, x = x),
@@ -76,20 +78,26 @@ panel.ci <- function(
 
   nobs <- sum(!is.na(y))
   if (!is.null(groups)) {
-    do.call(panel.superpose, updateList(list(
-      x = x,
-      y = y,
-      lower = lower,
-      upper = upper,
-      groups = groups,
-      subscripts = subscripts,
-      panel.groups = panel.ci,
-      alpha = alpha,
-      col.line = col.line,
-      fill = fill,
-      lty = lty,
-      lwd = lwd
-    ), dots))
+    do.call(
+      panel.superpose,
+      updateList(
+        list(
+          x = x,
+          y = y,
+          lower = lower,
+          upper = upper,
+          groups = groups,
+          subscripts = subscripts,
+          panel.groups = panel.ci,
+          alpha = alpha,
+          col.line = col.line,
+          fill = fill,
+          lty = lty,
+          lwd = lwd
+        ),
+        dots
+      )
+    )
   } else if (nobs > 0) {
     lower <- lower[subscripts]
     upper <- upper[subscripts]
@@ -99,16 +107,19 @@ panel.ci <- function(
     # Confidence bands
     do.call(
       panel.polygon,
-      updateList(list(
-        x = c(x, rev(x)),
-        y = c(upper[ord], rev(lower[ord])),
-        alpha = alpha,
-        col = fill,
-        border = "transparent",
-        lty = 0,
-        lwd = 0,
-        identifier = "ci"
-      ), dots)
+      updateList(
+        list(
+          x = c(x, rev(x)),
+          y = c(upper[ord], rev(lower[ord])),
+          alpha = alpha,
+          col = fill,
+          border = "transparent",
+          lty = 0,
+          lwd = 0,
+          identifier = "ci"
+        ),
+        dots
+      )
     )
 
     # Lower bounds
@@ -166,13 +177,14 @@ panel.ci <- function(
 #' )
 #'
 prepanel.ci <- function(
-    x,
-    y,
-    lower,
-    upper,
-    subscripts,
-    groups = NULL,
-    ...) {
+  x,
+  y,
+  lower,
+  upper,
+  subscripts,
+  groups = NULL,
+  ...
+) {
   if (any(!is.na(x)) && any(!is.na(y))) {
     ord <- order(as.numeric(x))
     if (!is.null(groups)) {

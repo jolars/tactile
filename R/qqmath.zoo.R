@@ -28,16 +28,24 @@ qqmath.zoo <- function(
   ci = TRUE,
   ...
 ) {
-  do.call(qqmath, updateList(list(
-    x = ~ zoo::coredata(x),
-    xlab = xlab,
-    ylab = ylab,
-    panel = function(...) {
-      if (ci)
-        panel.qqmathci(...)
-      if (ref)
-        panel.qqmathline(...)
-      panel.qqmath(...)
-    }
-  ), list(...)))
+  do.call(
+    qqmath,
+    updateList(
+      list(
+        x = ~ zoo::coredata(x),
+        xlab = xlab,
+        ylab = ylab,
+        panel = function(...) {
+          if (ci) {
+            panel.qqmathci(...)
+          }
+          if (ref) {
+            panel.qqmathline(...)
+          }
+          panel.qqmath(...)
+        }
+      ),
+      list(...)
+    )
+  )
 }

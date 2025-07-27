@@ -34,12 +34,14 @@ grid_wrap <- function(x, layout = NULL) {
 #'
 #' @return A rescaled version of `x`.
 #' @keywords internal
-rescale <- function(x,
-                    new_min = 0,
-                    new_max = 1,
-                    old_min = min(x, na.rm = TRUE),
-                    old_max = max(x, na.rm = TRUE)) {
-  (x - old_min)/(old_max - old_min) * (new_max - new_min) + new_min
+rescale <- function(
+  x,
+  new_min = 0,
+  new_max = 1,
+  old_min = min(x, na.rm = TRUE),
+  old_max = max(x, na.rm = TRUE)
+) {
+  (x - old_min) / (old_max - old_min) * (new_max - new_min) + new_min
 }
 
 
@@ -71,12 +73,15 @@ dont_plot <- function(x, ...) {
 #' @return Returns an updated list.
 #' @keywords internal
 updateList <- function(x, val) {
-  if (is.null(x))
+  if (is.null(x)) {
     x <- list()
-  if (!is.list(val))
+  }
+  if (!is.list(val)) {
     tryCatch(val <- as.list(val))
-  if (!is.list(x))
+  }
+  if (!is.list(x)) {
     tryCatch(x <- as.list(x))
+  }
   modifyList(x, val)
 }
 
@@ -86,12 +91,13 @@ updateList <- function(x, val) {
 #' @param fun Character or function.
 #' @keywords internal
 get_fun <- function(fun) {
-  if (is.function(fun))
+  if (is.function(fun)) {
     fun
-  else if (is.character(fun))
+  } else if (is.character(fun)) {
     get(fun)
-  else
+  } else {
     eval(fun)
+  }
 }
 
 
@@ -103,8 +109,9 @@ get_fun <- function(fun) {
 #' @keywords internal
 xyz_to_xy <- function(form) {
   new_form <- paste(form$right.y.name, "~", form$right.x.name)
-  if (!is.null(form$condition))
+  if (!is.null(form$condition)) {
     new_form <- paste(new_form, "|", paste(names(form$condition), sep = " + "))
+  }
   as.formula(new_form)
 }
 
@@ -117,11 +124,16 @@ xyz_to_xy <- function(form) {
 #'
 #' @keywords internal
 require_pkg <- function(pkg) {
-  if (!requireNamespace(pkg, quietly = TRUE))
-    stop(paste("Package",
-               pkg,
-               "is needed for this function to work. Please install it."),
-         call. = FALSE)
+  if (!requireNamespace(pkg, quietly = TRUE)) {
+    stop(
+      paste(
+        "Package",
+        pkg,
+        "is needed for this function to work. Please install it."
+      ),
+      call. = FALSE
+    )
+  }
 }
 
 
@@ -136,7 +148,7 @@ require_pkg <- function(pkg) {
 seq_pal <- function(n, bias = 1, space = "Lab", ...) {
   col <- trellis.par.get("regions")$col
   m <- length(col)
-  col <- col[ceiling(m/2L):m]
+  col <- col[ceiling(m / 2L):m]
   grDevices::colorRampPalette(col, bias = bias, space = space, ...)(n)
 }
 
@@ -156,12 +168,12 @@ seq_pal <- function(n, bias = 1, space = "Lab", ...) {
 #'   `key`, `default_key`, and `fun`.
 #' @keywords internal
 setup_key <- function(
-    legend,
-    key,
-    default_key,
-    fun,
-    pos = c("right", "top", "bottom", "left")
-  ) {
+  legend,
+  key,
+  default_key,
+  fun,
+  pos = c("right", "top", "bottom", "left")
+) {
   if (isTRUE(key) || is.list(key)) {
     key <- list(
       fun = fun,
@@ -169,13 +181,14 @@ setup_key <- function(
         key = updateList(default_key, if (is.list(key)) key else list())
       )
     )
-    space <- if (!is.null(key$args$key$space))
+    space <- if (!is.null(key$args$key$space)) {
       key$args$key$space
-    else if (!is.null(legend)) {
+    } else if (!is.null(legend)) {
       ii <- pos %in% names(legend)
       pos[!ii][1]
-    } else
+    } else {
       "right"
+    }
 
     legend[[space]] <- key
   }

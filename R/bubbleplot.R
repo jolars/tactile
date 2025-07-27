@@ -37,81 +37,86 @@ bubbleplot <- function(x, data = NULL, ...) UseMethod("bubbleplot")
 #' @rdname bubbleplot
 #' @export
 bubbleplot.formula <-
-  function(x,
-           data = NULL,
-           maxsize = 3,
-           bubblekey = TRUE,
-           panel = panel.bubbleplot,
-           groups = NULL,
-           subset = TRUE,
-           drop.unused.levels = lattice.getOption("drop.unused.levels"),
-           ...,
-           outer,
-           allow.multiple)
-{
-  new_groups <- substitute(groups)
-  groups <- eval(substitute(groups), data, environment(x))
-  subset <- eval(substitute(subset), data, environment(x))
+  function(
+    x,
+    data = NULL,
+    maxsize = 3,
+    bubblekey = TRUE,
+    panel = panel.bubbleplot,
+    groups = NULL,
+    subset = TRUE,
+    drop.unused.levels = lattice.getOption("drop.unused.levels"),
+    ...,
+    outer,
+    allow.multiple
+  ) {
+    new_groups <- substitute(groups)
+    groups <- eval(substitute(groups), data, environment(x))
+    subset <- eval(substitute(subset), data, environment(x))
 
-  if (!missing(outer))
-    warning("'outer' is ignored.")
-  if (!missing(allow.multiple))
-    warning("'allow.multiple' is ignored.")
+    if (!missing(outer)) {
+      warning("'outer' is ignored.")
+    }
+    if (!missing(allow.multiple)) {
+      warning("'allow.multiple' is ignored.")
+    }
 
-  # Parse the formula as z ~ x * y
-  form <- latticeParseFormula(
-    model = x,
-    data = data,
-    dimension = 3,
-    subset = subset,
-    groups = groups,
-    multiple = FALSE,
-    outer = FALSE,
-    subscripts = TRUE,
-    drop = drop.unused.levels
-  )
+    # Parse the formula as z ~ x * y
+    form <- latticeParseFormula(
+      model = x,
+      data = data,
+      dimension = 3,
+      subset = subset,
+      groups = groups,
+      multiple = FALSE,
+      outer = FALSE,
+      subscripts = TRUE,
+      drop = drop.unused.levels
+    )
 
-  new_form <- xyz_to_xy(form)
+    new_form <- xyz_to_xy(form)
 
-  # Compute bubble sizes
-  z <- form$left
-  bubbles <- make_bubbles(z, maxsize)
+    # Compute bubble sizes
+    z <- form$left
+    bubbles <- make_bubbles(z, maxsize)
 
-  # Retrieve call
-  ccall <- match.call()
+    # Retrieve call
+    ccall <- match.call()
 
-  ocall <- sys.call(sys.parent())
-  ocall[[1]] <- quote(bubbleplot)
+    ocall <- sys.call(sys.parent())
+    ocall[[1]] <- quote(bubbleplot)
 
-  # Update call
-  ccall$x <- new_form
-  ccall$z <- bubbles$x
-  ccall$panel <- panel
+    # Update call
+    ccall$x <- new_form
+    ccall$z <- bubbles$x
+    ccall$panel <- panel
 
-  # Make the call
-  ccall[[1]] <- quote(lattice::xyplot)
-  ans <- eval.parent(ccall)
-  ans$call <- ocall
+    # Make the call
+    ccall[[1]] <- quote(lattice::xyplot)
+    ans <- eval.parent(ccall)
+    ans$call <- ocall
 
-  # Set up bubblekey (if required)
-  ans$legend <- setup_key(
-    ans$legend,
-    bubblekey,
-    list(text = list(as.character(bubbles$breaks)),
-         title = form$left.name,
-         points = list(
-           col = if (is.null(groups)) trellis.par.get("plot.symbol")$col else 1,
-           pch = trellis.par.get("plot.symbol")$pch,
-           fill = trellis.par.get("plot.symbol")$fill,
-           alpha = trellis.par.get("plot.symbol")$alpha,
-           font = trellis.par.get("plot.symbol")$font,
-           cex = bubbles$breaks_cex
-          ),
-         padding.text = maxsize * 1.3),
-    draw.key
-  )
-  ans
-}
+    # Set up bubblekey (if required)
+    ans$legend <- setup_key(
+      ans$legend,
+      bubblekey,
+      list(
+        text = list(as.character(bubbles$breaks)),
+        title = form$left.name,
+        points = list(
+          col = if (is.null(groups)) trellis.par.get("plot.symbol")$col else 1,
+          pch = trellis.par.get("plot.symbol")$pch,
+          fill = trellis.par.get("plot.symbol")$fill,
+          alpha = trellis.par.get("plot.symbol")$alpha,
+          font = trellis.par.get("plot.symbol")$font,
+          cex = bubbles$breaks_cex
+        ),
+        padding.text = maxsize * 1.3
+      ),
+      draw.key
+    )
+    ans
+  }
 
 #' Panel Function for Bubble Plots
 #'
@@ -126,26 +131,29 @@ bubbleplot.formula <-
 #' @return Plots a layer inside a panel of a `lattice` plot.
 #' @export
 panel.bubbleplot <- function(
-    x,
-    y,
-    z,
-    groups = NULL,
-    subscripts,
-    cex = NULL,
-    ...
-  ) {
+  x,
+  y,
+  z,
+  groups = NULL,
+  subscripts,
+  cex = NULL,
+  ...
+) {
   # include cex as argument in top function and then ignore it
 
-  if (!is.null(groups))
-    panel.superpose(x = x,
-                    y = y,
-                    z = z,
-                    subscripts = subscripts,
-                    groups = groups,
-                    panel.bubbleplot,
-                    ...)
-  else
+  if (!is.null(groups)) {
+    panel.superpose(
+      x = x,
+      y = y,
+      z = z,
+      subscripts = subscripts,
+      groups = groups,
+      panel.bubbleplot,
+      ...
+    )
+  } else {
     panel.xyplot(x, y, cex = z[subscripts], ...)
+  }
 }
 
 #' Make Bubbles
@@ -165,8 +173,9 @@ make_bubbles <- function(x, maxsize) {
   breaks <- pretty(x, n = 4)
 
   # Drop first level if it is 0
-  if (breaks[1] == 0)
+  if (breaks[1] == 0) {
     breaks <- breaks[-1]
+  }
 
   breaks_cex <- sqrt(breaks / pi)
   x <- sqrt(x / pi)

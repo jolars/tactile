@@ -45,105 +45,116 @@ ternaryplot <- function(x, data, ...) {
 #'   will be evaluated inside data if provided.
 #' @export
 ternaryplot.formula <-
-  function(x,
-           data = NULL,
-           response = NULL,
-           groups = NULL,
-           density = FALSE,
-           region = density || !is.null(response),
-           contour = density || !is.null(response),
-           labels = !is.null(response),
-           colorkey = region,
-           xlab,
-           ylab,
-           zlab,
-           xlim = c(-0.15, 1.15),
-           ylim = c(-0.30, 1),
-           panel = panel.ternaryplot,
-           default.prepanel = lattice.getOption("prepanel.default.xyplot"),
-           drop.unused.levels = lattice.getOption("drop.unused.levels"),
-           subset = TRUE,
-           ...)
-{
-  response <- eval(substitute(response), data, environment(x))
-  groups <- eval(substitute(groups), data, environment(x))
-  subset <- eval(substitute(subset), data, environment(x))
-  form <- latticeParseFormula(
+  function(
     x,
-    data,
-    dimension = 3,
-    subset = subset,
-    groups = groups,
-    multiple = FALSE,
-    outer = FALSE,
-    subscripts = TRUE,
-    drop = drop.unused.levels
-  )
+    data = NULL,
+    response = NULL,
+    groups = NULL,
+    density = FALSE,
+    region = density || !is.null(response),
+    contour = density || !is.null(response),
+    labels = !is.null(response),
+    colorkey = region,
+    xlab,
+    ylab,
+    zlab,
+    xlim = c(-0.15, 1.15),
+    ylim = c(-0.30, 1),
+    panel = panel.ternaryplot,
+    default.prepanel = lattice.getOption("prepanel.default.xyplot"),
+    drop.unused.levels = lattice.getOption("drop.unused.levels"),
+    subset = TRUE,
+    ...
+  ) {
+    response <- eval(substitute(response), data, environment(x))
+    groups <- eval(substitute(groups), data, environment(x))
+    subset <- eval(substitute(subset), data, environment(x))
+    form <- latticeParseFormula(
+      x,
+      data,
+      dimension = 3,
+      subset = subset,
+      groups = groups,
+      multiple = FALSE,
+      outer = FALSE,
+      subscripts = TRUE,
+      drop = drop.unused.levels
+    )
 
-  # Retrieve call
-  ccall <- match.call()
-  ocall <- sys.call(sys.parent())
-  ocall[[1]] <- quote(ternaryplot)
+    # Retrieve call
+    ccall <- match.call()
+    ocall <- sys.call(sys.parent())
+    ocall[[1]] <- quote(ternaryplot)
 
-  # Update call
-  ccall$response <- response
-  ccall$panel <- panel
-  ccall$default.prepanel <- default.prepanel
-  ccall$density <- density
-  ccall$contour <- contour
-  ccall$region <- region
-  ccall$data <- data
-  ccall$aspect <- "iso"
-  ccall$xlim <- xlim
-  ccall$ylim <- ylim
+    # Update call
+    ccall$response <- response
+    ccall$panel <- panel
+    ccall$default.prepanel <- default.prepanel
+    ccall$density <- density
+    ccall$contour <- contour
+    ccall$region <- region
+    ccall$data <- data
+    ccall$aspect <- "iso"
+    ccall$xlim <- xlim
+    ccall$ylim <- ylim
 
-  if (density && !is.null(form$condition)) {
-    iso <- with(form, ilr(left, right.x, right.y))
-    dens <- by(iso, form$condition, function(x) {
-      MASS::kde2d(x$x, x$y, n = 50, lims = c(-16.92, 16.92, -14.65, 14.65))$z
-    })
-    dens <- do.call(rbind, dens)
-    ccall$density_breaks <- pretty(dens, 10)
-  } else if (density) {
-    iso <- with(form, ilr(left, right.x, right.y))
-    dens <- MASS::kde2d(iso$x, iso$y, n = 50,
-                        lims = c(-16.92, 16.92, -14.65, 14.65))$z
-    ccall$density_breaks <- pretty(dens, 10)
+    if (density && !is.null(form$condition)) {
+      iso <- with(form, ilr(left, right.x, right.y))
+      dens <- by(iso, form$condition, function(x) {
+        MASS::kde2d(x$x, x$y, n = 50, lims = c(-16.92, 16.92, -14.65, 14.65))$z
+      })
+      dens <- do.call(rbind, dens)
+      ccall$density_breaks <- pretty(dens, 10)
+    } else if (density) {
+      iso <- with(form, ilr(left, right.x, right.y))
+      dens <- MASS::kde2d(
+        iso$x,
+        iso$y,
+        n = 50,
+        lims = c(-16.92, 16.92, -14.65, 14.65)
+      )$z
+      ccall$density_breaks <- pretty(dens, 10)
+    }
+
+    # Make the call
+    ccall[[1]] <- quote(lattice::cloud)
+    ans <- eval.parent(ccall)
+    ans$call <- ocall
+
+    # Set up colorkey (if needed)
+    ans$legend <- setup_key(
+      ans$legend,
+      colorkey,
+      if (density) {
+        list(col = seq_pal(100), at = ccall$density_breaks)
+      } else if (!is.null(response) && region) {
+        list(
+          col = trellis.par.get("regions")$col,
+          at = pretty(quantile(response, c(0.1, 0.9)), 10)
+        )
+      } else {
+        list()
+      },
+      draw.colorkey
+    )
+
+    ans$x.limits <- xlim
+    ans$y.limits <- ylim
+
+    ans
   }
-
-  # Make the call
-  ccall[[1]] <- quote(lattice::cloud)
-  ans <- eval.parent(ccall)
-  ans$call <- ocall
-
-  # Set up colorkey (if needed)
-  ans$legend <- setup_key(
-    ans$legend,
-    colorkey,
-    if (density)
-      list(col = seq_pal(100), at = ccall$density_breaks)
-    else if (!is.null(response) && region)
-      list(col = trellis.par.get("regions")$col,
-           at = pretty(quantile(response, c(0.1, 0.9)), 10))
-    else list(),
-    draw.colorkey
-  )
-
-  ans$x.limits <- xlim
-  ans$y.limits <- ylim
-
-  ans
-}
 
 #' @describeIn ternaryplot A data frame for which the first three columns will
 #'   be mapped to the *left*, *right*, and *top* dimensions of the ternary plot
 #'   respectively.
 #' @export
 ternaryplot.data.frame <- function(x, data = NULL, ...) {
-  if (NCOL(x) < 3)
+  if (NCOL(x) < 3) {
     stop("'x' needs at least 3 columns.")
-  if (!is.null(data))
+  }
+  if (!is.null(data)) {
     warning("Exlicit 'data' specification has been dropped.")
+  }
 
   names <- colnames(x)
   form <- as.formula(paste(names[3], "~", names[1], "*", names[2]))
@@ -190,38 +201,40 @@ ternaryplot.matrix <- function(x, data = NULL, ...) {
 #' @inherit panel.bubbleplot return
 #' @export
 panel.ternaryplot <- function(
-    x,
-    y,
-    z,
-    subscripts,
-    response = NULL,
-    density = FALSE,
-    region = density || !is.null(response),
-    contour = density || !is.null(response),
-    labels = !is.null(response),
-    points = TRUE,
-    grid = TRUE,
-    density_breaks = NULL,
-    xlab,
-    ylab,
-    zlab,
-    xlab.default,
-    ylab.default,
-    zlab.default,
-    ...
-  ) {
-  if (length(subscripts) == 0)
+  x,
+  y,
+  z,
+  subscripts,
+  response = NULL,
+  density = FALSE,
+  region = density || !is.null(response),
+  contour = density || !is.null(response),
+  labels = !is.null(response),
+  points = TRUE,
+  grid = TRUE,
+  density_breaks = NULL,
+  xlab,
+  ylab,
+  zlab,
+  xlab.default,
+  ylab.default,
+  zlab.default,
+  ...
+) {
+  if (length(subscripts) == 0) {
     return()
+  }
 
   xyz <- data.frame(x, y, z)[subscripts, ]
   lrt <- xyz / rowSums(xyz)
   xy <- tern_cart(lrt)
 
-  if (grid)
+  if (grid) {
     panel.ternaryplot.grid()
+  }
 
   # Density?
-  if (density || contour)
+  if (density || contour) {
     panel.ternaryplot.density(
       x = x,
       y = y,
@@ -233,7 +246,7 @@ panel.ternaryplot <- function(
       density_breaks = density_breaks,
       ...
     )
-  else if (!is.null(response))
+  } else if (!is.null(response)) {
     panel.ternaryplot.response(
       x = x,
       y = y,
@@ -245,6 +258,7 @@ panel.ternaryplot <- function(
       labels = labels,
       ...
     )
+  }
 
   # Clip
   panel.ternaryplot.clip()
@@ -253,8 +267,9 @@ panel.ternaryplot <- function(
   panel.ternaryplot.scales(xlab, ylab, zlab, at = seq.int(0, 1, by = 0.2))
 
   # Overlay points
-  if (points)
-    panel.ternaryplot.xyplot(x = x, y = y, z = z,  subscripts = subscripts, ...)
+  if (points) {
+    panel.ternaryplot.xyplot(x = x, y = y, z = z, subscripts = subscripts, ...)
+  }
 }
 
 #' Axes and Labels for Ternary Plots
@@ -280,8 +295,9 @@ panel.ternaryplot.scales <- function(
   axis.left <- lattice.getOption("axis.left")
   axis.text <- trellis.par.get("axis.text")
   axis.line <- trellis.par.get("axis.line")
-  if (axis.line$col == "transparent")
-    axis.line$col <- 1 # Don't allow axis.line$col to remove axis
+  if (axis.line$col == "transparent") {
+    axis.line$col <- 1
+  } # Don't allow axis.line$col to remove axis
   axis.units <- lattice.getOption("axis.units")
   layout.widths <- trellis.par.get("layout.widths")
   ylab.axis.padding <- lattice.getOption("layout.widths")$ylab.axis.padding
@@ -292,12 +308,15 @@ panel.ternaryplot.scales <- function(
   gpar.axis.text <- do.call(gpar, axis.text)
   gpar.axis.line <- do.call(gpar, axis.line)
 
-  if (is.null(xlab) && !is.null(xlab.default))
+  if (is.null(xlab) && !is.null(xlab.default)) {
     xlab <- xlab.default
-  if (is.null(ylab) && !is.null(ylab.default))
+  }
+  if (is.null(ylab) && !is.null(ylab.default)) {
     ylab <- ylab.default
-  if (is.null(zlab) && !is.null(zlab.default))
+  }
+  if (is.null(zlab) && !is.null(zlab.default)) {
     zlab <- zlab.default
+  }
 
   tck <- axis.units$outer$left$tick
   pad1 <- axis.units$outer$left$pad1
@@ -310,25 +329,25 @@ panel.ternaryplot.scales <- function(
   rot <- 60L * pi / 180L
 
   tck_x1 <- unit(cos(rot) * tck$x, tck$units)
-  tck_x2 <- unit(cos(rot/2L) * tck$x, tck$units)
+  tck_x2 <- unit(cos(rot / 2L) * tck$x, tck$units)
   tck_y1 <- unit(sin(rot) * tck$x, tck$units)
-  tck_y2 <- unit(sin(rot/2L) * tck$x, tck$units)
+  tck_y2 <- unit(sin(rot / 2L) * tck$x, tck$units)
 
   pad1_x1 <- unit(cos(rot) * pad1$x, pad1$units)
-  pad1_x2 <- unit(cos(rot/2L) * pad1$x, pad1$units)
+  pad1_x2 <- unit(cos(rot / 2L) * pad1$x, pad1$units)
   pad1_y1 <- unit(sin(rot) * pad1$x, pad1$units)
-  pad1_y2 <- unit(sin(rot/2L) * pad1$x, pad1$units)
+  pad1_y2 <- unit(sin(rot / 2L) * pad1$x, pad1$units)
 
   pad2_x1 <- unit(cos(rot) * pad2$x, pad2$units)
-  pad2_x2 <- unit(cos(rot/2L) * pad2$x, pad2$units)
+  pad2_x2 <- unit(cos(rot / 2L) * pad2$x, pad2$units)
   pad2_y1 <- unit(sin(rot) * pad2$x, pad2$units)
-  pad2_y2 <- unit(sin(rot/2L) * pad2$x, pad2$units)
+  pad2_y2 <- unit(sin(rot / 2L) * pad2$x, pad2$units)
 
   tck <- unit(tck$x, tck$units)
   pad1 <- unit(pad1$x, pad1$units)
   pad2 <- unit(pad2$x, pad2$units)
 
-  top <- sqrt(3L)/2L
+  top <- sqrt(3L) / 2L
 
   bx <- unit(at, "native")
   by <- unit(rep.int(0, length(at)), "native")
@@ -386,13 +405,13 @@ panel.ternaryplot.scales <- function(
 
   # Draw axis labels
   nudge <- max(stringWidth(at))
-  nudgex <- nudge * cos(rot/2L)
-  nudgey <- nudge * sin(rot/2L)
+  nudgex <- nudge * cos(rot / 2L)
+  nudgey <- nudge * sin(rot / 2L)
 
   grid.text(
     label = xlab,
     x = unit(0.25, "native") - tck_x2 - pad1_x2 - pad2_x2 - nudgex,
-    y = unit(top/2L, "native") + tck_y2 + pad1_y2 + pad2_y2 + nudgey,
+    y = unit(top / 2L, "native") + tck_y2 + pad1_y2 + pad2_y2 + nudgey,
     rot = rot * 180L / pi,
     just = "bottom",
     gp = do.call(gpar, xlab.text)
@@ -409,7 +428,7 @@ panel.ternaryplot.scales <- function(
   grid.text(
     label = zlab,
     x = unit(0.75, "native") + tck_x2 + pad1_x2 + pad2_x2 + nudgex,
-    y = unit(top/2L, "native") + tck_y2 + pad1_y2 + pad2_y2 + nudgey,
+    y = unit(top / 2L, "native") + tck_y2 + pad1_y2 + pad2_y2 + nudgey,
     rot = -rot * 180L / pi,
     just = "bottom",
     gp = do.call(gpar, zlab.text)
@@ -436,7 +455,7 @@ panel.ternaryplot.grid <- function(
 ) {
   reference.line <- trellis.par.get("reference.line")
 
-  top <- sqrt(3L)/2L
+  top <- sqrt(3L) / 2L
 
   rot <- 60L * pi / 180L
 
@@ -468,23 +487,24 @@ panel.ternaryplot.grid <- function(
 #' @inherit panel.bubbleplot return
 #' @export
 panel.ternaryplot.response <- function(
-    x,
-    y,
-    z,
-    subscripts,
-    response,
-    region = TRUE,
-    contour = TRUE,
-    labels = isTRUE(contour),
-    fun = c("glm", "lm"),
-    formula = response ~ poly(x, y),
-    ...
-  ) {
+  x,
+  y,
+  z,
+  subscripts,
+  response,
+  region = TRUE,
+  contour = TRUE,
+  labels = isTRUE(contour),
+  fun = c("glm", "lm"),
+  formula = response ~ poly(x, y),
+  ...
+) {
   stopifnot(is.numeric(x), is.numeric(y), is.numeric(z))
   dots <- list(...)
 
-  if (missing(response))
+  if (missing(response)) {
     stop("`panel.ternaryplot.response` needs a response variable.")
+  }
 
   add.line <- trellis.par.get("add.line")
   add.text <- trellis.par.get("add.text")
@@ -525,22 +545,30 @@ panel.ternaryplot.response <- function(
   if (region) {
     levels <- vapply(clines, "[[", "level", FUN.VALUE = numeric(1))
     numcol <- length(levels) - 1L
-    fills <- level.colors(x = seq_len(numcol) - 0.5,
-                          at = seq_len(numcol + 1L) - 1L,
-                          col.regions = regions$col)
+    fills <- level.colors(
+      x = seq_len(numcol) - 0.5,
+      at = seq_len(numcol + 1L) - 1L,
+      col.regions = regions$col
+    )
 
     for (i in seq_along(clines)[-length(clines)]) {
       a <- clines[[i + 1]]$xy
       b <- clines[[i]]$xy
       polys <- rbind(a, b[rev(seq_along(b$x)), ])
 
-      do.call(panel.polygon, updateList(list(
-        polys,
-        border = "transparent",
-        col = fills[i],
-        lty = add.line$lty,
-        lwd = add.line$lwd
-      ), dots))
+      do.call(
+        panel.polygon,
+        updateList(
+          list(
+            polys,
+            border = "transparent",
+            col = fills[i],
+            lty = add.line$lty,
+            lwd = add.line$lwd
+          ),
+          dots
+        )
+      )
     }
   }
 
@@ -553,32 +581,46 @@ panel.ternaryplot.response <- function(
       if (labels && NROW(xy) > 100L) {
         ad <- vapply(xy, diff, FUN.VALUE = double(nrow(xy) - 1L))
         as <- sqrt(rowSums(ad^2L))
-        mid <- which.min(abs(cumsum(as) - sum(as)/2L))
+        mid <- which.min(abs(cumsum(as) - sum(as) / 2L))
 
         xx <- xy$x[c(mid - 1L, mid + 1L)]
         xx <- xy$y[c(mid - 1L, mid + 1L)]
 
         dy <- diff(xy$y[c(mid + 1L, mid - 1L)])
         dx <- diff(xy$x[c(mid + 1L, mid - 1L)])
-        angle <- atan2(dy, dx) * 180L/pi
+        angle <- atan2(dy, dx) * 180L / pi
 
-        if (abs(angle) > 90L)
+        if (abs(angle) > 90L) {
           angle <- angle - 180L
+        }
 
-        do.call(panel.text, updateList(list(
-          x = xy$x[mid],
-          y = xy$y[mid],
-          adj = c(0.5, 0L),
-          labels = foo$level, srt = angle
-        ), dots))
+        do.call(
+          panel.text,
+          updateList(
+            list(
+              x = xy$x[mid],
+              y = xy$y[mid],
+              adj = c(0.5, 0L),
+              labels = foo$level,
+              srt = angle
+            ),
+            dots
+          )
+        )
       }
-      do.call(panel.lines, updateList(list(
-        xy,
-        border = "transparent",
-        col = add.line$col,
-        lty = add.line$lty,
-        lwd = add.line$lwd
-      ), dots))
+      do.call(
+        panel.lines,
+        updateList(
+          list(
+            xy,
+            border = "transparent",
+            col = add.line$col,
+            lty = add.line$lty,
+            lwd = add.line$lwd
+          ),
+          dots
+        )
+      )
     }
   }
 }
@@ -593,30 +635,37 @@ panel.ternaryplot.response <- function(
 #' @inherit panel.ternaryplot return
 #' @export
 panel.ternaryplot.density <- function(
-    x,
-    y,
-    z,
-    subscripts,
-    n = 100,
-    region = TRUE,
-    contour = FALSE,
-    labels = isTRUE(contour),
-    density_breaks = NULL,
-    ...
-  ) {
+  x,
+  y,
+  z,
+  subscripts,
+  n = 100,
+  region = TRUE,
+  contour = FALSE,
+  labels = isTRUE(contour),
+  density_breaks = NULL,
+  ...
+) {
   stopifnot(is.numeric(x), is.numeric(y), is.numeric(z))
 
   regions <- trellis.par.get("regions")
   add.line <- trellis.par.get("add.line")
 
   iso <- ilr(x, y, z)[subscripts, ]
-  dens <- MASS::kde2d(iso$x, iso$y, n = n,
-                      lims = c(-16.92, 16.92, -14.65, 14.65))
-  if (is.null(density_breaks))
+  dens <- MASS::kde2d(
+    iso$x,
+    iso$y,
+    n = n,
+    lims = c(-16.92, 16.92, -14.65, 14.65)
+  )
+  if (is.null(density_breaks)) {
     density_breaks <- pretty(dens$z, 10)
+  }
 
-  clines <- with(dens, grDevices::contourLines(x, y, z,
-                                               levels = density_breaks))
+  clines <- with(
+    dens,
+    grDevices::contourLines(x, y, z, levels = density_breaks)
+  )
 
   clines <- lapply(clines, function(x) {
     list(level = x$level, xy = tern_cart(ilr_inv(x$x, x$y)))
@@ -625,18 +674,26 @@ panel.ternaryplot.density <- function(
   if (region) {
     levels <- vapply(clines, "[[", "level", FUN.VALUE = numeric(1))
     numcol <- length(levels) - 1L
-    fills <- level.colors(x = seq_len(numcol) - 0.5,
-                          at = seq_len(numcol + 1L) - 1L,
-                          col.regions = seq_pal(100L))
+    fills <- level.colors(
+      x = seq_len(numcol) - 0.5,
+      at = seq_len(numcol + 1L) - 1L,
+      col.regions = seq_pal(100L)
+    )
 
     for (i in seq_along(clines)) {
       polys <- clines[[i]]$xy
-      do.call(panel.polygon, updateList(list(
-        polys,
-        border = "transparent",
-        col = fills[i],
-        alpha = regions$alpha
-      ), list(...)))
+      do.call(
+        panel.polygon,
+        updateList(
+          list(
+            polys,
+            border = "transparent",
+            col = fills[i],
+            alpha = regions$alpha
+          ),
+          list(...)
+        )
+      )
     }
   }
 
@@ -648,32 +705,46 @@ panel.ternaryplot.density <- function(
       if (labels && NROW(xy) > 5L) {
         ad <- vapply(xy, diff, FUN.VALUE = double(nrow(xy) - 1L))
         as <- sqrt(rowSums(ad^2L))
-        mid <- which.min(abs(cumsum(as) - sum(as)/2L))
+        mid <- which.min(abs(cumsum(as) - sum(as) / 2L))
 
         xx <- xy$x[c(mid - 1L, mid + 1L)]
         xx <- xy$y[c(mid - 1L, mid + 1L)]
 
         dy <- diff(xy$y[c(mid + 1L, mid - 1L)])
         dx <- diff(xy$x[c(mid + 1L, mid - 1L)])
-        angle <- atan2(dy, dx) * 180L/pi
+        angle <- atan2(dy, dx) * 180L / pi
 
-        if (abs(angle) > 90L) angle <- angle - 180L
+        if (abs(angle) > 90L) {
+          angle <- angle - 180L
+        }
 
-        do.call(panel.text, updateList(list(
-          x = xy$x[mid],
-          y = xy$y[mid],
-          adj = c(0.5, 0L),
-          labels = foo$level,
-          srt = angle
-        ), list(...)))
+        do.call(
+          panel.text,
+          updateList(
+            list(
+              x = xy$x[mid],
+              y = xy$y[mid],
+              adj = c(0.5, 0L),
+              labels = foo$level,
+              srt = angle
+            ),
+            list(...)
+          )
+        )
       }
-      do.call(panel.lines, updateList(list(
-        xy,
-        border = "transparent",
-        col = add.line$col,
-        lty = add.line$lty,
-        lwd = add.line$lwd
-      ), list(...)))
+      do.call(
+        panel.lines,
+        updateList(
+          list(
+            xy,
+            border = "transparent",
+            col = add.line$col,
+            lty = add.line$lty,
+            lwd = add.line$lwd
+          ),
+          list(...)
+        )
+      )
     }
   }
 }
@@ -718,8 +789,8 @@ panel.ternaryplot.clip <- function(
 ) {
   background <- trellis.par.get("background")
 
-  polx <- c(xl[1], 0,       0.5, 1, xl[1], xl[1], xl[2], xl[2], xl[1], xl[1])
-  poly <- c(0,     0, sqrt(3)/2, 0,     0, yl[1], yl[1], yl[2], yl[2],     0)
+  polx <- c(xl[1], 0, 0.5, 1, xl[1], xl[1], xl[2], xl[2], xl[1], xl[1])
+  poly <- c(0, 0, sqrt(3) / 2, 0, 0, yl[1], yl[1], yl[2], yl[2], 0)
   panel.polygon(polx, poly, col = col, border = border)
 }
 
@@ -731,7 +802,7 @@ tern_cart <- function(l, r = NULL, t = NULL) {
     l <- l[, 1L]
   }
   x <- 0.5 * (2L * r + t) / (l + r + t)
-  y <- sqrt(3L)/2L * t / (l + r + t)
+  y <- sqrt(3L) / 2L * t / (l + r + t)
   data.frame(x, y)
 }
 
@@ -741,37 +812,40 @@ cart_tern <- function(x, y = NULL) {
     y <- x[, 2L]
     x <- x[, 1L]
   }
-  r <- x - y * tan(pi/6L)
-  t <- y / (tan(pi/3L) * 0.5)
+  r <- x - y * tan(pi / 6L)
+  t <- y / (tan(pi / 3L) * 0.5)
   l <- 1L - r - t
   data.frame(l, r, t)
 }
 
 # Isometric log-ratio transformation
 ilr <- function(x, y = NULL, z = NULL) {
-  if (any(x < 0L))
+  if (any(x < 0L)) {
     stop("No negative values, please.")
+  }
 
-  if (!is.null(y) || !is.null(z))
+  if (!is.null(y) || !is.null(z)) {
     x <- data.frame(x, y, z)
+  }
 
   data.frame(
-    x = -sqrt(2L/3L) *
-      log(exp(rowSums(log(as.matrix(x[, c(2L, 3L)])))/2L) / x[, 1L]),
+    x = -sqrt(2L / 3L) *
+      log(exp(rowSums(log(as.matrix(x[, c(2L, 3L)]))) / 2L) / x[, 1L]),
     y = -sqrt(0.5) * log(x[, 3L] / x[, 2L])
   )
 }
 
 # Inverse isometric log-ratio transformation
 ilr_inv <- function(x, y = NULL) {
-  if (!is.null(y))
+  if (!is.null(y)) {
     x <- data.frame(x, y)
+  }
 
   x <- -x
   n <- nrow(x)
   xyz <- data.frame(x = double(n), y = double(n), z = double(n))
 
-  xyz[, 1L] <- -sqrt(2/3) * x[, 1L]
+  xyz[, 1L] <- -sqrt(2 / 3) * x[, 1L]
   xyz[, 2L] <- x[, 1L] / sqrt(6)
   xyz[, 3L] <- xyz[, 2L] + x[, 2L] / sqrt(2L)
   xyz[, 2L] <- xyz[, 2L] - x[, 2L] * sqrt(0.5)

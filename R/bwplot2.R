@@ -22,7 +22,7 @@
 #'         groups = site,
 #'         data = barley,
 #'         par.settings = tactile.theme())
-bwplot2 <- function(x, data = NULL, ...){
+bwplot2 <- function(x, data = NULL, ...) {
   UseMethod("bwplot2")
 }
 
@@ -42,14 +42,16 @@ bwplot2.formula <- function(
   # Need to eval groups to set up plot in the high-level call
   groups <- eval(substitute(groups), data, environment(x))
   subset <- eval(substitute(subset), data, environment(x))
-  form <- latticeParseFormula(x,
-                              data,
-                              subset = subset,
-                              groups = groups,
-                              multiple = allow.multiple,
-                              outer = outer,
-                              subscripts = TRUE,
-                              drop = drop.unused.levels)
+  form <- latticeParseFormula(
+    x,
+    data,
+    subset = subset,
+    groups = groups,
+    multiple = allow.multiple,
+    outer = outer,
+    subscripts = TRUE,
+    drop = drop.unused.levels
+  )
   groups <- form$groups
 
   # Retrieve call
@@ -69,28 +71,34 @@ bwplot2.formula <- function(
   if (!is.null(groups)) {
     ccall$n_groups <- length(unique(groups))
     ccall$panel = panel.superpose
-    if(is.null(ccall$box.width))
-      ccall$box.width <- 1/(ccall$n_groups + 1)
-    ccall$panel.groups <- function(x, y,
-                                   horizontal,
-                                   ...,
-                                   pch = box.dot$pch,
-                                   n_groups,
-                                   group.number,
-                                   box.width) {
+    if (is.null(ccall$box.width)) {
+      ccall$box.width <- 1 / (ccall$n_groups + 1)
+    }
+    ccall$panel.groups <- function(
+      x,
+      y,
+      horizontal,
+      ...,
+      pch = box.dot$pch,
+      n_groups,
+      group.number,
+      box.width
+    ) {
       box.dot <- trellis.par.get("box.dot")
       n <- n_groups
       if (horizontal || is.null(horizontal)) {
-        y <- y + (group.number - (n + 1)/2)*box.width
+        y <- y + (group.number - (n + 1) / 2) * box.width
       } else {
-        x <- x + (group.number - (n + 1)/2)*box.width
+        x <- x + (group.number - (n + 1) / 2) * box.width
       }
 
-      panel.bwplot(x = x,
-                   y = y,
-                   horizontal = horizontal,
-                   box.width = box.width,
-                   ...)
+      panel.bwplot(
+        x = x,
+        y = y,
+        horizontal = horizontal,
+        box.width = box.width,
+        ...
+      )
     }
   }
 
@@ -112,11 +120,12 @@ bwplot2.numeric <- function(
   ocall <- sys.call(sys.parent())
   ocall[[1]] <- quote(bwplot2)
   ccall <- match.call()
-  if (!is.null(ccall$data))
+  if (!is.null(ccall$data)) {
     warning("explicit 'data' specification ignored")
+  }
   ccall$data <- environment()
   ccall$xlab <- xlab
-  ccall$x <- ~ x
+  ccall$x <- ~x
   ccall[[1]] <- quote(lattice::bwplot)
   ans <- eval.parent(ccall)
   ans$call <- ocall

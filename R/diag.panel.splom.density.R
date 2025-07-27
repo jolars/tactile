@@ -21,20 +21,24 @@
 #'   diag.panel = diag.panel.splom.density,
 #'   pscales = 0
 #' )
-diag.panel.splom.density <- function(x,
-                                     bw = "nrd0",
-                                     adjust = 1,
-                                     kernel = "gaussian",
-                                     weights = NULL,
-                                     n = 512,
-                                     ...) {
+diag.panel.splom.density <- function(
+  x,
+  bw = "nrd0",
+  adjust = 1,
+  kernel = "gaussian",
+  weights = NULL,
+  n = 512,
+  ...
+) {
   yrng <- current.panel.limits()$ylim
-  d <- density(x,
+  d <- density(
+    x,
     bw = bw,
     adjust = adjust,
     kernel = kernel,
     weights = weights,
-    n = n, na.rm = TRUE
+    n = n,
+    na.rm = TRUE
   )
   d$y <- yrng[1] + 0.95 * diff(yrng) * d$y / max(d$y, na.rm = TRUE)
   panel.lines(d, ...)

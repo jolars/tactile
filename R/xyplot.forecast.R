@@ -51,10 +51,11 @@ xyplot.forecast <- function(
   ...
 ) {
   dots <- list(...)
-  if (is.null(x$lower) | is.null(x$upper) | is.null(x$level))
+  if (is.null(x$lower) | is.null(x$upper) | is.null(x$level)) {
     ci <- FALSE
-  else if (!is.finite(max(x$upper)))
+  } else if (!is.finite(max(x$upper))) {
     ci <- FALSE
+  }
 
   # Required packages
   require_pkg("zoo")
@@ -68,76 +69,110 @@ xyplot.forecast <- function(
 
   # Drop levels not in x$level
   ci_levels <- ci_levels[ci_levels %in% x$level]
-  if (any(!(ci_levels %in% x$level)))
-    warning("Some (or all) of the required prediction intervals were not found in 'x'.")
+  if (any(!(ci_levels %in% x$level))) {
+    warning(
+      "Some (or all) of the required prediction intervals were not found in 'x'."
+    )
+  }
 
-  if (!is.null(data))
+  if (!is.null(data)) {
     actual <- c(actual, zoo::as.zoo(data))
+  }
 
-  fills <- rgb(grDevices::colorRamp(ci_pal)(ci_levels / 100),
-               maxColorValue = 255)
+  fills <- rgb(
+    grDevices::colorRamp(ci_pal)(ci_levels / 100),
+    maxColorValue = 255
+  )
 
   dd <- merge(Actual = actual, Fitted = pred)
   upr <- zoo::zoo(x$upper[, which_levels], zoo::index(x$mean))
   lwr <- zoo::zoo(x$lower[, which_levels], zoo::index(x$mean))
 
-  out <- do.call(xyplot, updateList(list(
-    dd,
-    superpose = TRUE,
-    lty = 1:2,
-    ylim = extendrange(c(zoo::coredata(dd), zoo::coredata(upr),
-                         zoo::coredata(lwr))),
-    panel = function(x, grid = FALSE, ...) {
-      if (grid)
-        panel.grid(h = -1, v = -1)
-      if (ci) {
-        xx <- c(time(upr), rev(time(upr)))
-        yu <- zoo::coredata(upr)
-        yl <- zoo::coredata(lwr)
-        if (NCOL(upr) == 1) {
-          panel.polygon(x = xx, y = c(yu, rev(yl)),
-                        col = fills, alpha = ci_alpha,
-                        border = "transparent")
-        } else {
-          for (i in 1:NCOL(upr)) {
-            if (i == 1) {
-              panel.polygon(x = xx, y = c(yu[, 1], rev(yl[, 1])),
-                            col = fills[i], alpha = ci_alpha,
-                            border = "transparent")
+  out <- do.call(
+    xyplot,
+    updateList(
+      list(
+        dd,
+        superpose = TRUE,
+        lty = 1:2,
+        ylim = extendrange(c(
+          zoo::coredata(dd),
+          zoo::coredata(upr),
+          zoo::coredata(lwr)
+        )),
+        panel = function(x, grid = FALSE, ...) {
+          if (grid) {
+            panel.grid(h = -1, v = -1)
+          }
+          if (ci) {
+            xx <- c(time(upr), rev(time(upr)))
+            yu <- zoo::coredata(upr)
+            yl <- zoo::coredata(lwr)
+            if (NCOL(upr) == 1) {
+              panel.polygon(
+                x = xx,
+                y = c(yu, rev(yl)),
+                col = fills,
+                alpha = ci_alpha,
+                border = "transparent"
+              )
             } else {
-              panel.polygon(x = xx, y = c(yu[, i - 1], rev(yu[, i])),
-                            col = fills[i], alpha = ci_alpha,
-                            border = "transparent")
-              panel.polygon(x = xx, y = c(yl[, i - 1], rev(yl[, i])),
-                            col = fills[i], alpha = ci_alpha,
-                            border = "transparent")
+              for (i in 1:NCOL(upr)) {
+                if (i == 1) {
+                  panel.polygon(
+                    x = xx,
+                    y = c(yu[, 1], rev(yl[, 1])),
+                    col = fills[i],
+                    alpha = ci_alpha,
+                    border = "transparent"
+                  )
+                } else {
+                  panel.polygon(
+                    x = xx,
+                    y = c(yu[, i - 1], rev(yu[, i])),
+                    col = fills[i],
+                    alpha = ci_alpha,
+                    border = "transparent"
+                  )
+                  panel.polygon(
+                    x = xx,
+                    y = c(yl[, i - 1], rev(yl[, i])),
+                    col = fills[i],
+                    alpha = ci_alpha,
+                    border = "transparent"
+                  )
+                }
+              }
             }
           }
+          panel.xyplot(x, grid = FALSE, ...)
         }
-      }
-      panel.xyplot(x, grid = FALSE, ...)
-    }
-  ), dots))
+      ),
+      dots
+    )
+  )
 
   # Setup a key?
   if (length(ci_levels) > 5) {
     out$legend <- setup_key(
       out$legend,
       ci_key,
-      list(col = adjustcolor(fills, alpha.f = ci_alpha),
-           at = c(ci_levels / 100, 1)),
+      list(
+        col = adjustcolor(fills, alpha.f = ci_alpha),
+        at = c(ci_levels / 100, 1)
+      ),
       draw.colorkey
     )
   } else if (length(ci_levels) > 1) {
     out$legend <- setup_key(
       out$legend,
       ci_key,
-      list(text = list(paste0(ci_levels, "%")),
-           rectangles = list(col = fills, alpha = ci_alpha)),
+      list(
+        text = list(paste0(ci_levels, "%")),
+        rectangles = list(col = fills, alpha = ci_alpha)
+      ),
       draw.key
     )
   }
   out
 }
-
-

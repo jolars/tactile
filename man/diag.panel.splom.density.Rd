@@ -20,14 +20,14 @@ same for diagonal 'panels').}
 
 \item{bw}{the smoothing bandwidth to be used.  The kernels are scaled
     such that this is the standard deviation of the smoothing kernel.
-    (Note this differs from the reference books cited below, and from S-PLUS.)
+    (Note this differs from the reference books cited below.)
 
     \code{bw} can also be a character string giving a rule to choose the
     bandwidth.  See \code{\link[stats]{bw.nrd}}. \cr The default,
     \code{"nrd0"}, has remained the default for historical and
     compatibility reasons, rather than as a general recommendation,
-    where e.g., \code{"SJ"} would rather fit, see also Venables and
-    Ripley (2002).
+    where e.g., \code{"SJ"} would rather fit, see also
+    Venables and Ripley (2002).
 
     The specified (or computed) value of \code{bw} is multiplied by
     \code{adjust}.
